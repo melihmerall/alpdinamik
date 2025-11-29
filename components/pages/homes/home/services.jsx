@@ -40,8 +40,8 @@ const Services = () => {
                 <div className="row al-end">
                     <div className="col-lg-8">
                         <div className="services__one-title lg-t-center lg-mb-20">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Our Services</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Provide Quality Services</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Hizmetlerimiz</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Uçtan Uca Mühendislik Çözümleri</h2>
                         </div>
                     </div>
                     <div className="col-lg-4 wow fadeInDown" data-wow-delay=".4s">
@@ -55,21 +55,7 @@ const Services = () => {
                         </div>
                     </div>
                 </div>
-                <div className="row mt-60 wow fadeInUp data_cursor" data-wow-delay=".5s" data-cursor-text="Drag">
-                    <div className="col-xl-12">
-                        <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
-                            {servicesData?.map((data, id) => (
-                                <SwiperSlide key={id}>
-                                    <div className="services__one-item">
-                                        {data.icon}
-                                        <h4><Link href={`/services/${data.id}`}>{data.title}</Link></h4>
-                                        <Link className="more_btn" href={`/services/${data.id}`}>Read More <i className="flaticon-right-up"></i></Link>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                </div>
+              
             </div>
         </div>
     );

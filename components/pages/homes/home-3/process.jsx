@@ -8,8 +8,8 @@ const WorkProcess = () => {
                     <div className="row mb-75">
                         <div className="col-xl-12">
                             <div className="process__area-title t-center">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Our Process</span>
-                                <h2 className="wow fadeInRight" data-wow-delay=".6s">The Journey of Your Project with Us</h2>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Çalışma Sürecimiz</span>
+                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Projenizin Bizimle Yolculuğu</h2>
                             </div>
                         </div>
                     </div>
@@ -17,29 +17,29 @@ const WorkProcess = () => {
                         <div className="col-lg-3 col-md-6 lg-mb-40 wow fadeInLeft" data-wow-delay=".3s">
                             <div className="process__area-item">
                                 <h6>01</h6>
-                                <h4>Initial Consultation</h4>
-                                <p>Discuss project goals, budget, and timeline with our expert team</p>
+                                <h4>İlk Görüşme</h4>
+                                <p>Uzman ekibimizle proje hedefleri, gereksinimler ve zaman çizelgesini görüşüyoruz</p>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 md-mb-40 wow fadeInLeft" data-wow-delay=".6s">
                             <div className="process__area-item pl-20 xl-pl-0">
                                 <h6>02</h6>
-                                <h4>Work Planning</h4>
-                                <p>Comprehensive plan, including design, materials, and schedules</p>
+                                <h4>Proje Planlama</h4>
+                                <p>Tasarım, ürün seçimi ve zaman çizelgesini içeren kapsamlı plan hazırlıyoruz</p>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 md-mb-40 wow fadeInLeft" data-wow-delay=".9s">
                             <div className="process__area-item pl-40 xl-pl-0">
                                 <h6>03</h6>
-                                <h4>Execution Phase</h4>
-                                <p>Implement the plan with skilled professionals ensuring quality</p>
+                                <h4>Uygulama Aşaması</h4>
+                                <p>Kaliteli işçilik ve mühendislik ile planı uyguluyoruz</p>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 wow fadeInLeft" data-wow-delay="1.2s">
                             <div className="process__area-item pl-40 xl-pl-0">
                                 <h6>04</h6>
-                                <h4>Final Review</h4>
-                                <p>We addressing any concerns before project completion</p>
+                                <h4>Devreye Alma</h4>
+                                <p>Proje tamamlanmadan önce tüm endişeleri ele alıyoruz</p>
                             </div>
                         </div>
                     </div>

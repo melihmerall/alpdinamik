@@ -80,7 +80,7 @@ const TestimonialTwo = () => {
                 </div>
             </div>   
             <div className="testimonial__two section-padding">
-                <div className="testimonial_two_slide wow fadeInUp data_cursor" data-wow-delay=".5s" data-cursor-text="Drag">
+                <div className="testimonial_two_slide wow fadeInUp" data-wow-delay=".5s">
                     <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
                         {testimonialData?.map((data, id) => (
                             <SwiperSlide key={id}>

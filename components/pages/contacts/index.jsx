@@ -1,6 +1,6 @@
 "use client";
 import SEO from "@/components/data/seo";
-import FooterOne from "../../layout/footers/footer-one";
+import FooterTwo from "../../layout/footers/footer-two";
 import HeaderTwo from "../../layout/headers/header-two";
 import BreadCrumb from "../common/breadcrumb";
 import CustomCursor from "../common/cursor";
@@ -10,11 +10,11 @@ import ContactMain from "./contact";
 const ContactUs = () => {
     return (
         <>
-            <SEO pageTitle="Contact Us" />
+            <SEO pageTitle="İletişim" />
             <HeaderTwo />
             <CustomCursor />
             <SwitchTab />
-            <BreadCrumb title="Contact Us" innerTitle="Contact Us" />
+            <BreadCrumb title="İletişim" innerTitle="İletişim" />
             <ContactMain />
             <div className="map section-padding pt-0">
                 <div className="container">
@@ -27,7 +27,7 @@ const ContactUs = () => {
                     </div>
                 </div>
             </div>
-            <FooterOne />
+            <FooterTwo />
         </>
     );
 };

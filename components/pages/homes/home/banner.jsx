@@ -11,10 +11,10 @@ const BannerOne = () => {
                 <div className="row">
                     <div className="col-xl-12">
                         <div className="banner__one-content">
-                            <h1 className="wow fadeInRight" data-wow-delay=".4s">Building Construction Solutions</h1>
+                            <h1 className="wow fadeInRight" data-wow-delay=".4s">Lineer hareket sistemlerinde mühendislik ortağınız</h1>
                             <div className="banner__one-content-user wow fadeInUp" data-wow-delay=".6s">
                                 <img src={user.src} alt="image" />
-                                <h5>More then 25K Clients Reviews</h5>
+                                <h5>25+ yıl sektör tecrübesi</h5>
                             </div>
                             <div className="banner__one-content-award bounce_y">
                                 <img src={award.src} alt="image" />

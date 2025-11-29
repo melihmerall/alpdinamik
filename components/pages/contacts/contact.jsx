@@ -11,9 +11,9 @@ const ContactMain = () => {
                         <div className="col-lg-5 lg-mb-25">
                             <div className="contact__area-left mr-40 xl-mr-0">
                                 <div className="title">
-                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Contact Us</span>
-                                    <h2 className="title_split_anim mb-25">Get In Touch</h2>
-                                    <p className="wow fadeInUp" data-wow-delay=".4s">We’re here to assist you! Please reach out with any questions, feedback, or project inquiries.</p>
+                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">İletişim</span>
+                                    <h2 className="title_split_anim mb-25">Bizimle İletişime Geçin</h2>
+                                    <p className="wow fadeInUp" data-wow-delay=".4s">Projenizle ilgili teknik sorularınız, ürün seçimi ve teklif talepleriniz için formu doldurabilir veya aşağıdaki iletişim kanallarından bize ulaşabilirsiniz.</p>
                                 </div>
                                 <div className="contact__area-left-contact wow fadeInUp" data-wow-delay=".7s">
                                     <div className="contact__area-left-contact-item">
@@ -21,8 +21,8 @@ const ContactMain = () => {
                                             <i className="flaticon-phone"></i>
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
-                                            <span>Phone:</span>
-                                            <h6><Link href="tel:+123 (256) 568 58">+123 (256) 568 58</Link></h6>
+                                            <span>Telefon:</span>
+                                            <h6><Link href="tel:+90 (212) 123 45 67">+90 (212) 123 45 67</Link></h6>
                                         </div>
                                     </div>
                                     <div className="contact__area-left-contact-item">
@@ -30,8 +30,8 @@ const ContactMain = () => {
                                             <i className="flaticon-email-3"></i>
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
-                                            <span>Email Address:</span>
-                                            <h6><Link href="mailto:needhelp@gmail.com">needhelp@gmail.com</Link></h6>
+                                            <span>E-posta:</span>
+                                            <h6><Link href="mailto:info@alpdinamik.com.tr">info@alpdinamik.com.tr</Link></h6>
                                         </div>
                                     </div>
                                     <div className="contact__area-left-contact-item">
@@ -39,8 +39,8 @@ const ContactMain = () => {
                                             <i className="flaticon-location-1"></i>
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
-                                            <span>Location:</span>
-                                            <h6><Link href="https://google.com/maps" target="_blank">2464 Royal Ln. Mesa, New Jersey 45463</Link></h6>
+                                            <span>Adres:</span>
+                                            <h6><Link href="https://google.com/maps" target="_blank">İstanbul, Türkiye</Link></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -48,7 +48,7 @@ const ContactMain = () => {
                         </div>
                         <div className="col-lg-7 wow fadeInRight" data-wow-delay=".4s">
                             <div className="contact__area-form">
-                                <h4>Send Message</h4>
+                                <h4>Mesaj Gönderin</h4>
                                 <FormArea />
                             </div>
                         </div>

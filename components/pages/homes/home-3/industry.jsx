@@ -11,8 +11,8 @@ const Industry = () => {
                     <div className="col-lg-4 lg-mb-25">
                         <div className="industry__area-left section-padding pb-0">
                             <div className="title">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Industry Certifications</span>
-                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Winning Strategies for Success</h2>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Sektörlerimiz</span>
+                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Başarı İçin Çözüm Odaklı Yaklaşım</h2>
                             </div>
                             <div className="image wow fadeInDown" data-wow-delay="1.2s">
                                 <img className="dark-n" src={user1.src} alt="image" />
@@ -29,8 +29,8 @@ const Industry = () => {
                                         <div className="industry__area-right-list-item">
                                             <i className="flaticon-creative"></i>
                                             <div className="industry__area-right-list-item-content">
-                                                <h4>Safety Compliance</h4>
-                                                <p>Ensuring all projects adhere to safety regulations, protecting workers</p>
+                                                <h4>Çelik Endüstrisi</h4>
+                                                <p>Ağır yük kaldırma ve hassas konumlandırma için özel lineer hareket çözümleri</p>
                                             </div>
                                         </div>
                                     </div>
@@ -38,8 +38,8 @@ const Industry = () => {
                                         <div className="industry__area-right-list-item">
                                             <i className="flaticon-search-analysis"></i>
                                             <div className="industry__area-right-list-item-content">
-                                                <h4>Cost Estimation</h4>
-                                                <p>Accurate and transparent cost estimates help you budget effectively</p>
+                                                <h4>Güneş Enerjisi Sistemleri</h4>
+                                                <p>Güneş paneli takip sistemleri ve CSP uygulamaları için güvenilir çözümler</p>
                                             </div>
                                         </div>
                                     </div>

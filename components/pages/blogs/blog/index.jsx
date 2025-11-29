@@ -2,7 +2,7 @@
 import SEO from "@/components/data/seo";
 import BreadCrumb from "../../common/breadcrumb";
 import BlogGridMain from "./blog-grid";
-import FooterOne from "@/components/layout/footers/footer-one";
+import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import SwitchTab from "../../common/dark-light";
@@ -12,13 +12,13 @@ import CustomCursor from "../../common/cursor";
 const BlogGrid = () => {
     return (
         <>
-            <SEO pageTitle='Blog Grid' />
+            <SEO pageTitle='Blog' />
             <SwitchTab />
             <CustomCursor />
             <HeaderTwo />
-            <BreadCrumb title="Blog Grid" innerTitle="Blog Grid" />
+            <BreadCrumb title="Blog" innerTitle="Blog" />
             <BlogGridMain />
-            <FooterOne />
+            <FooterTwo />
             <ScrollToTop />
         </>
     );

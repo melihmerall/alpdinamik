@@ -8,8 +8,8 @@ const PricingPlan = () => {
                 <div className="row mb-50">
                     <div className="col-xl-12">
                         <div className="price__area-title t-center">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Flexible Plans</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Pricing Made Simple</h2>                        
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Ürünlerimiz</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Mecmot Ürün Portföyü</h2>                        
                         </div>
                     </div>
                 </div>
@@ -17,64 +17,64 @@ const PricingPlan = () => {
                     <div className="col-xl-4 col-md-6 xl-mb-25 wow fadeInUp" data-wow-delay=".4s">
                         <div className="price__area-item">
                             <div className="price__area-item-price">
-                                <span>Start Package</span>
-                                <h3>Basic Plan</h3>
-                                <h2>$89<span>/Per monthly</span></h2>
+                                <span>Mecmot</span>
+                                <h3>Vidalı Krikolar</h3>
+                                <h2>Yüksek <span>Hassasiyet</span></h2>
                             </div>
                             <div className="price__area-item-list">
                                 <ul>
-                                    <li><i className="flaticon-checked"></i>Core feature access</li>
-                                    <li><i className="flaticon-checked"></i>5 GB storage</li>
-                                    <li><i className="flaticon-checked"></i>Email support</li>
-                                    <li><i className="flaticon-checked"></i>Basic analytics</li>
-                                    <li><i className="flaticon-checked"></i>Community forum access</li>
+                                    <li><i className="flaticon-checked"></i>Seviye ayarı uygulamaları</li>
+                                    <li><i className="flaticon-checked"></i>Presleme sistemleri</li>
+                                    <li><i className="flaticon-checked"></i>Yüksek yük kapasitesi</li>
+                                    <li><i className="flaticon-checked"></i>Hassas konumlandırma</li>
+                                    <li><i className="flaticon-checked"></i>Çelik endüstrisi uygulamaları</li>
                                 </ul>
                             </div>
                             <div className="price__area-item-btn">
-                                <Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href="/portfolio/3-columns">Ürünleri İncele<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>
                     <div className="col-xl-4 col-md-6 md-mb-25 wow fadeInUp" data-wow-delay=".7s">
                         <div className="price__area-item active">
                             <div className="price__area-item-price">
-                                <span>Growth Package</span>
-                                <h3>Standard Plan</h3>
-                                <h2>$129<span>/Per monthly</span></h2>
+                                <span>Mecmot</span>
+                                <h3>Yön Değiştiriciler</h3>
+                                <h2>Güç <span>Aktarımı</span></h2>
                             </div>
                             <div className="price__area-item-list">
                                 <ul>
-                                    <li><i className="flaticon-checked"></i> Access to all core features</li>
-                                    <li><i className="flaticon-checked"></i> 50 GB storage</li>
-                                    <li><i className="flaticon-checked"></i> Priority email support</li>
-                                    <li><i className="flaticon-checked"></i> Advanced analytics</li>
-                                    <li><i className="flaticon-checked"></i> Customizable dashboard</li>
+                                    <li><i className="flaticon-checked"></i>Güç aktarımında esneklik</li>
+                                    <li><i className="flaticon-checked"></i>Yüksek verimlilik</li>
+                                    <li><i className="flaticon-checked"></i>Kompakt tasarım</li>
+                                    <li><i className="flaticon-checked"></i>Otomasyon sistemleri</li>
+                                    <li><i className="flaticon-checked"></i>Tarım makinaları uygulamaları</li>
                                 </ul>
                                 
                             </div>
                             <div className="price__area-item-btn">
-                                <Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href="/portfolio/3-columns">Ürünleri İncele<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>
                     <div className="col-xl-4 col-md-6 wow fadeInUp" data-wow-delay="1s">
                         <div className="price__area-item">
                             <div className="price__area-item-price">
-                                <span>Pro Package</span>
-                                <h3>Premium Plan</h3>
-                                <h2>$159<span>/Per monthly</span></h2>
+                                <span>Mecmot</span>
+                                <h3>Lineer Aktuatörler</h3>
+                                <h2>Hassas <span>Hareket</span></h2>
                             </div>
                             <div className="price__area-item-list">
                                 <ul>
-                                    <li><i className="flaticon-checked"></i> Premium security features</li>
-                                    <li><i className="flaticon-checked"></i> Unlimited storage</li>
-                                    <li><i className="flaticon-checked"></i> 24/7 phone and email support</li>
-                                    <li><i className="flaticon-checked"></i> Basic analytics</li>
-                                    <li><i className="flaticon-checked"></i> Custom branding options</li>
+                                    <li><i className="flaticon-checked"></i>Otomatik hareket kontrolü</li>
+                                    <li><i className="flaticon-checked"></i>Güneş takip sistemleri</li>
+                                    <li><i className="flaticon-checked"></i>Hareketli platformlar</li>
+                                    <li><i className="flaticon-checked"></i>Hassas konumlandırma</li>
+                                    <li><i className="flaticon-checked"></i>Savunma sanayi uygulamaları</li>
                                 </ul>                            
                             </div>
                             <div className="price__area-item-btn">
-                                <Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href="/portfolio/3-columns">Ürünleri İncele<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>

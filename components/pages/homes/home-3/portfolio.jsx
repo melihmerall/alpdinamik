@@ -39,8 +39,8 @@ const PortfolioThree = () => {
                 <div className="row al-end mb-60">
                     <div className="col-lg-8">
                         <div className="portfolio__three-title lg-t-center lg-mb-20">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Our Portfolio</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Showcasing Our Work</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Portföyümüz</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Tamamladığımız Projeleri Keşfedin</h2>
                         </div>
                     </div>
                     <div className="col-lg-4 wow fadeInDown" data-wow-delay=".4s">
@@ -55,7 +55,7 @@ const PortfolioThree = () => {
                     </div>
                 </div>
             </div>
-            <div className="wow fadeInUp data_cursor" data-wow-delay=".5s" data-cursor-text="Drag">
+            <div className="wow fadeInUp" data-wow-delay=".5s">
                 <Swiper className='portfolio_slide' modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
                     {portfolioData?.map((data, id) => (
                         <SwiperSlide key={id}>

@@ -31,7 +31,7 @@ const ThreeColumns = () => {
                 {next < items.length && (
                     <div className="row mt-70">
                         <div className="col-xl-12 t-center">
-                            <button onClick={handleLoadData} className="build_button">Load More<i className="flaticon flaticon-right-up"></i></button>
+                            <button onClick={handleLoadData} className="build_button">Daha Fazla<i className="flaticon flaticon-right-up"></i></button>
                         </div>
                     </div>
                 )}

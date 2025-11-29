@@ -6,33 +6,33 @@ import image5 from "../../public/assets/img/portfolio/portfolio-5.jpg";
 
 const historyData = [
     {
-        date: "2010",
-        title: "Start Company",
-        description: "Launching a new company is an exciting journey that requires careful planning and execution. Let’s begin!",
+        date: "2000",
+        title: "Kuruluş",
+        description: "Alp Dinamik, lineer hareket sistemleri alanında projeci ve mühendislik odaklı hizmet vermek üzere kuruldu. İlk yıllarımızda temsil ettiğimiz markaların ürünlerini endüstriyel uygulamalara entegre etmeye başladık.",
         image: image1,
     },
     {
-        date: "2014",
-        title: "Opening Office",
-        description: "Opening a new office represents growth and opportunity. Join us as we expand our operations!",
+        date: "2005",
+        title: "CAD & Teknik Veri Desteği",
+        description: "Müşterilerimize 2D ve 3D CAD verileri, teknik çizimler ve ürün katalogları sağlayarak proje süreçlerini hızlandırmaya başladık. Mekanik entegrasyon desteği hizmetlerimizi genişlettik.",
         image: image2,
     },
     {
-        date: "2018",
-        title: "Project Management",
-        description: "Effective project management ensures timely delivery and quality results. Our expert team is here to help!",
+        date: "2010",
+        title: "Sektörel Uzmanlaşma",
+        description: "Çelik endüstrisi, güneş enerjisi ve savunma sanayi gibi farklı sektörlerde lineer hareket çözümleri sunarak deneyimimizi artırdık. Her sektörün özel gereksinimlerine uygun çözümler geliştirdik.",
         image: image3,
     },
     {
-        date: "2021",
-        title: "Open Research Team",
-        description: "Our open research team is dedicated to innovation and collaboration, driving impactful solutions for clients.",
+        date: "2015",
+        title: "Mühendislik Ekibi Genişlemesi",
+        description: "Deneyimli mühendislerden oluşan ekibimizi genişleterek, proje tasarımı ve ürün seçimi konularında daha kapsamlı danışmanlık hizmetleri sunmaya başladık.",
         image: image4,
     },
     {
-        date: "2025",
-        title: "Winning Award",
-        description: "Winning awards showcases our commitment to excellence and innovation. Thank you for believing.",
+        date: "2020",
+        title: "Uçtan Uca Çözüm Ortağı",
+        description: "Sadece ürün tedarikçisi değil, uçtan uca mühendislik çözümü sunan referans firma olma yolunda önemli adımlar attık. Devreye alma ve satış sonrası hizmetlerimizi güçlendirdik.",
         image: image5,
     },
 ];

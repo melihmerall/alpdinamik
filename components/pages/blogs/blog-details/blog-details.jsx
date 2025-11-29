@@ -22,16 +22,16 @@ const BlogSingleMain = ({singleData}) => {
                             <img src={singleData.image.src} alt="image" />
                             <h3 className="mt-25 mb-20">{singleData.title}</h3>
                             <p>{singleData.description}</p>
-                            <p>Urban development presents unique challenges, including space constraints, zoning regulations, and community impact. As cities continue to grow, finding innovative solutions to these challenges is crucial. Strategies such as mixed-use developments, green spaces and sustainable transportation can transform urban areas into vibrant communities. Engaging with local stakeholder.</p>
+                            <p>Lineer hareket sistemlerinde doğru ürün seçimi, uygulamanın başarısı için kritik öneme sahiptir. Yük, strok, hız ve çalışma çevrimi gibi parametrelerin detaylı analizi, sistemin güvenli ve verimli çalışmasını sağlar. Alp Dinamik olarak, her projede bu parametreleri dikkate alarak mühendislik odaklı çözümler sunuyoruz.</p>
                             <div className="blog__details-area-box">
                                 <i className="fas fa-quote-right"></i>
                                 <div>
-                                    <h6>This article sheds light on important industry trends, offering valuable strategies for navigating construction challenges effectively</h6>                                
-                                    <span>Sarah L - Project Coordinator</span>
+                                    <h6>Doğru ürün seçimi ve mühendislik desteği, lineer hareket sistemlerinin uzun ömürlü ve güvenilir çalışmasını sağlar</h6>                                
+                                    <span>Alp Dinamik Mühendislik Ekibi</span>
                                 </div>
                             </div>
-                            <h4 className="mb-20">Worker Productivity due to Safety Concerns</h4>
-                            <p>Rain is one of the most common weather-related factors that can disrupt a construction project. Heavy rainfall can cause delays in various activities, such as excavation, concrete pouring, and roofing. Wet surfaces can lead to safety hazards like slips and falls, and excessive water can damage materials such as wood, drywall, or electrical components.</p>
+                            <h4 className="mb-20">Duty Cycle Analizinin Önemi</h4>
+                            <p>Duty cycle, lineer hareket sistemlerinin performansını ve ömrünü belirleyen en önemli faktörlerden biridir. Sistemin ne kadar süre çalışacağı, dinlenme süreleri ve çalışma çevrimi, ürün seçiminde kritik rol oynar. Duty cycle analizi yapılmadan seçilen ürünlerde erken arıza ve performans kayıpları yaşanabilir. Bu nedenle, her uygulama için detaylı duty cycle hesaplaması yapılmalıdır.</p>
                             <div className="row mt-40 mb-40 blog__details-area-image">
                                 <div className="col-sm-6 sm-mb-25">
                                     <img src={image1.src} alt="image" />
@@ -40,9 +40,9 @@ const BlogSingleMain = ({singleData}) => {
                                     <img src={image2.src} alt="image" />
                                 </div>
                             </div>
-                            <p>Delivering superior construction projects through expert craftsmanship, innovative techniques, and a commitment to quality. It involves balancing aesthetics with functionality, ensuring that each structure not only looks impressive but also stands the test of time. This approach focuses on meticulous planning, sustainable materials, and advanced technology to create buildings that are both durable and efficient. By prioritizing attention to detail and client satisfaction.</p>
+                            <p>Alp Dinamik olarak, lineer hareket sistemlerinde uzman mühendislik desteği, yenilikçi çözümler ve kalite odaklı yaklaşımımızla projelerinizin başarısını sağlıyoruz. Her uygulamanın kendine özgü gereksinimlerini dikkate alarak, güvenilir ve verimli sistemler kuruyoruz. Detaylı planlama, doğru ürün seçimi ve sürekli teknik destek ile müşteri memnuniyetini ön planda tutuyoruz.</p>
                             <div className="blog__details-area-tag">
-                                <h5>Related Tags :</h5>
+                                <h5>İlgili Konular :</h5>
                                 <div className="all__sidebar-item-tag">
                                     <ul>
                                         {blogPost.map((data, id) => (
@@ -56,15 +56,15 @@ const BlogSingleMain = ({singleData}) => {
                                     <img src={avatar1.src} alt="avatar-image" />
                                 </div>
                                 <div className="blog__details-area-author-content">
-                                    <h5>Joshua Harvey</h5>
-                                    <p>Starting a product design from scratch is an iterative process that may involve multiple cycles of design, testing, and refinement to achieve the best possible user experience and product</p>
+                                    <h5>Alp Dinamik Mühendislik Ekibi</h5>
+                                    <p>Lineer hareket sistemlerinde proje tasarımı, ürün seçimi ve teknik destek konularında deneyimli mühendislerimiz, her projede en uygun çözümü sunmak için çalışıyor.</p>
                                     <div className="social__icon">
                                         <Social />
                                     </div>
                                 </div>
                             </div>
                             <div className="blog__details-area-comment mt-40">
-                                <h3 className="mb-30">Comments (2)</h3>
+                                <h3 className="mb-30">Yorumlar (2)</h3>
                                 <div className="blog__details-area-comment-item">
                                     <div className="blog__details-area-comment-item-comment">
                                         <div className="blog__details-area-comment-item-comment-image">
@@ -91,8 +91,8 @@ const BlogSingleMain = ({singleData}) => {
                                 </div>
                             </div>
                             <div className="blog__details-area-contact mt-60">
-                                <h3>Post Comment</h3>
-                                <p>Your email address will not be published. Required fields are marked</p>
+                                <h3>Yorum Yapın</h3>
+                                <p>E-posta adresiniz yayınlanmayacaktır. Gerekli alanlar işaretlenmiştir</p>
                                 <div className="blog__details-area-contact-form">
                                     <FormArea />
                                 </div>

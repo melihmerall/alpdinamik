@@ -10,7 +10,7 @@ const BreadCrumb = ({title, innerTitle}) => {
                         <div className="breadcrumb__area-content">
                             <h2>{title}</h2>
                             <ul>
-                                <li><Link href="/">Home</Link><i className="fa-regular fa-angle-right"></i></li>
+                                <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
                                 <li>{innerTitle}</li>
                             </ul>
                         </div>

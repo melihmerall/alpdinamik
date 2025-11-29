@@ -15,26 +15,26 @@ const FaqArea = () => {
                         <div className="col-xl-6 col-lg-7">
                             <div className="faq__area-right">
                                 <div className="faq__area-right-title mb-40">
-                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Common Inquiries</span>
-                                    <h2 className="wow fadeInRight" data-wow-delay=".6s">Answers to Your Construction Queries</h2>
+                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Sıkça Sorulan Sorular</span>
+                                    <h2 className="wow fadeInRight" data-wow-delay=".6s">Lineer Hareket Sistemleri Hakkında Sorularınız</h2>
                                 </div>
                                 <div className="wow fadeInUp" data-wow-delay=".9s" id="accordionExample">
                                     <div className="faq-item">
-                                        <h5 className="icon" data-bs-toggle="collapse" data-bs-target="#collapseOne">1. What services do you offer?</h5>
+                                        <h5 className="icon" data-bs-toggle="collapse" data-bs-target="#collapseOne">1. Hangi ürünleri temsil ediyorsunuz?</h5>
                                         <div id="collapseOne" className="faq-item-body collapse show" data-bs-parent="#accordionExample">
-                                            <p>We offer a range of services including construction management, design-build solutions, renovations, and specialty contracting for both residential and commercial projects</p>
+                                            <p>Alp Dinamik olarak Mecmot markasının Türkiye temsilciliğini yapıyoruz. Mecmot Vidalı Krikolar, Yön Değiştiriciler ve Lineer Aktuatörler ürün portföyümüzü oluşturmaktadır.</p>
                                         </div>
                                     </div>
                                     <div className="faq-item">
-                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">2. Do you provide free estimates?</h5>
+                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">2. Mühendislik desteği sağlıyor musunuz?</h5>
                                         <div id="collapseTwo" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                            <p>Yes, we offer free estimates for all potential projects. We assess your requirements and provide a detailed quote without any obligation</p>
+                                            <p>Evet, sadece ürün tedarik etmekle kalmıyoruz. Uygulama analizi, ürün seçimi ve boyutlandırma, 2D/3D CAD desteği, devreye alma ve satış sonrası teknik destek hizmetleri sunuyoruz.</p>
                                         </div>
                                     </div>
                                     <div className="faq-item">
-                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">3. Are you licensed and insured?</h5>
+                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">3. Hangi sektörlere hizmet veriyorsunuz?</h5>
                                         <div id="collapseThree" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                            <p>Yes, we are fully licensed and insured to operate in our service areas. This ensures that your project is protected and complies with all local regulations</p>
+                                            <p>Çelik endüstrisi, güneş enerjisi sistemleri, savunma sanayi, hareketli platformlar, havacılık, hidroelektrik sistemler ve genel makina imalatı gibi geniş bir yelpazede endüstriyel sektörlere hizmet veriyoruz.</p>
                                         </div>
                                     </div>
                                 </div>

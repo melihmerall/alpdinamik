@@ -10,11 +10,11 @@ const Blog = () => {
                     <div className="row">
                         <div className="col-xl-4 col-lg-5 columns_sticky lg-mb-30">
                             <div className="title">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Latest Insights</span>
-                                <h2 className="title_split_anim mb-20">Stay Updated on Industry Trends</h2>
-                                <p className="wow fadeInUp" data-wow-delay=".4s">Subscribe to our newsletter for the latest insights and developments shaping the construction</p>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Son Haberler</span>
+                                <h2 className="title_split_anim mb-20">Sektör Trendlerinden Haberdar Olun</h2>
+                                <p className="wow fadeInUp" data-wow-delay=".4s">Lineer hareket sistemleri ve mühendislik çözümleri hakkında en son gelişmeler ve içgörüler için bültenimize abone olun</p>
                                 <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                    <a className="build_button mt-25" href="blog.html">View Blog<i className="flaticon-right-up"></i></a>
+                                    <a className="build_button mt-25" href="/blog">Blogu Görüntüle<i className="flaticon-right-up"></i></a>
                                 </div>
                             </div>
                         </div>

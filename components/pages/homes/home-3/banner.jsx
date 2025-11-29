@@ -49,8 +49,8 @@ const BannerThree = () => {
                     <div className="row al-end">
                         <div className="col-lg-9 lg-mb-10">
                             <div className="banner__three-content title_split_anim">
-                                <h1>Modern <img className="wow img_left_animation" src={banner.src} alt="image" /></h1>
-                                <h1>Building Concepts</h1>
+                                <h1>Lineer Hareket <img className="wow img_left_animation" src={banner.src} alt="image" /></h1>
+                                <h1>Sistemlerinde Mühendislik Ortağınız</h1>
                             </div>
                         </div>
                         <div className="col-lg-3 wow fadeInDown" data-wow-delay=".4s">

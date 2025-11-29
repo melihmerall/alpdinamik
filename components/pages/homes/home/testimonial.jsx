@@ -41,8 +41,8 @@ const Testimonial = () => {
                 <div className="row al-end mb-60">
                     <div className="col-xl-6 col-lg-8">
                         <div className="testimonial__one-title lg-t-center lg-mb-20">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Testimonial</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Client Feedback and Success Stories</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Referanslar</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Müşteri Görüşleri ve Başarı Hikayeleri</h2>
                         </div>
                     </div>
                     <div className="col-xl-6 col-lg-4 wow fadeInDown" data-wow-delay=".4s">
@@ -57,7 +57,7 @@ const Testimonial = () => {
                     </div>
                 </div>
             </div>
-            <div className="testimonial_slide swiper lg-pl-10 lg-pr-10 wow fadeInUp data_cursor" data-wow-delay=".5s" data-cursor-text="Drag">
+            <div className="testimonial_slide swiper lg-pl-10 lg-pr-10 wow fadeInUp" data-wow-delay=".5s">
                 <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
                     {testimonialItem?.map((data, id) => (
                         <SwiperSlide key={id}>

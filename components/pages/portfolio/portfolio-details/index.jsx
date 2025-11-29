@@ -2,7 +2,7 @@
 import SEO from "@/components/data/seo";
 import BreadCrumb from "../../common/breadcrumb";
 import PortfolioDetailsMain from "./portfolio-details";
-import FooterOne from "@/components/layout/footers/footer-one";
+import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 import CustomCursor from "../../common/cursor";
 import SwitchTab from "../../common/dark-light";
@@ -17,7 +17,7 @@ const PortfolioDetails = ({singleData}) => {
             <HeaderTwo />
             <BreadCrumb title={singleData?.title} innerTitle={singleData?.title} />
             <PortfolioDetailsMain singleData={singleData} />
-            <FooterOne />
+            <FooterTwo />
             <ScrollToTop />
         </>
     );

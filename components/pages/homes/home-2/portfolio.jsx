@@ -9,10 +9,10 @@ const PortfolioTwo = () => {
                 <div className="row">
                     <div className="col-lg-5 columns_sticky lg-mb-25">
                         <div className="portfolio__two-left mr-40 xl-mr-0">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Latest Creations</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">View Our Completed Projects</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Portföyümüz</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Tamamladığımız Projeleri Keşfedin</h2>
                             <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                <Link className="build_button mt-35" href="/portfolio">All Project<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button mt-35" href="/portfolio/3-columns">Tüm Projeler<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>

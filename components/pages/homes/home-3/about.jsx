@@ -17,13 +17,13 @@ const AboutThree = () => {
                         <div className="col-xl-5 col-lg-4"></div>
                         <div className="col-xl-7 col-lg-8">
                             <div className="about__three-right pt-120 lg-pt-30 pl-30 lg-pl-0">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">About Our Company</span>
-                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Advanced Solutions for Essential Construction Projects</h2>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Hakkımızda</span>
+                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Lineer Hareket Sistemlerinde Güvenilir Çözüm Ortağınız</h2>
                                 <div className="row mt-20">
                                     <div className="col-lg-7 col-md-8 pr-25 md-mb-25">
-                                        <p className="wow fadeInUp" data-wow-delay=".4s">We provide cutting-edge solutions that enhance project efficiency, ensure sustainability, and deliver superior results tailored to meet your construction needs.</p>
+                                        <p className="wow fadeInUp" data-wow-delay=".4s">Alp Dinamik olarak, lineer hareket çözümleri, proje tasarımı, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.</p>
                                         <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                            <a className="build_button mt-20" href="about.html">Discover more<i className="flaticon-right-up"></i></a>
+                                            <a className="build_button mt-20" href="/about-us">Daha Fazlasını Keşfedin<i className="flaticon-right-up"></i></a>
                                         </div>
                                     </div>
                                     <div className="col-lg-5 col-md-4 t-right">

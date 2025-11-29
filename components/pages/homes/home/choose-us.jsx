@@ -14,40 +14,40 @@ const ChooseUs = () => {
                         <div className="choose__us-left t-right mr-40 xl-mr-0">
                             <img className="wow img_left_animation" src={image.src} alt="image" />
                             <div className="choose__us-left-counter bounce_x" style={{backgroundImage: `url(${videoBg.src})`}}>
-                                <h2><Count number={156}/>k</h2>
-                                <p>Project Completed</p>
+                                <h2><Count number={500}/>+</h2>
+                                <p>Tamamlanan Proje</p>
                             </div>
                         </div>
                     </div>
                     <div className="col-xl-6">
                         <div className="choose__us-right ml-30 xl-ml-0">
                             <div className="choose__us-right-title mb-40">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Why Choose US</span>
-                                <h2 className="mb-30 wow fadeInRight" data-wow-delay=".6s">Modern Building Challenges & Solutions</h2>
-                                <p className="wow fadeInUp" data-wow-delay=".4s">One significant challenge is managing project costs in an era of fluctuating material prices and labor shortages.</p>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Neden Alp Dinamik</span>
+                                <h2 className="mb-30 wow fadeInRight" data-wow-delay=".6s">Lineer Hareket Sistemlerinde Doğru Çözüm Ortağı</h2>
+                                <p className="wow fadeInUp" data-wow-delay=".4s">Sadece ürün tedarikçisi değil, uçtan uca mühendislik çözümü sunan bir firma olarak, projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.</p>
                             </div>
                             <div className="choose__us-right-skill wow fadeInUp" data-wow-delay=".7s">
                                 <div className="skill__area-item">
                                     <div className="skill__area-item-content">
-                                        <h6>Building Construction</h6> 
-                                        <span className="skill__area-item-count"><Count number={89}/>%</span>
+                                        <h6>Proje Tasarımı & Mühendislik</h6> 
+                                        <span className="skill__area-item-count"><Count number={95}/>%</span>
                                     </div>
                                     <div className="skill__area-item-inner">
-                                        <div className="skill__area-item-bar wow active_bar" style={{ width: '89%' }}></div>
+                                        <div className="skill__area-item-bar wow active_bar" style={{ width: '95%' }}></div>
                                     </div>
                                 </div>
                                 <div className="skill__area-item">
                                     <div className="skill__area-item-content">
-                                        <h6>Interiors Design</h6> 
-                                        <span className="skill__area-item-count"><Count number={70}/>%</span>
+                                        <h6>CAD & Teknik Veri Desteği</h6> 
+                                        <span className="skill__area-item-count"><Count number={90}/>%</span>
                                     </div>
                                     <div className="skill__area-item-inner">
-                                        <div className="skill__area-item-bar wow active_bar" style={{ width: '70%' }}></div>
+                                        <div className="skill__area-item-bar wow active_bar" style={{ width: '90%' }}></div>
                                     </div>
                                 </div>
                             </div>
                             <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                <Link className="build_button mt-50" href="/request-quote">Start Today<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button mt-50" href="/contact-us">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>

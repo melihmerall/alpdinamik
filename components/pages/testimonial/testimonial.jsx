@@ -85,7 +85,7 @@ const TestimonialMain = () => {
                     </div>
                 </div>
             </div>
-            <div className="testimonial_slide swiper lg-pl-10 lg-pr-10 wow fadeInUp data_cursor" data-wow-delay=".5s" data-cursor-text="Drag">
+            <div className="testimonial_slide swiper lg-pl-10 lg-pr-10 wow fadeInUp" data-wow-delay=".5s">
                 <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
                     {testimonialData?.map((data, id) => (
                         <SwiperSlide key={id}>

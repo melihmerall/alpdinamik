@@ -37,8 +37,8 @@ const BlogTwo = () => {
                 <div className="row mb-55">
                     <div className="col-xl-12">
                         <div className="blog__two-title t-center">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">News & Blog</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Update News & Blogs</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Haberler & Blog</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Güncel Haberler ve Blog Yazıları</h2>
                         </div>					
                     </div>
                 </div>
@@ -63,7 +63,7 @@ const BlogTwo = () => {
                                                     </ul>
                                                 </div>
                                                 <h4><Link href={`/blog/${data.id}`}>{data.title}</Link></h4>
-                                                <Link className="more_btn" href={`/blog/${data.id}`}>Read More<i className="flaticon-right-up"></i></Link>
+                                                <Link className="more_btn" href={`/blog/${data.id}`}>Daha Fazla Oku<i className="flaticon-right-up"></i></Link>
                                             </div>
                                         </div>
                                     </SwiperSlide>

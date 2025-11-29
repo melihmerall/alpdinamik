@@ -34,10 +34,10 @@ const BannerTwo = () => {
 							<div className="row align-items-center">
 								<div className="col-xl-12">
 									<div className="banner__two-content">
-										<span className="subtitle">Best Construction</span>
-										<h2>Delivering Quality</h2>
-										<h1>Projects</h1>
-										<Link className="build_button" href="/about-us">Discover More<i className="flaticon-right-up"></i></Link>
+										<span className="subtitle">Lineer Hareket Sistemleri</span>
+										<h2>Mühendislik</h2>
+										<h1>Ortağınız</h1>
+										<Link className="build_button" href="/about-us">Daha Fazlasını Keşfedin<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>
@@ -51,10 +51,10 @@ const BannerTwo = () => {
 							<div className="row align-items-center">
 								<div className="col-xl-12">
 									<div className="banner__two-content">
-										<span className="subtitle">Structural Mastery</span>
-										<h2>Building with</h2>
-										<h1>Integrity</h1>
-										<Link className="build_button" href="/about-us">Discover More<i className="flaticon-right-up"></i></Link>
+										<span className="subtitle">Proje Tasarımı</span>
+										<h2>Ürün Seçimi</h2>
+										<h1>ve CAD Desteği</h1>
+										<Link className="build_button" href="/services">Hizmetlerimiz<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>
@@ -68,10 +68,10 @@ const BannerTwo = () => {
 							<div className="row align-items-center">
 								<div className="col-xl-12">
 									<div className="banner__two-content">
-										<span className="subtitle">Future Foundations</span>
-										<h2>Shaping Modern</h2>
-										<h1>Spaces</h1>
-										<Link className="build_button" href="/about-us">Discover More<i className="flaticon-right-up"></i></Link>
+										<span className="subtitle">Mecmot Ürünleri</span>
+										<h2>Vidalı Krikolar</h2>
+										<h1>Yön Değiştiriciler</h1>
+										<Link className="build_button" href="/portfolio/3-columns">Ürün Portföyü<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>
@@ -100,15 +100,15 @@ const BannerTwo = () => {
 									>
 										<SwiperSlide className='banner__two-slide-area-thumb-item'>
 											<img src={banner1.src} alt="banner" />
-											<h6>Delivering Quality Projects</h6>
+											<h6>Mühendislik Ortağınız</h6>
 										</SwiperSlide>
 										<SwiperSlide className='banner__two-slide-area-thumb-item'>
 											<img src={banner2.src} alt="banner" />
-											<h6>Building with Integrity</h6>
+											<h6>Proje Tasarımı ve CAD Desteği</h6>
 										</SwiperSlide>
 										<SwiperSlide className='banner__two-slide-area-thumb-item'>
 											<img src={banner3.src} alt="banner" />
-											<h6>Shaping Modern Spaces</h6>
+											<h6>Mecmot Ürün Portföyü</h6>
 										</SwiperSlide>
 									</Swiper>
 								</div>

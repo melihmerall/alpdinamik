@@ -16,11 +16,11 @@ const Services = () => {
                     <div className="row">
                         <div className="col-lg-5 columns_sticky">
                             <div className="services__three-title">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Our Services</span>
-                                <h2 className="wow fadeInRight" data-wow-delay=".6s">We Ready to Provide Services</h2>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Hizmetlerimiz</span>
+                                <h2 className="wow fadeInRight" data-wow-delay=".6s">Kaliteli Mühendislik Çözümleri Sunuyoruz</h2>
                                 <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                    <Link className="build_button mt-40" href="/about-us">
-                                        All Services<i className="flaticon-right-up"></i>
+                                    <Link className="build_button mt-40" href="/services">
+                                        Tüm Hizmetler<i className="flaticon-right-up"></i>
                                     </Link>
                                 </div>
                             </div>

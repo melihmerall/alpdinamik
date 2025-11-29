@@ -20,7 +20,7 @@ import ScrollToTop from "../../common/scroll/scroll-to-top";
 const HomeOne = () => {
     return (
         <div>
-            <SEO pageTitle='Construction Company' />
+            <SEO pageTitle='Lineer Hareket Sistemleri ve Mühendislik Çözümleri' />
             <CustomCursor />
             <SwitchTab />
             <HeaderOne />

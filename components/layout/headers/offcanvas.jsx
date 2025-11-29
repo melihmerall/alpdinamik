@@ -12,16 +12,16 @@ const SideBar = ({ isOpen, setIsOpen }) => {
                     <img src={logo2.src} alt="logo" />
                 </Link>
                 </div>
-                <p>Redefining the construction industry with innovative solutions, cuttin-edge technology and sustainable practices</p>
+                <p>Lineer hareket sistemlerinde doğru ürün ve mühendislik çözümleri sunuyoruz. Mecmot markasının Türkiye temsilciliği ile projelerinize değer katıyoruz.</p>
                 <div className="header__area-menubar-right-sidebar-popup-contact">
-                    <h4 className="mb-30">Address</h4>
+                    <h4 className="mb-30">İletişim Bilgileri</h4>
                     <div className="header__area-menubar-right-sidebar-popup-contact-item">
                         <div className="header__area-menubar-right-sidebar-popup-contact-item-icon">
                             <i className="flaticon-phone"></i>
                         </div>
                         <div className="header__area-menubar-right-sidebar-popup-contact-item-content">
-                            <span>Phone:</span>
-                            <h6><Link href="tel:+123 (256) 568 58">+123 (256) 568 58</Link></h6>
+                            <span>Telefon:</span>
+                            <h6><Link href="tel:+902626434126">+90 262 643 41 26</Link></h6>
                         </div>
                     </div>
                     <div className="header__area-menubar-right-sidebar-popup-contact-item">
@@ -29,8 +29,8 @@ const SideBar = ({ isOpen, setIsOpen }) => {
                             <i className="flaticon-email-3"></i>
                         </div>
                         <div className="header__area-menubar-right-sidebar-popup-contact-item-content">
-                            <span>Email Address:</span>
-                            <h6><Link href="mailto:needhelp@gmail.com">needhelp@gmail.com</Link></h6>
+                            <span>E-posta Adresi:</span>
+                            <h6><Link href="mailto:alpdinamik@alpdinamik.com.tr">alpdinamik@alpdinamik.com.tr</Link></h6>
                         </div>
                     </div>
                     <div className="header__area-menubar-right-sidebar-popup-contact-item">
@@ -38,8 +38,8 @@ const SideBar = ({ isOpen, setIsOpen }) => {
                             <i className="flaticon-location-1"></i>
                         </div>
                         <div className="header__area-menubar-right-sidebar-popup-contact-item-content">
-                            <span>Location:</span>
-                            <h6><Link href="https://google.com/maps" target="_blank">2464 Royal Ln. Mesa, New Jersey 45463</Link></h6>
+                            <span>Konum:</span>
+                            <h6><Link href="https://www.google.com/maps" target="_blank">Mevlana Mh. Soma Maden Şehitleri Blv. No:4/1 İç Kapı No:9 Gebze / Kocaeli</Link></h6>
                         </div>
                     </div>
                 </div>

@@ -7,78 +7,57 @@ const RequestQuoteMain = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-xl-12">
-							<form action="#">
+							<div className="request__quote-header mb-40">
+								<h2 className="mb-15">Projenizi paylaşın</h2>
+								<p className="mb-20">Kısa formu doldurun; en geç 2 iş saati içinde CAD veya teklif dosya paylaşımı için dönüş.</p>
+								<p className="text-s" style={{opacity: 0.85}}>CAD & FEM doğrulama gerektiren taleplerde örnek çizim eklemek süreci hızlandırır.</p>
+							</div>
+							<form action="#" method="post" encType="multipart/form-data">
 								<div className="row">
 									<div className="col-md-6 mt-30">
 										<div className="request__quote-item">
-											<label>First Name<span> *</span></label>
-											<input type="text" name="name" placeholder="First" />
+											<label htmlFor="contact-name">Ad Soyad<span> *</span></label>
+											<input id="contact-name" type="text" name="name" placeholder="Örn. Ali Yılmaz" required />
 										</div>
 									</div>
 									<div className="col-md-6 mt-30">
 										<div className="request__quote-item">
-											<label>Last Name</label>
-											<input type="text" placeholder="Last" />
+											<label htmlFor="contact-email">E-posta<span> *</span></label>
+											<input id="contact-email" type="email" name="email" placeholder="ornek@domain.com" required />
 										</div>
 									</div>
 									<div className="col-md-6 mt-30">
 										<div className="request__quote-item">
-											<label>Email Address<span> *</span></label>
-											<input type="email" placeholder="Email" />
+											<label htmlFor="contact-phone">Telefon</label>
+											<input id="contact-phone" type="text" name="phone" placeholder="+90 ___ ___ __ __" />
 										</div>
 									</div>
 									<div className="col-md-6 mt-30">
 										<div className="request__quote-item">
-											<label>Number<span> *</span></label>
-											<input type="text" placeholder="+00 123 4567" />
-										</div>
-									</div>
-									<div className="col-md-6 mt-30">
-										<div className="request__quote-item">
-											<label>Company/Organization<span> *</span></label>
-											<input type="text" placeholder="Envato" />
-										</div>
-									</div>
-									<div className="col-md-6 mt-30">
-										<div className="request__quote-item">
-											<label>Website<span> *</span></label>
-											<input type="text" placeholder="http://envato.com" />
-										</div>
-									</div>
-									<div className="col-md-12 mt-30">
-										<p className="mb-10">What services can we provide you?<span> *</span></p>
-										<div className="row">
-											<div className="col-md-4">
-												<div className="request__quote-services">
-													<label><input className="mr-10" type="checkbox" />Optimization (SEO)</label>
-													<label><input className="mr-10" type="checkbox" />Web Design</label>
-													<label><input className="mr-10" type="checkbox" />Web Hosting / Maintenance</label>
-												</div>
-											</div>
-											<div className="col-md-4">
-												<div className="request__quote-services">
-													<label><input className="mr-10" type="checkbox" />Content Writing</label>
-													<label><input className="mr-10" type="checkbox" />Search Engine Marketing</label>
-													<label><input className="mr-10" type="checkbox" />Social Media</label>
-												</div>
-											</div>
-											<div className="col-md-4">
-												<div className="request__quote-services">
-													<label><input className="mr-10" type="checkbox" />ADA Compliance</label>
-													<label><input className="mr-10" type="checkbox" />Photography / Video</label>
-													<label><input className="mr-10" type="checkbox" />Email Marketing</label>
-												</div>
-											</div>
+											<label htmlFor="contact-file">Dosya Ekle (Opsiyonel)</label>
+											<input id="contact-file" type="file" name="file" accept=".pdf,.dwg,.dxf,.step,.stp,.jpg,.jpeg,.png" />
+											<small className="text-muted">PDF, DWG, DXF, STEP, STP, JPG, PNG formatları desteklenir.</small>
 										</div>
 									</div>
 									<div className="col-md-12 mt-30">
 										<div className="request__quote-item">
-											<label>Message<span> *</span></label>
-											<textarea name="message"></textarea>
+											<label htmlFor="contact-message">İhtiyaç detayları<span> *</span></label>
+											<textarea id="contact-message" name="message" placeholder="Kaldırma kuvveti, hız, strok, ortam bilgisi..." rows="4" required></textarea>
 										</div>
 									</div>
-									<div className="col-lg-12">
-										<button className="build_button mt-30" type="submit">Submit Now<i className="flaticon-right-up"></i></button>
+									<div className="col-md-12 mt-30">
+										<div className="request__quote-item">
+											<label className="checkbox-inline" style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+												<input type="checkbox" name="kvkk" required style={{marginRight: '10px'}} />
+												<span>KVKK metnini okudum, verilerimin işlenmesini onaylıyorum.<span> *</span></span>
+											</label>
+										</div>
+									</div>
+									<div className="col-lg-12 mt-30">
+										<button className="build_button" type="submit">Gönder<i className="flaticon-right-up"></i></button>
+									</div>
+									<div className="col-lg-12 mt-20">
+										<p className="text-xs text-center" style={{opacity: 0.8, fontSize: '12px'}}>Gönderimler TLS korumalıdır ve verileriniz yalnızca proje süresince saklanır.</p>
 									</div>
 								</div>
 							</form>

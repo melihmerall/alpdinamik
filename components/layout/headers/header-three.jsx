@@ -33,7 +33,7 @@ const HeaderThree = () => {
                                 <Search isOpen={search} setIsOpen={setSearch} />
                             </div>
                             <div className="header__area-menubar-right-btn">
-                                <Link className="build_button" href="/request-quote">Get Started<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href="/request-quote">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
                             </div>
                             <div className="header__area-menubar-right-sidebar">
                                 <div className="header__area-menubar-right-sidebar-icon" onClick={() => setSidebarOpen(true)}>

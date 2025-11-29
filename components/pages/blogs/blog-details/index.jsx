@@ -2,7 +2,7 @@
 import SEO from "@/components/data/seo";
 import BreadCrumb from "../../common/breadcrumb";
 import BlogSingleMain from "./blog-details";
-import FooterOne from "@/components/layout/footers/footer-one";
+import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 import SwitchTab from "../../common/dark-light";
 import CustomCursor from "../../common/cursor";
@@ -18,7 +18,7 @@ const BlogDetails = ({singleData}) => {
             <HeaderTwo />
             <BreadCrumb title={firstThreeWords} innerTitle={singleData?.title} />
             <BlogSingleMain singleData={singleData}/>
-            <FooterOne />
+            <FooterTwo />
             <ScrollToTop />
         </>
     );

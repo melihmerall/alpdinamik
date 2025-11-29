@@ -14,7 +14,7 @@ const ServicesSingleMain = ({singleData}) => {
                         <div className="col-lg-4 columns_sticky">
                             <div className="all__sidebar">                        
                                 <div className="all__sidebar-item">
-                                    <h4>Our Solutions</h4>
+                                    <h4>Hizmetlerimiz</h4>
                                     <div className="all__sidebar-item-category">
                                         <ul>
                                             {servicesData.slice(0, 5).map((data, id) => (
@@ -24,15 +24,15 @@ const ServicesSingleMain = ({singleData}) => {
                                     </div>
                                 </div>
                                 <div className="all__sidebar-item-help mb-25" style={{backgroundImage: `url(${ctaImage.src})`}}>
-                                    <h3>Ready for Your Next Construction?</h3>
-                                    <Link className="build_button mt-20" href="/contact-us">Get an Advice<i className="flaticon-right-up"></i></Link>
+                                    <h3>Projeniz İçin Hazır mısınız?</h3>
+                                    <Link className="build_button mt-20" href="/contact-us">Teklif Alın<i className="flaticon-right-up"></i></Link>
                                 </div>
                                 <div className="all__sidebar-item">
-                                    <h4>Download</h4>
+                                    <h4>İndir</h4>
                                     <div className="all__sidebar-item-download">
                                         <ul>
-                                            <li><Link href="#">Company Details<span className="fal fa-arrow-to-bottom"></span></Link></li>
-                                            <li><Link href="#">Our Brochures<span className="fal fa-arrow-to-bottom"></span></Link></li>
+                                            <li><Link href="#">Firma Detayları<span className="fal fa-arrow-to-bottom"></span></Link></li>
+                                            <li><Link href="#">Ürün Katalogları<span className="fal fa-arrow-to-bottom"></span></Link></li>
                                         </ul>                            
                                     </div>
                                 </div>
@@ -42,10 +42,10 @@ const ServicesSingleMain = ({singleData}) => {
                             <div className="services__details-area">
                                 <img src={singleData.image.src} alt="image" />
                                 <h3 className="mt-25 mb-20">{singleData.title}</h3>
-                                <p className="mb-20">We pride ourselves on delivering high-quality construction services tailored to meet the unique needs of our clients. With years of experience in the industry, our team of skilled professionals is dedicated to bringing your vision to life. Whether you are looking to build a new structure, renovate an existing space, or need specialized construction services, we are here to help.</p>
-                                <p className="mb-25">With years of industry experience, our team handles every aspect of the construction process, your project runs smoothly and efficiently. We prioritize open communication, timely delivery, and quality workmanship to exceed your expectations. Trust us to provide innovative solutions that.</p>
-                                <h4 className="mb-20">Building with Unmatched Excellence</h4>
-                                <p>Transform your existing space with our renovation and remodeling services. Whether you want to update your kitchen, bathroom, or entire home, we bring innovative solutions to enhance your living space. Our team has extensive experience in commercial construction, including office buildings, retail spaces, and industrial facilities. We work closely with you to ensure your project align.</p>
+                                <p className="mb-20">Alp Dinamik olarak, lineer hareket sistemlerinde müşterilerimizin özel ihtiyaçlarına uygun yüksek kaliteli mühendislik hizmetleri sunuyoruz. Sektördeki yılların verdiği deneyimle, uzman ekibimiz projelerinizi hayata geçirmek için çalışıyor. Yeni bir sistem kurulumu, mevcut sistem iyileştirmesi veya özel uygulama gereksinimleriniz için yanınızdayız.</p>
+                                <p className="mb-25">Sektördeki deneyimimizle, ekibimiz proje sürecinin her aşamasını yönetir ve projenizin sorunsuz ve verimli ilerlemesini sağlar. Açık iletişim, zamanında teslimat ve kaliteli işçilik ile beklentilerinizi aşmayı hedefliyoruz. Yenilikçi çözümler sunarak güvenilir bir mühendislik ortağı olmaya devam ediyoruz.</p>
+                                <h4 className="mb-20">Mühendislik Çözümlerinde Üstün Kalite</h4>
+                                <p>Lineer hareket sistemlerinizi Alp Dinamik'in uzman desteğiyle geliştirin. Uygulamanızın gereksinimlerine göre en uygun vidalı kriko, yön değiştirici veya lineer aktüatör çözümünü sunuyoruz. Ekibimiz, çelik endüstrisi, güneş enerjisi, savunma sanayi ve genel makina imalatı gibi farklı sektörlerde kapsamlı deneyime sahiptir. Projenizin başarısı için sizinle yakın işbirliği içinde çalışıyoruz.</p>
                                 <div className="row mt-40 mb-40">
                                     <div className="col-sm-6 sm-mb-25">
                                         <img className="img_full" src={image1.src} alt="image" />
@@ -54,31 +54,31 @@ const ServicesSingleMain = ({singleData}) => {
                                         <img className="img_full" src={image2.src} alt="image" />
                                     </div>
                                 </div>
-                                <p>We deliver exceptional construction services backed by years of experience. Our skilled team prioritizes quality, transparency, and client satisfaction. We utilize innovative techniques and sustainable practices, ensuring timely project completion. Trust us to bring your to life with unmatched craftsmanship</p>
+                                <p>Yılların deneyimiyle olağanüstü mühendislik hizmetleri sunuyoruz. Uzman ekibimiz kalite, şeffaflık ve müşteri memnuniyetini ön planda tutuyor. Yenilikçi teknikler ve sürdürülebilir uygulamalar kullanarak, projelerin zamanında tamamlanmasını sağlıyoruz. Üstün mühendislik çözümlerimizle projelerinizi hayata geçirmenize güvenin.</p>
                                 <ul className="services__details-area-list">
-                                    <li><i className="flaticon-check-mark"></i>Our skilled professionals bring years of experience a</li>
-                                    <li><i className="flaticon-check-mark"></i>We are the leading construction company in the industry.</li>
-                                    <li><i className="flaticon-check-mark"></i>Our transparent pricing ensures no hidden fees or surprises.</li>
-                                    <li><i className="flaticon-check-mark"></i>We adhere to strict safety standards on all job sites.</li>
+                                    <li><i className="flaticon-check-mark"></i>Deneyimli mühendislerimiz yılların birikimini projelerinize aktarır</li>
+                                    <li><i className="flaticon-check-mark"></i>Lineer hareket sistemlerinde sektörün önde gelen mühendislik firmasıyız</li>
+                                    <li><i className="flaticon-check-mark"></i>Şeffaf fiyatlandırma ile gizli maliyet yok, net teklifler sunuyoruz</li>
+                                    <li><i className="flaticon-check-mark"></i>Tüm projelerimizde güvenlik standartlarına sıkı sıkıya bağlıyız</li>
                                 </ul>
-                                <h3>Commonly Asked Questions</h3>
+                                <h3>Sıkça Sorulan Sorular</h3>
                                 <div className="mt-30" id="accordionExample">
                                     <div className="faq-item">
-                                        <h5 className="icon" data-bs-toggle="collapse" data-bs-target="#collapseOne">1. What services do you offer?</h5>
+                                        <h5 className="icon" data-bs-toggle="collapse" data-bs-target="#collapseOne">1. Hangi hizmetleri sunuyorsunuz?</h5>
                                         <div id="collapseOne" className="faq-item-body collapse show" data-bs-parent="#accordionExample">
-                                            <p>We offer a range of services including construction management, design-build solutions, renovations, and specialty contracting for both residential and commercial projects</p>
+                                            <p>Proje tasarımı ve mühendislik, ürün seçimi ve boyutlandırma, 2D/3D CAD ve teknik veri desteği, devreye alma ve saha desteği, satış sonrası teknik destek hizmetlerini sunuyoruz</p>
                                         </div>
                                     </div>
                                     <div className="faq-item">
-                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">2. Do you provide free estimates?</h5>
+                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">2. Ücretsiz teklif veriyor musunuz?</h5>
                                         <div id="collapseTwo" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                            <p>Yes, we offer free estimates for all potential projects. We assess your requirements and provide a detailed quote without any obligation</p>
+                                            <p>Evet, tüm potansiyel projeler için ücretsiz teklif sunuyoruz. Gereksinimlerinizi değerlendirip, herhangi bir yükümlülük olmadan detaylı bir teklif hazırlıyoruz</p>
                                         </div>
                                     </div>
                                     <div className="faq-item">
-                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">3. Are you licensed and insured?</h5>
+                                        <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">3. CAD verileri ne kadar sürede temin edilir?</h5>
                                         <div id="collapseThree" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                            <p>Yes, we are fully licensed and insured to operate in our service areas. This ensures that your project is protected and complies with all local regulations</p>
+                                            <p>2D ve 3D CAD verileri, teknik çizimler ve ürün katalogları genellikle 24-48 saat içinde sağlanır. Acil durumlarda daha hızlı teslimat yapılabilir</p>
                                         </div>
                                     </div>
                                 </div>

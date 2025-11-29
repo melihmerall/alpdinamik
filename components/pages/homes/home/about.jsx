@@ -17,8 +17,8 @@ const About = () => {
                         <div className="col-lg-7 lg-mb-25">
                             <div className="about__one-left">
                                 <div className="about__one-left-title">
-                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">About Our Company</span>
-                                    <h2 className="wow fadeInRight" data-wow-delay=".6s">Innovative Solutions for Complex Projects</h2>
+                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Hakkımızda</span>
+                                    <h2 className="wow fadeInRight" data-wow-delay=".6s">Lineer Hareket Sistemlerinde Projeci ve Mühendislik Odaklı Çözümler</h2>
                                 </div>
                                 <div className="row al-center mt-45">
                                     <div className="col-md-4 md-mb-25">
@@ -34,20 +34,20 @@ const About = () => {
                                             <div className="about__one-left-list-item wow fadeInUp" data-wow-delay=".3s">
                                                 <i className="flaticon-technology"></i>
                                                 <div className="about__one-left-list-item-content">
-                                                    <h4>Modern Technology</h4>
-                                                    <p>Cutting-edge tools and software streamline processes, enabling teams to deliver</p>
+                                                    <h4>CAD & Teknik Veri Desteği</h4>
+                                                    <p>2D ve 3D CAD verileriyle projelerinizi hızlandırın, doğru ürün seçimi için teknik veri desteği alın</p>
                                                 </div>
                                             </div>
                                             <div className="about__one-left-list-item wow fadeInUp" data-wow-delay=".5s">
                                                 <i className="flaticon-team"></i>
                                                 <div className="about__one-left-list-item-content">
-                                                    <h4>Experience Engineers</h4>
-                                                    <p>Knowledge and practical skills enable them to tackle challenges from start to finish</p>
+                                                    <h4>Deneyimli Mühendisler</h4>
+                                                    <p>Uygulama analizinden devreye almaya kadar projenizin her aşamasında yanınızdayız</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                            <Link className="build_button mt-40" href="/about">Discover more<i className="flaticon-right-up"></i></Link>
+                                            <Link className="build_button mt-40" href="/about-us">Daha fazla bilgi<i className="flaticon-right-up"></i></Link>
                                         </div>
                                     </div>
                                 </div>

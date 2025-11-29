@@ -11,10 +11,10 @@ const Award = () => {
     };
     const images = [image1, image2, image3, image4];
     const awards = [
-        { title: "Sustainable Practices", location: "France", year: "2017" },
-        { title: "3D Design", location: "Italy", year: "2005" },
-        { title: "Health and Safety", location: "Germany", year: "1990" },
-        { title: "Construction Solution", location: "USA", year: "1968" },
+        { title: "Çelik Endüstrisi Projesi", location: "Türkiye", year: "2023" },
+        { title: "Güneş Enerjisi Takip Sistemi", location: "Türkiye", year: "2022" },
+        { title: "Savunma Sanayi Platformu", location: "Türkiye", year: "2021" },
+        { title: "Hidroelektrik Kapak Kontrolü", location: "Türkiye", year: "2020" },
     ];
 
     return (
@@ -23,13 +23,13 @@ const Award = () => {
                 <div className="row al-end mb-60">
                     <div className="col-lg-7 lg-mb-10">
                         <div className="award__area-title">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Achieve Distinction</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Recognition's and Award</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Başarılarımız</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Referanslar ve Başarılar</h2>
                         </div>
                     </div>
                     <div className="col-lg-5 wow fadeInDown" data-wow-delay=".4s">
                         <div className="award__area-content jc-end">
-                            <p>Our commitment to excellence has earned us numerous awards and honors in the construction industry, showcasing our dedication and quality.</p>
+                            <p>Mükemmellik taahhüdümüz, endüstriyel projelerde sayısız başarı ve referans kazandırdı. Kalite ve adanmışlığımızı gösteriyoruz.</p>
                         </div>
                     </div>
                 </div>

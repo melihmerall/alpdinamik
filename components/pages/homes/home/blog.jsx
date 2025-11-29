@@ -9,8 +9,8 @@ const Blog = () => {
                 <div className="row mb-55">
                     <div className="col-xl-12">
                         <div className="blog__one-title t-center">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">News & Blog</span>
-                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Update News & Blogs</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Haberler & Blog</span>
+                            <h2 className="wow fadeInRight" data-wow-delay=".6s">Teknik İçerikler ve Güncellemeler</h2>
                         </div>					
                     </div>
                 </div>
@@ -26,7 +26,7 @@ const Blog = () => {
                                 </div>
                                 <div className="blog__one-item-content">
                                     <h4><Link href={`/blog/${data.id}`}>{data.title}</Link></h4>
-                                    <Link className="more_btn" href={`/blog/${data.id}`}>Read More<i className="flaticon-right-up"></i></Link>
+                                    <Link className="more_btn" href={`/blog/${data.id}`}>Devamını Oku<i className="flaticon-right-up"></i></Link>
                                 </div>
                             </div>
                         </div>

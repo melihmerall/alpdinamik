@@ -11,8 +11,8 @@ const AboutMain = () => {
                     <div className="row">
                         <div className="col-lg-6 lg-mb-25">
                             <div className="mission__area-left mr-40 xl-mr-0">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Our Mission</span>
-                                <h2 className="title_split_anim">Dedicated to Delivering Value and Excellence</h2>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Misyonumuz</span>
+                                <h2 className="title_split_anim">Doğru Ürün + Doğru Mühendislik + Sürdürülebilir Hizmet</h2>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -22,8 +22,8 @@ const AboutMain = () => {
                                         <div className="experience__area-list-item">
                                             <i className="flaticon-team"></i>
                                             <div className="experience__area-list-item-content">
-                                                <h4>Project Planning</h4>
-                                                <p>Ensuring every detail is considered designing</p>
+                                                <h4>Proje Tasarımı</h4>
+                                                <p>Uygulama analizi ve mühendislik danışmanlığı ile her detayı planlıyoruz</p>
                                             </div>
                                         </div>
                                     </div>
@@ -31,8 +31,8 @@ const AboutMain = () => {
                                         <div className="experience__area-list-item">
                                             <i className="flaticon-technology"></i>
                                             <div className="experience__area-list-item-content">
-                                                <h4>Labor Preparation</h4>
-                                                <p>We take pride in our quality craftsmanship</p>
+                                                <h4>CAD & Teknik Veri</h4>
+                                                <p>2D/3D CAD desteği ve teknik veri hazırlığında kalite odaklıyız</p>
                                             </div>
                                         </div>
                                     </div>
@@ -53,15 +53,15 @@ const AboutMain = () => {
                         <div className="col-lg-7">
                             <div className="about__five-right ml-70 xl-ml-0">
                                 <div className="about__five-right-title">
-                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">About Our Company</span>
-                                    <h2 className="title_split_anim">Trusted Partner in Construction and Design</h2>
+                                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Hakkımızda</span>
+                                    <h2 className="title_split_anim">Lineer Hareket Sistemlerinde Mühendislik Ortağınız</h2>
                                 </div>
                                 <div className="features wow fadeInUp" data-wow-delay=".3s" style={{backgroundImage: `url(${bgImage.src})`}}>
-                                    <h3>Building Trust<br/>Since 1989</h3>
+                                    <h3>Güven İnşa Ediyoruz<br/>25+ Yıldır</h3>
                                 </div>
-                                <p className="wow fadeInUp" data-wow-delay=".6s">Our journey began with a commitment to excellence, and that commitment remains at the core of our operations today. We’ve grown from a small local business into a trusted partner for both residential and commercial.</p>
+                                <p className="wow fadeInUp" data-wow-delay=".6s">Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz markaların ürünlerini sadece satış olarak değil, uygulama analizi, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle birlikte sunuyoruz. Makine imalatçıları, çelik endüstrisi, güneş enerjisi ve savunma sanayi gibi sektörlerde güvenilir çözüm ortağıyız.</p>
                                 <div className="item_bounce">
-                                    <Link className="build_button mt-20" href="/portfolio">See Projects<i className="flaticon-right-up"></i></Link>
+                                    <Link className="build_button mt-20" href="/portfolio/3-columns">Projelerimizi İnceleyin<i className="flaticon-right-up"></i></Link>
                                 </div>
                             </div>
                         </div>

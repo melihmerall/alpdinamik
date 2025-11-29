@@ -49,7 +49,7 @@ const ServicesFour = () => {
                 </div>
                 <div className="row mt-70 wow fadeInUp" data-wow-delay=".5s">
                     <div className="col-xl-12">
-                        <div className="swiper services_four_slide data_cursor" data-cursor-text="Drag">
+                        <div className="swiper services_four_slide">
                             <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
                                 {servicesData?.map((data, id) => (
                                     <SwiperSlide key={id}>

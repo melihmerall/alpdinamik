@@ -17,7 +17,7 @@ import ScrollToTop from "../../common/scroll/scroll-to-top";
 const HomeTwo = () => {
     return (
         <>
-            <SEO pageTitle="Renovation Business" />
+            <SEO pageTitle="Lineer Hareket Sistemleri ve Mühendislik Çözümleri" />
             <CustomCursor />
             <SwitchTab />
             <HeaderTwo />

@@ -19,7 +19,7 @@ import ScrollToTop from "../../common/scroll/scroll-to-top";
 const HomeThree = () => {
     return (
         <>
-            <SEO pageTitle="Modern Construction" />
+            <SEO pageTitle="Lineer Hareket Sistemleri ve Mühendislik Çözümleri" />
             <CustomCursor />
             <SwitchTab />
             <HeaderThree />

@@ -1,7 +1,7 @@
 "use client"
 import SEO from "@/components/data/seo";
 import BreadCrumb from "../common/breadcrumb";
-import FooterOne from "@/components/layout/footers/footer-one";
+import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../common/scroll/scroll-to-top";
 import FaqArea from "./faq";
 import HeaderTwo from "@/components/layout/headers/header-two";
@@ -11,13 +11,13 @@ import SwitchTab from "../common/dark-light";
 const Faq = () => {
     return (
         <>        
-            <SEO pageTitle='FAQ' />
+            <SEO pageTitle='Sıkça Sorulan Sorular' />
             <CustomCursor />
             <SwitchTab />
             <HeaderTwo />
-            <BreadCrumb title='Question & Ans.' innerTitle="FAQ's" />
+            <BreadCrumb title='Sıkça Sorulan Sorular' innerTitle="SSS" />
             <FaqArea />
-            <FooterOne />
+            <FooterTwo />
             <ScrollToTop />
         </>
     );
