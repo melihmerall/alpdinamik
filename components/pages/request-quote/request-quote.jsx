@@ -1,6 +1,60 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 
 const RequestQuoteMain = () => {
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState('');
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError('');
+		setSuccess(false);
+		
+		const formData = new FormData(e.currentTarget);
+		const file = formData.get('file');
+		
+		const data = {
+			fullName: formData.get('name'),
+			email: formData.get('email'),
+			phone: formData.get('phone'),
+			message: formData.get('message'),
+			source: 'PROJECT_FORM',
+			meta: {
+				kvkk: formData.get('kvkk') === 'on',
+			},
+		};
+
+		if (file && file.size > 0) {
+			data.meta.fileName = file.name;
+			data.meta.fileSize = file.size;
+			// TODO: File upload için ayrı endpoint gerekebilir
+		}
+
+		try {
+			const response = await fetch('/api/leads', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data),
+			});
+
+			const result = await response.json();
+
+			if (response.ok && result.success) {
+				setSuccess(true);
+				e.currentTarget.reset();
+			} else {
+				setError(result.error?.message || 'Bir hata oluştu');
+			}
+		} catch (err) {
+			console.error('Error:', err);
+			setError('Form gönderilirken bir hata oluştu');
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
 		<>
 			<div className="request__quote section-padding-three">
@@ -12,7 +66,17 @@ const RequestQuoteMain = () => {
 								<p className="mb-20">Kısa formu doldurun; en geç 2 iş saati içinde CAD veya teklif dosya paylaşımı için dönüş.</p>
 								<p className="text-s" style={{opacity: 0.85}}>CAD & FEM doğrulama gerektiren taleplerde örnek çizim eklemek süreci hızlandırır.</p>
 							</div>
-							<form action="#" method="post" encType="multipart/form-data">
+							{success && (
+								<div className="alert alert-success mb-30" style={{padding: '1rem', background: '#d1fae5', color: '#065f46', borderRadius: '4px'}}>
+									Form başarıyla gönderildi! En kısa sürede size dönüş yapacağız.
+								</div>
+							)}
+							{error && (
+								<div className="alert alert-error mb-30" style={{padding: '1rem', background: '#fee2e2', color: '#991b1b', borderRadius: '4px'}}>
+									{error}
+								</div>
+							)}
+							<form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
 								<div className="row">
 									<div className="col-md-6 mt-30">
 										<div className="request__quote-item">
@@ -54,7 +118,9 @@ const RequestQuoteMain = () => {
 										</div>
 									</div>
 									<div className="col-lg-12 mt-30">
-										<button className="build_button" type="submit">Gönder<i className="flaticon-right-up"></i></button>
+										<button className="build_button" type="submit" disabled={loading}>
+											{loading ? 'Gönderiliyor...' : 'Gönder'}<i className="flaticon-right-up"></i>
+										</button>
 									</div>
 									<div className="col-lg-12 mt-20">
 										<p className="text-xs text-center" style={{opacity: 0.8, fontSize: '12px'}}>Gönderimler TLS korumalıdır ve verileriniz yalnızca proje süresince saklanır.</p>

@@ -1,10 +1,29 @@
+"use client"
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay, Navigation} from 'swiper/modules';
-import blogData from '../../../data/blog-data';
+import { useState, useEffect } from 'react';
 
 const BlogTwo = () => {
-    const blogItem = blogData.slice(0, 4);
+    const [blogItem, setBlogItem] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadBlog() {
+            try {
+                const response = await fetch('/api/blog?published=true&limit=4');
+                if (response.ok) {
+                    const data = await response.json();
+                    setBlogItem(data.data || []);
+                }
+            } catch (error) {
+                console.error('Error loading blog:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadBlog();
+    }, []);
     const slideControl = {
         spaceBetween: 25,
         speed: 1000,
@@ -50,20 +69,20 @@ const BlogTwo = () => {
                                     <SwiperSlide key={id}>
                                         <div className="blog__one-item">
                                             <div className="blog__one-item-image">
-                                            <Link href={`/blog/${data.id}`}><img src={data.image.src} alt="blog" /></Link>
+                                            <Link href={`/blog/${data.slug}`}><img src={data.imageUrl || '/assets/img/blog/blog-1.jpg'} alt="blog" /></Link>
                                                 <div className="blog__one-item-image-date">
-                                                    <h6><i className="fa-regular fa-calendar"></i>{data.date} Dec</h6>
+                                                    <h6><i className="fa-regular fa-calendar"></i>{data.publishedAt ? new Date(data.publishedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) : ''}</h6>
                                                 </div>
                                             </div>
                                             <div className="blog__one-item-content">
                                                 <div className="meta">
                                                     <ul>
                                                         <li><a href="#"><i className="far fa-user"></i>By-Admin</a></li>
-                                                        <li><a href="#"><i className="far fa-comment-dots"></i>Comments ({data.comment})</a></li>
+                                                        <li><a href="#"><i className="far fa-comment-dots"></i>Comments (0)</a></li>
                                                     </ul>
                                                 </div>
-                                                <h4><Link href={`/blog/${data.id}`}>{data.title}</Link></h4>
-                                                <Link className="more_btn" href={`/blog/${data.id}`}>Daha Fazla Oku<i className="flaticon-right-up"></i></Link>
+                                                <h4><Link href={`/blog/${data.slug}`}>{data.title}</Link></h4>
+                                                <Link className="more_btn" href={`/blog/${data.slug}`}>Daha Fazla Oku<i className="flaticon-right-up"></i></Link>
                                             </div>
                                         </div>
                                     </SwiperSlide>

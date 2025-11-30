@@ -11,11 +11,10 @@ import HeaderTwo from "@/components/layout/headers/header-two";
 const PortfolioDetails = ({singleData}) => {
     return (
         <>
-            <SEO pageTitle={singleData?.title} />
             <CustomCursor />
             <SwitchTab />
             <HeaderTwo />
-            <BreadCrumb title={singleData?.title} innerTitle={singleData?.title} />
+            <BreadCrumb title={singleData?.title} innerTitle={singleData?.title} backgroundImage={singleData?.breadcrumbImageUrl} />
             <PortfolioDetailsMain singleData={singleData} />
             <FooterTwo />
             <ScrollToTop />

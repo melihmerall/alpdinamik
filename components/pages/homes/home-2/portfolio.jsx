@@ -1,8 +1,27 @@
+"use client"
 import Link from "next/link";
-import portfolioData from '../../../data/portfolio-data';
+import { useState, useEffect } from 'react';
 
 const PortfolioTwo = () => {
-    const portfolioItem = portfolioData.slice(0, 4);
+    const [portfolioItem, setPortfolioItem] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadPortfolio() {
+            try {
+                const response = await fetch('/api/portfolio?limit=4');
+                if (response.ok) {
+                    const data = await response.json();
+                    setPortfolioItem(data.data || []);
+                }
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadPortfolio();
+    }, []);
     return (
         <div className="portfolio__two section-padding">
             <div className="container">
@@ -20,11 +39,11 @@ const PortfolioTwo = () => {
                         <div className="portfolio__two-right">
                             {portfolioItem?.map((data, id) => (
                                 <div className="portfolio__two-item mt-25 card_sticky" key={id}>
-                                    <img src={data.image.src} alt="image" />
+                                    <img src={data.imageUrl || '/assets/img/portfolio/portfolio-1.jpg'} alt="image" />
                                     <div className="portfolio__two-item-content">
-                                        <span>{data.subtitle}</span>
-                                        <h4><Link href={`/portfolio/${data.id}`}>{data.title}</Link></h4>
-                                        <Link href={`/portfolio/${data.id}`}><i className="flaticon-right-up"></i></Link>
+                                        <span>{data.sector?.name || data.summary}</span>
+                                        <h4><Link href={`/portfolio/${data.slug}`}>{data.title}</Link></h4>
+                                        <Link href={`/portfolio/${data.slug}`}><i className="flaticon-right-up"></i></Link>
                                     </div>
                                 </div>
                             ))}

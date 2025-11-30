@@ -1,9 +1,13 @@
+"use client"
 import Link from 'next/link';
 import breadCrumbBg from "../../../public/assets/img/page/breadcrumb.jpg";
 
-const BreadCrumb = ({title, innerTitle}) => {
+const BreadCrumb = ({title, innerTitle, backgroundImage}) => {
+    // Use provided background image or fallback to default
+    const bgImage = backgroundImage || breadCrumbBg.src;
+    
     return (
-        <div className="breadcrumb__area" style={{backgroundImage: `url(${breadCrumbBg.src})`}}>
+        <div className="breadcrumb__area" style={{backgroundImage: `url(${bgImage})`}}>
             <div className="container">
                 <div className="row">
                     <div className="col-xl-12">

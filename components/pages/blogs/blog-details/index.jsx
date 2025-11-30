@@ -12,11 +12,10 @@ const BlogDetails = ({singleData}) => {
     const firstThreeWords = singleData?.title.split(' ').slice(0, 3).join(' ') + '...';
     return (
         <>
-            <SEO pageTitle={singleData?.title} />
             <SwitchTab />
             <CustomCursor />
             <HeaderTwo />
-            <BreadCrumb title={firstThreeWords} innerTitle={singleData?.title} />
+            <BreadCrumb title={firstThreeWords} innerTitle={singleData?.title} backgroundImage={singleData?.breadcrumbImageUrl} />
             <BlogSingleMain singleData={singleData}/>
             <FooterTwo />
             <ScrollToTop />

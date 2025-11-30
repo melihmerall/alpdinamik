@@ -13,11 +13,10 @@ const ServicesSingle = ({singleData}) => {
     const firstAndSecondWord = words.slice(0, 2).join(' ');
     return (
         <>
-            <SEO pageTitle={singleData?.title} />
             <CustomCursor />
             <SwitchTab />
             <HeaderTwo />
-            <BreadCrumb title={firstAndSecondWord} innerTitle={singleData?.title} />
+            <BreadCrumb title={firstAndSecondWord} innerTitle={singleData?.title} backgroundImage={singleData?.breadcrumbImageUrl} />
             <ServicesSingleMain singleData={singleData}/>
             <FooterTwo />
             <ScrollToTop />

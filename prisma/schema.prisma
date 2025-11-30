@@ -36,15 +36,22 @@ model CompanyPage {
 
 // Services - Services offered
 model Service {
-  id        String   @id @default(cuid())
-  slug      String   @unique // e.g., "proje-tasarimi", "urun-secimi"
-  title     String
-  summary   String   @db.Text
-  body      String?  @db.Text
-  icon      String?
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String   @id @default(cuid())
+  slug              String   @unique // e.g., "proje-tasarimi", "urun-secimi"
+  title             String
+  summary           String   @db.Text
+  body              String?  @db.Text
+  icon              String?
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@map("services")
 }
@@ -97,35 +104,48 @@ model BannerMessage {
 
 // Blog Posts - Blog / News
 model BlogPost {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  title       String
-  summary     String    @db.Text
-  body        String    @db.Text
-  publishedAt DateTime?
-  isPublished Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  title             String
+  summary           String    @db.Text
+  body              String    @db.Text
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  publishedAt       DateTime?
+  isPublished       Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@map("blog_posts")
 }
 
 // Reference Projects - Reference projects / example projects
 model ReferenceProject {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  summary     String   @db.Text
-  body        String?  @db.Text
-  sectorId    String?
-  year        Int?
-  customerName String?
-  location    String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  summary           String   @db.Text
+  body              String?  @db.Text
+  sectorId          String?
+  year              Int?
+  customerName      String?
+  location          String?
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  sector      Sector?  @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+  sector            Sector?  @relation(fields: [sectorId], references: [id], onDelete: SetNull)
 
   @@map("reference_projects")
 }
@@ -205,5 +225,42 @@ model User {
 enum UserRole {
   ADMIN
   EDITOR
+}
+
+// Team Members - Team/Staff
+model TeamMember {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  role        String   // position
+  bio         String?  @db.Text
+  imageUrl    String?
+  email       String?
+  phone       String?
+  socialLinks Json?    // {linkedin, twitter, facebook, behance, etc.}
+  category    String?  // founder, manager, engineer, etc.
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+// Testimonials - Customer testimonials/reviews
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?  // position
+  company   String?
+  imageUrl  String?
+  message   String   @db.Text
+  rating    Int?     // 1-5
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
 }
 

@@ -1,4 +1,3 @@
-"use client"
 import SEO from "@/components/data/seo";
 import CustomCursor from "../../common/cursor";
 import SwitchTab from "../../common/dark-light";
@@ -14,7 +13,7 @@ import BlogTwo from "./blog";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 
-const HomeTwo = () => {
+const HomeTwo = async () => {
     return (
         <>
             <SEO pageTitle="Lineer Hareket Sistemleri ve Mühendislik Çözümleri" />

@@ -162,3 +162,35 @@ export async function getProduct(representativeSlug: string, productSlug: string
   })
 }
 
+// Get active team members
+export async function getActiveTeamMembers(limit?: number) {
+  return await prisma.teamMember.findMany({
+    where: { isActive: true },
+    orderBy: { order: 'asc' },
+    take: limit,
+  })
+}
+
+// Get team member by slug
+export async function getTeamMember(slug: string) {
+  return await prisma.teamMember.findUnique({
+    where: { slug },
+  })
+}
+
+// Get active testimonials
+export async function getActiveTestimonials(limit?: number) {
+  return await prisma.testimonial.findMany({
+    where: { isActive: true },
+    orderBy: { order: 'asc' },
+    take: limit,
+  })
+}
+
+// Get testimonial by id
+export async function getTestimonial(id: string) {
+  return await prisma.testimonial.findUnique({
+    where: { id },
+  })
+}
+

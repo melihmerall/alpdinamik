@@ -1,6 +1,7 @@
+"use client"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay, Navigation} from 'swiper/modules';
-import testimonialData from "../../../data/testimonial-data";
+import { useState, useEffect } from 'react';
 import brand1 from "../../../../public/assets/img/brand/brand-1.png";
 import brand2 from "../../../../public/assets/img/brand/brand-2.png";
 import brand3 from "../../../../public/assets/img/brand/brand-3.png";
@@ -11,6 +12,25 @@ import brand7 from "../../../../public/assets/img/brand/brand-7.png";
 import brand8 from "../../../../public/assets/img/brand/brand-8.png";
 
 const TestimonialTwo = () => {
+    const [testimonialData, setTestimonialData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadTestimonials() {
+            try {
+                const response = await fetch('/api/testimonials?active=true&limit=5');
+                if (response.ok) {
+                    const data = await response.json();
+                    setTestimonialData(data.data || []);
+                }
+            } catch (error) {
+                console.error('Error loading testimonials:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadTestimonials();
+    }, []);
 
     const slideControl = {
         spaceBetween: 25,
@@ -87,20 +107,18 @@ const TestimonialTwo = () => {
                                 <div className="testimonial__one-item">
                                     <div className="testimonial__one-item-client">
                                         <div className="testimonial__one-item-client-image">
-                                            <img src={data.avatar.src} alt="image" />
+                                            <img src={data.imageUrl || '/assets/img/team/team-1.jpg'} alt="image" />
                                         </div>
                                         <div className="testimonial__one-item-client-title">
                                             <h4>{data.name}</h4>
-                                            <span>{data.position}</span>
+                                            <span>{data.role}{data.company ? ` - ${data.company}` : ''}</span>
                                         </div>
                                     </div>
-                                    <p>{data.des}</p>
+                                    <p>{data.message}</p>
                                     <div className="testimonial__one-item-reviews">
-                                        <i className="flaticon-star"></i>
-                                        <i className="flaticon-star"></i>
-                                        <i className="flaticon-star"></i>
-                                        <i className="flaticon-star"></i>
-                                        <i className="flaticon-star"></i>
+                                        {Array.from({ length: data.rating || 5 }).map((_, i) => (
+                                            <i key={i} className="flaticon-star"></i>
+                                        ))}
                                     </div>
                                 </div>
                             </SwiperSlide>

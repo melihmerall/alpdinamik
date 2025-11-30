@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: alpdinamik-db
+    environment:
+      POSTGRES_USER: alpdinamik
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-alpdinamik123}
+      POSTGRES_DB: alpdinamik_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alpdinamik"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - alpdinamik-network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alpdinamik-app
+    environment:
+      DATABASE_URL: postgresql://alpdinamik:${DB_PASSWORD:-alpdinamik123}@postgres:5432/alpdinamik_db?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-change-me-in-production-please}
+      NEXTAUTH_URL: http://localhost:3000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - alpdinamik-network
+    restart: unless-stopped
+    command: sh -c "npx prisma db push --accept-data-loss && npm run db:seed && node server.js"
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  alpdinamik-network:
+    driver: bridge
+

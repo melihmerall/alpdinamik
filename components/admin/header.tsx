@@ -18,37 +18,36 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
     router.refresh()
   }
 
+  const getUserInitials = (email: string) => {
+    return email.charAt(0).toUpperCase()
+  }
+
+  const getRoleLabel = (role: string) => {
+    return role === 'ADMIN' ? 'Yönetici' : 'Editör'
+  }
+
   return (
-    <header style={{
-      background: 'white',
-      padding: '1rem 2rem',
-      borderBottom: '1px solid #e5e7eb',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}>
-      <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600' }}>
-        Yönetim Paneli
-      </h1>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <span style={{ color: '#6b7280' }}>
-          {user.email}
-        </span>
+    <header className="admin-header">
+      <div className="admin-header-left">
+        <h1 className="admin-header-title">Yönetim Paneli</h1>
+      </div>
+      <div className="admin-header-right">
+        <div className="admin-header-user">
+          <div className="admin-header-user-avatar">
+            {getUserInitials(user.email)}
+          </div>
+          <div className="admin-header-user-info">
+            <div className="admin-header-user-name">{user.email}</div>
+            <div className="admin-header-user-role">{getRoleLabel(user.role)}</div>
+          </div>
+        </div>
         <button
           onClick={handleLogout}
-          style={{
-            padding: '0.5rem 1rem',
-            background: '#ef4444',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
+          className="admin-btn admin-btn-danger admin-btn-sm"
         >
-          Çıkış
+          <span>Çıkış</span>
         </button>
       </div>
     </header>
   )
 }
-

@@ -1,0 +1,132 @@
+"use client"
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+export default function AdminLogin() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include', // Ensure cookies are sent
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Use window.location for full page reload to ensure cookie is set
+        // This ensures the server can read the cookie on the next request
+        window.location.href = '/admin'
+      } else {
+        setError(data.error || 'Giriş başarısız')
+        setLoading(false)
+      }
+    } catch (err) {
+      setError('Bir hata oluştu')
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
+      <div style={{
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '8px',
+        boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+        width: '100%',
+        maxWidth: '400px'
+      }}>
+        <h1 style={{ marginBottom: '1.5rem', textAlign: 'center', color: '#333' }}>
+          Admin Girişi
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#666' }}>
+              E-posta
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #ddd',
+                borderRadius: '4px',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#666' }}>
+              Şifre
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #ddd',
+                borderRadius: '4px',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
+          {error && (
+            <div style={{
+              padding: '0.75rem',
+              background: '#fee',
+              color: '#c33',
+              borderRadius: '4px',
+              marginBottom: '1rem'
+            }}>
+              {error}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              background: loading ? '#ccc' : '#667eea',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '1rem',
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+          </button>
+        </form>
+        <div style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.875rem', color: '#666' }}>
+          <p>Varsayılan: admin@alpdinamik.com.tr / admin123</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+

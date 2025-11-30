@@ -63,6 +63,9 @@ export async function POST(request: NextRequest) {
       path: '/',
     })
 
+    // Also set a header to indicate successful login
+    response.headers.set('X-Auth-Success', 'true')
+
     return response
   } catch (error) {
     console.error('Login error:', error)

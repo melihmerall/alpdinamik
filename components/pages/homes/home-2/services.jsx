@@ -1,9 +1,29 @@
+"use client"
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay, Navigation} from 'swiper/modules';
-import servicesData from '../../../data/services-data';
+import { useState, useEffect } from 'react';
 
 const ServicesTwo = () => {
+    const [servicesData, setServicesData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadServices() {
+            try {
+                const response = await fetch('/api/services');
+                if (response.ok) {
+                    const data = await response.json();
+                    setServicesData(data.data || []);
+                }
+            } catch (error) {
+                console.error('Error loading services:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadServices();
+    }, []);
     const slideControl = {
         spaceBetween: 25,
         slidesPerView: 4,
@@ -50,9 +70,9 @@ const ServicesTwo = () => {
                             {servicesData?.map((data, id) => (
                                 <SwiperSlide key={id}>
                                     <div className="services__one-item">
-                                        {data.icon}
-                                        <h4><Link href={`/services/${data.id}`}>{data.title}</Link></h4>
-                                        <Link className="more_btn" href={`/services/${data.id}`}>Daha Fazla Oku <i className="flaticon-right-up"></i></Link>
+                                        {data.icon && <i className={data.icon}></i>}
+                                        <h4><Link href={`/services/${data.slug}`}>{data.title}</Link></h4>
+                                        <Link className="more_btn" href={`/services/${data.slug}`}>Daha Fazla Oku <i className="flaticon-right-up"></i></Link>
                                     </div>
                                 </SwiperSlide>
                             ))}

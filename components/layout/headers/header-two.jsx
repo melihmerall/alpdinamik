@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import logo from "../../../public/assets/img/logo-2.png";
 import MainMenu from './header-menu';
