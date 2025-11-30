@@ -1,19 +1,17 @@
 "use client"
 import Link from "next/link";
 import { useEffect, useState } from 'react';
+import { getActiveRepresentatives } from '@/lib/content';
 
-const MainMenu = () => {
+const MainMenuDynamic = () => {
     const [representatives, setRepresentatives] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadMenu() {
             try {
-                const response = await fetch('/api/menu');
-                if (response.ok) {
-                    const reps = await response.json();
-                    setRepresentatives(reps);
-                }
+                const reps = await getActiveRepresentatives();
+                setRepresentatives(reps);
             } catch (error) {
                 console.error('Error loading menu:', error);
             } finally {
@@ -22,6 +20,23 @@ const MainMenu = () => {
         }
         loadMenu();
     }, []);
+
+    if (loading) {
+        return (
+            <ul>
+                <li><Link href='/'>Anasayfa</Link></li>
+                <li className='menu-item-has-children'><Link href='/about-us'>Kurumsal</Link>
+                    <ul className='sub-menu'>
+                        <li><Link href='/about-us'>Hakkımızda</Link></li>
+                        <li><Link href='/history'>Misyon & Vizyon</Link></li>
+                    </ul>
+                </li>
+                <li><Link href='/portfolio/3-columns'>Sektörler</Link></li>
+                <li><Link href='/blog'>Blog</Link></li>
+                <li><Link href='/contact-us'>İletişim</Link></li>
+            </ul>
+        );
+    }
 
     return (
         <>
@@ -81,4 +96,5 @@ const MainMenu = () => {
     );
 };
 
-export default MainMenu;
+export default MainMenuDynamic;
+
