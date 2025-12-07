@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import ServicesSingle from '@/components/pages/services/service-single'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
   const service = await prisma.service.findUnique({
     where: { slug: params.slug },
   })
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         }
       ] : [],
       type: 'website',
-      url: `${siteUrl}/services/${service.slug}`,
+      url: `${siteUrl}/${params.locale}/services/${service.slug}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -43,12 +43,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       images: service.ogImage || service.imageUrl ? [service.ogImage || service.imageUrl || ''] : [],
     },
     alternates: {
-      canonical: `${siteUrl}/services/${service.slug}`,
+      canonical: `${siteUrl}/${params.locale}/services/${service.slug}`,
     },
   }
 }
 
-export default async function ServiceDetailPage({ params }: { params: { slug: string } }) {
+export default async function ServiceDetailPage({ params }: { params: { slug: string; locale: string } }) {
   const service = await prisma.service.findUnique({
     where: { slug: params.slug },
   })

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 export default function NotFound() {
-  // Root level 404 - redirect to default locale (Turkish)
   return (
     <div style={{
       display: 'flex',
@@ -13,7 +12,7 @@ export default function NotFound() {
       textAlign: 'center'
     }}>
       <h1 style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '1rem' }}>404</h1>
-      <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Sayfa Bulunamadı</h2>
+      <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Sayfa Bulunamadı [LOCALE]</h2>
       <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '2rem' }}>
         Aradığınız sayfa mevcut değil veya taşınmış olabilir.
       </p>

@@ -1,8 +1,10 @@
 "use client"
 import Link from "next/link";
 import { useEffect, useState } from 'react';
+import { useLocale } from 'next-intl';
 
 const MainMenu = () => {
+    const locale = useLocale();
     const [representatives, setRepresentatives] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -26,31 +28,31 @@ const MainMenu = () => {
     return (
         <>
             <ul>
-                <li><Link href='/'>Anasayfa</Link></li>
+                <li><Link href={`/${locale}`}>Anasayfa</Link></li>
                 
                 <li className='menu-item-has-children'>
-                    <Link href='/about-us'>Kurumsal</Link>
+                    <Link href={`/${locale}/about-us`}>Kurumsal</Link>
                     <ul className='sub-menu'>
-                        <li><Link href='/about-us'>Hakkımızda</Link></li>
-                        <li><Link href='/history'>Misyon & Vizyon</Link></li>
+                        <li><Link href={`/${locale}/about-us`}>Hakkımızda</Link></li>
+                        <li><Link href={`/${locale}/history`}>Misyon & Vizyon</Link></li>
                     </ul>
                 </li>
 
                 {representatives.length > 0 && (
                     <li className='menu-item-has-children'>
-                        <Link href='/temsilcilikler'>TEMSİLCİLİKLER</Link>
+                        <Link href={`/${locale}/temsilcilikler`}>TEMSİLCİLİKLER</Link>
                         <ul className='sub-menu'>
                             {representatives.map((rep) => (
                                 <li key={rep.id} className={rep.products.length > 0 ? 'menu-item-has-children' : ''}>
-                                    <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
+                                    <Link href={`/${locale}/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
                                     {rep.products.length > 0 && (
                                         <ul className='sub-menu'>
                                             <li className='menu-item-has-children'>
-                                                <Link href={`/temsilcilikler/${rep.slug}/urunler`}>Ürünler</Link>
+                                                <Link href={`/${locale}/temsilcilikler/${rep.slug}/urunler`}>Ürünler</Link>
                                                 <ul className='sub-menu'>
                                                     {rep.products.map((product) => (
                                                         <li key={product.id}>
-                                                            <Link href={`/temsilcilikler/${rep.slug}/urunler/${product.slug}`}>
+                                                            <Link href={`/${locale}/temsilcilikler/${rep.slug}/urunler/${product.slug}`}>
                                                                 {product.name}
                                                             </Link>
                                                         </li>
@@ -65,17 +67,17 @@ const MainMenu = () => {
                     </li>
                 )}
 
-                <li><Link href='/sektorler'>Sektörler</Link></li>
+                <li><Link href={`/${locale}/sektorler`}>Sektörler</Link></li>
 
                 <li className='menu-item-has-children'>
-                    <Link href='/blog'>Blog</Link>
+                    <Link href={`/${locale}/blog`}>Blog</Link>
                     <ul className='sub-menu'>
-                        <li><Link href='/blog'>Blog Grid</Link></li>
-                        <li><Link href='/blog-standard'>Blog Standard</Link></li>
+                        <li><Link href={`/${locale}/blog`}>Blog Grid</Link></li>
+                        <li><Link href={`/${locale}/blog-standard`}>Blog Standard</Link></li>
                     </ul>
                 </li>
 
-                <li><Link href='/contact-us'>İLETİŞİM</Link></li>
+                <li><Link href={`/${locale}/contact-us`}>İLETİŞİM</Link></li>
             </ul>
         </>
     );

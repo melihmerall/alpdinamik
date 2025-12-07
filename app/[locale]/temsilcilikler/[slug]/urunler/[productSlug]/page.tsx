@@ -17,8 +17,9 @@ async function getProduct(repSlug: string, productSlug: string) {
 export default async function ProductPage({ 
   params 
 }: { 
-  params: { slug: string; productSlug: string } 
+  params: { slug: string; productSlug: string; locale: string } 
 }) {
+  const locale = params.locale;
   const product = await getProduct(params.slug, params.productSlug);
 
   if (!product) {
@@ -44,9 +45,9 @@ export default async function ProductPage({
               <div className="breadcrumb__area-content">
                 <h2>{product.name}</h2>
                 <ul>
-                  <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
-                  <li><Link href="/temsilcilikler">Temsilcilikler</Link><i className="fa-regular fa-angle-right"></i></li>
-                  <li><Link href={`/temsilcilikler/${params.slug}`}>{product.representative?.name}</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}/temsilcilikler`}>Temsilcilikler</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}/temsilcilikler/${params.slug}`}>{product.representative?.name}</Link><i className="fa-regular fa-angle-right"></i></li>
                   <li>{product.name}</li>
                 </ul>
               </div>
@@ -118,7 +119,7 @@ export default async function ProductPage({
 
                 <div style={{ marginTop: '2rem' }}>
                   <Link 
-                    href="/contact-us" 
+                    href={`/${locale}/contact-us`}
                     className="btn btn-primary btn-block"
                     style={{ width: '100%', textAlign: 'center' }}
                   >
@@ -128,7 +129,7 @@ export default async function ProductPage({
 
                 <div style={{ marginTop: '1rem' }}>
                   <Link 
-                    href={`/temsilcilikler/${params.slug}`}
+                    href={`/${locale}/temsilcilikler/${params.slug}`}
                     className="btn btn-outline-secondary btn-block"
                     style={{ width: '100%', textAlign: 'center' }}
                   >

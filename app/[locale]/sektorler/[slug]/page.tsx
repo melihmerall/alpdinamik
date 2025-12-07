@@ -13,12 +13,14 @@ async function getSector(slug: string) {
   return res.json();
 }
 
-export default async function SectorPage({ params }: { params: { slug: string } }) {
+export default async function SectorPage({ params }: { params: { slug: string; locale: string } }) {
   const sector = await getSector(params.slug);
 
   if (!sector) {
     notFound();
   }
+
+  const locale = params.locale;
 
   return (
     <div>
@@ -39,8 +41,8 @@ export default async function SectorPage({ params }: { params: { slug: string } 
               <div className="breadcrumb__area-content">
                 <h2>{sector.name}</h2>
                 <ul>
-                  <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
-                  <li><Link href="/sektorler">Sektörler</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}/sektorler`}>Sektörler</Link><i className="fa-regular fa-angle-right"></i></li>
                   <li>{sector.name}</li>
                 </ul>
               </div>
@@ -91,7 +93,7 @@ export default async function SectorPage({ params }: { params: { slug: string } 
                   <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
                     Bu sektör için çözümlerimiz hakkında bilgi almak ister misiniz?
                   </h3>
-                  <Link href="/contact-us" className="btn btn-primary btn-lg">
+                  <Link href={`/${locale}/contact-us`} className="btn btn-primary btn-lg">
                     Bize Ulaşın
                   </Link>
                 </div>

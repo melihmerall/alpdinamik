@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import BlogDetails from '@/components/pages/blogs/blog-details'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
   const post = await prisma.blogPost.findUnique({
     where: { slug: params.slug },
   })
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       ] : [],
       type: 'article',
       publishedTime: post.publishedAt ? post.publishedAt.toISOString() : undefined,
-      url: `${siteUrl}/blog/${post.slug}`,
+      url: `${siteUrl}/${params.locale}/blog/${post.slug}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -44,12 +44,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       images: post.ogImage || post.imageUrl ? [post.ogImage || post.imageUrl || ''] : [],
     },
     alternates: {
-      canonical: `${siteUrl}/blog/${post.slug}`,
+      canonical: `${siteUrl}/${params.locale}/blog/${post.slug}`,
     },
   }
 }
 
-export default async function BlogDetailPage({ params }: { params: { slug: string } }) {
+export default async function BlogDetailPage({ params }: { params: { slug: string; locale: string } }) {
   const post = await prisma.blogPost.findUnique({
     where: { slug: params.slug },
   })

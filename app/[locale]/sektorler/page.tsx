@@ -12,7 +12,8 @@ async function getSectors() {
   return res.json();
 }
 
-export default async function SectorsPage() {
+export default async function SectorsPage({ params }: { params: { locale: string } }) {
+  const locale = params.locale;
   const sectors = await getSectors();
 
   return (
@@ -30,7 +31,7 @@ export default async function SectorsPage() {
               <div className="breadcrumb__area-content">
                 <h2>Sektörler</h2>
                 <ul>
-                  <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
                   <li>Sektörler</li>
                 </ul>
               </div>
@@ -100,7 +101,7 @@ export default async function SectorsPage() {
                     {sector.slug && (
                       <div className="card-footer bg-transparent" style={{ borderTop: '1px solid #e0e0e0' }}>
                         <Link 
-                          href={`/sektorler/${sector.slug}`}
+                          href={`/${locale}/sektorler/${sector.slug}`}
                           className="btn btn-sm btn-outline-primary"
                         >
                           Detaylı İncele

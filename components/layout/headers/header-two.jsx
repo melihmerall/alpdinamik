@@ -7,8 +7,10 @@ import { useState, useEffect } from 'react';
 import MobileMenuOne from './menu_sidebar/menu-one';
 import SideBar from './offcanvas';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useLocale } from 'next-intl';
 
 const HeaderTwo = () => {
+    const locale = useLocale();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [menuSidebar, setMenuSidebar] = useState(false);
     const [search, setSearch] = useState(false);
@@ -44,7 +46,7 @@ const HeaderTwo = () => {
                     <div className="header__area-menubar">
                         <div className="header__area-menubar-left one">
                             <div className="header__area-menubar-left-logo">
-                                <Link href='/'><img className='one' src={logo.src} alt='logo'/></Link>
+                                <Link href={`/${locale}`}><img className='one' src={logo.src} alt='logo'/></Link>
                             </div>
                         </div>
                         <div className="header__area-menubar-center">
@@ -70,7 +72,7 @@ const HeaderTwo = () => {
                                 <Search isOpen={search} setIsOpen={setSearch} />
                             </div>
                             <div className="header__area-menubar-right-btn one">
-                                <Link className="build_button" href="/request-quote">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href={`/${locale}/request-quote`}>Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
                             </div>
                             <div className="header__area-menubar-right-sidebar">
                                 <div className="header__area-menubar-right-sidebar-icon" onClick={() => setSidebarOpen(true)}>

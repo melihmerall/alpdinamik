@@ -10,11 +10,13 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
 
   const switchLocale = (newLocale: string) => {
-    // Remove current locale from pathname
-    const pathnameWithoutLocale = pathname.replace(`/${locale}`, '');
+    // Remove current locale from pathname using regex with word boundary
+    // This ensures we only remove the locale prefix, not locale codes within the path
+    const pathnameWithoutLocale = pathname.replace(new RegExp(`^/${locale}(/|$)`), '/');
     
     // Navigate to new locale
-    router.push(`/${newLocale}${pathnameWithoutLocale}`);
+    const newPath = `/${newLocale}${pathnameWithoutLocale === '/' ? '' : pathnameWithoutLocale}`;
+    router.push(newPath);
   };
 
   return (
@@ -43,4 +45,3 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
-

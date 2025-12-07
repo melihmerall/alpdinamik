@@ -13,7 +13,8 @@ async function getAboutData() {
   return res.json();
 }
 
-export default async function AboutPage() {
+export default async function AboutPage({ params }: { params: { locale: string } }) {
+  const locale = params.locale;
   const aboutData = await getAboutData();
 
   // Fallback if page doesn't exist
@@ -32,7 +33,7 @@ export default async function AboutPage() {
                 <div className="breadcrumb__area-content">
                   <h2>Hakkımızda</h2>
                   <ul>
-                    <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                    <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
                     <li>Hakkımızda</li>
                   </ul>
                 </div>
@@ -74,7 +75,7 @@ export default async function AboutPage() {
               <div className="breadcrumb__area-content">
                 <h2>{aboutData.title}</h2>
                 <ul>
-                  <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
                   <li>{aboutData.title}</li>
                 </ul>
               </div>

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import PortfolioDetails from '@/components/pages/portfolio/portfolio-details'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
   const project = await prisma.referenceProject.findUnique({
     where: { slug: params.slug },
     include: { sector: true },
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         }
       ] : [],
       type: 'website',
-      url: `${siteUrl}/portfolio/${project.slug}`,
+      url: `${siteUrl}/${params.locale}/portfolio/${project.slug}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -44,12 +44,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       images: project.ogImage || project.imageUrl ? [project.ogImage || project.imageUrl || ''] : [],
     },
     alternates: {
-      canonical: `${siteUrl}/portfolio/${project.slug}`,
+      canonical: `${siteUrl}/${params.locale}/portfolio/${project.slug}`,
     },
   }
 }
 
-export default async function PortfolioDetailPage({ params }: { params: { slug: string } }) {
+export default async function PortfolioDetailPage({ params }: { params: { slug: string; locale: string } }) {
   const project = await prisma.referenceProject.findUnique({
     where: { slug: params.slug },
     include: { sector: true },

@@ -13,12 +13,14 @@ async function getRepresentative(slug: string) {
   return res.json();
 }
 
-export default async function RepresentativePage({ params }: { params: { slug: string } }) {
+export default async function RepresentativePage({ params }: { params: { slug: string; locale: string } }) {
   const representative = await getRepresentative(params.slug);
 
   if (!representative) {
     notFound();
   }
+
+  const locale = params.locale;
 
   return (
     <div>
@@ -37,8 +39,8 @@ export default async function RepresentativePage({ params }: { params: { slug: s
               <div className="breadcrumb__area-content">
                 <h2>{representative.name}</h2>
                 <ul>
-                  <li><Link href="/">Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
-                  <li><Link href="/temsilcilikler">Temsilcilikler</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}`}>Anasayfa</Link><i className="fa-regular fa-angle-right"></i></li>
+                  <li><Link href={`/${locale}/temsilcilikler`}>Temsilcilikler</Link><i className="fa-regular fa-angle-right"></i></li>
                   <li>{representative.name}</li>
                 </ul>
               </div>
@@ -104,7 +106,7 @@ export default async function RepresentativePage({ params }: { params: { slug: s
                           )}
                           <div className="card-body">
                             <h3 className="card-title" style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>
-                              <Link href={`/temsilcilikler/${params.slug}/urunler/${product.slug}`}>
+                              <Link href={`/${locale}/temsilcilikler/${params.slug}/urunler/${product.slug}`}>
                                 {product.name}
                               </Link>
                             </h3>
@@ -116,7 +118,7 @@ export default async function RepresentativePage({ params }: { params: { slug: s
                           </div>
                           <div className="card-footer bg-transparent" style={{ borderTop: '1px solid #e0e0e0' }}>
                             <Link 
-                              href={`/temsilcilikler/${params.slug}/urunler/${product.slug}`}
+                              href={`/${locale}/temsilcilikler/${params.slug}/urunler/${product.slug}`}
                               className="btn btn-sm btn-outline-primary"
                             >
                               Detaylı İncele
