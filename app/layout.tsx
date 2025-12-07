@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import "./globals.css";
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         // Dynamically import Bootstrap JavaScript
         import("bootstrap/dist/js/bootstrap.min.js");
@@ -14,11 +14,10 @@ export default function RootLayout({ children }) {
     }, []);
 
     return (
-        <html lang="tr">
+        <html suppressHydrationWarning>
             <head>
                 <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Alp Dinamik | Lineer Hareket Sistemleri</title>
                 <link rel="icon" type="image/png" href="/favicon.ico" />
             </head>
             <body>
@@ -27,3 +26,4 @@ export default function RootLayout({ children }) {
         </html>
     );
 }
+

@@ -6,6 +6,7 @@ import Search from './search';
 import { useState, useEffect } from 'react';
 import MobileMenuOne from './menu_sidebar/menu-one';
 import SideBar from './offcanvas';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const HeaderTwo = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -52,6 +53,9 @@ const HeaderTwo = () => {
                             </div>
                         </div>
                         <div className="header__area-menubar-right">
+                            <div style={{marginRight: '15px'}}>
+                                <LanguageSwitcher />
+                            </div>
                             <div className="header__area-menubar-right-theme" onClick={toggleTheme} style={{cursor: 'pointer', marginRight: '15px', fontSize: '20px', color: dark ? '#fff' : '#000', transition: 'all 0.3s'}}>
                                 {dark ? (
                                     <i className="fas fa-sun" title="Light Mode"></i>
