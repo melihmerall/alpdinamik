@@ -29,9 +29,9 @@ const menuItems = [
     group: 'İçerik Yönetimi',
     items: [
       { href: '/admin/blog', label: 'Blog Yazıları', icon: '📰' },
-      { href: '/admin/references', label: 'Referanslar', icon: '⭐' },
+      { href: '/admin/references', label: 'Portfolyo', icon: '⭐' },
       { href: '/admin/team', label: 'Ekip Üyeleri', icon: '👥' },
-      { href: '/admin/testimonials', label: 'Referanslar', icon: '💬' },
+      { href: '/admin/testimonials', label: 'Müşteri Yorumları', icon: '💬' },
     ]
   },
   {

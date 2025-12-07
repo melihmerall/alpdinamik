@@ -14,7 +14,12 @@ const ServicesTwo = () => {
                 const response = await fetch('/api/services');
                 if (response.ok) {
                     const data = await response.json();
-                    setServicesData(data.data || []);
+                    // API direkt array döndürüyor, data.data yoksa direkt data'yı kullan
+                    const services = Array.isArray(data) ? data : (data.data || []);
+                    console.log('Services loaded:', services);
+                    setServicesData(services);
+                } else {
+                    console.error('Failed to fetch services:', response.status);
                 }
             } catch (error) {
                 console.error('Error loading services:', error);
@@ -28,7 +33,6 @@ const ServicesTwo = () => {
         spaceBetween: 25,
         slidesPerView: 4,
         speed: 1000,
-        loop: true,
         autoplay: {
             delay: 4000,
             reverseDirection: false,
@@ -66,17 +70,35 @@ const ServicesTwo = () => {
                 </div>
                 <div className="row mt-60 wow fadeInUp" data-wow-delay=".5s">
                     <div className="col-xl-12 slider-area">
-                        <Swiper modules={[EffectFade, Autoplay, Navigation]} {...slideControl} >
-                            {servicesData?.map((data, id) => (
-                                <SwiperSlide key={id}>
-                                    <div className="services__one-item">
-                                        {data.icon && <i className={data.icon}></i>}
-                                        <h4><Link href={`/services/${data.slug}`}>{data.title}</Link></h4>
-                                        <Link className="more_btn" href={`/services/${data.slug}`}>Daha Fazla Oku <i className="flaticon-right-up"></i></Link>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
+                        {loading ? (
+                            <div style={{ textAlign: 'center', padding: '2rem' }}>
+                                <p>Yükleniyor...</p>
+                            </div>
+                        ) : (
+                            <Swiper 
+                                modules={[EffectFade, Autoplay, Navigation]} 
+                                {...slideControl}
+                                loop={servicesData && servicesData.length > 1}
+                            >
+                                {servicesData && servicesData.length > 0 ? (
+                                    servicesData.map((data, id) => (
+                                        <SwiperSlide key={data.id || id}>
+                                            <div className="services__one-item">
+                                                {data.icon && <i className={data.icon}></i>}
+                                                <h4><Link href={`/services/${data.slug}`}>{data.title}</Link></h4>
+                                                <Link className="more_btn" href={`/services/${data.slug}`}>Daha Fazla Oku <i className="flaticon-right-up"></i></Link>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
+                                ) : (
+                                    <SwiperSlide>
+                                        <div className="services__one-item">
+                                            <p>Henüz hizmet eklenmemiş</p>
+                                        </div>
+                                    </SwiperSlide>
+                                )}
+                            </Swiper>
+                        )}
                         <div className="slider-arrow">
                             <div className="slider-arrow-prev service_prev">
                                 <i className="fa-sharp fa-regular fa-arrow-left-long"></i>

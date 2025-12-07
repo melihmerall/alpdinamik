@@ -36,6 +36,27 @@ async function main() {
     })
   }
 
+  // Create home about page
+  await prisma.companyPage.upsert({
+    where: { slug: 'home-about' },
+    update: {},
+    create: {
+      slug: 'home-about',
+      title: 'Lineer Hareket Sistemlerinde Güvenilir Çözüm Ortağınız',
+      subtitle: 'Hakkımızda',
+      body: 'Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
+      imageUrl: '/assets/img/page/who-we-are.jpg',
+      stat1Number: 25,
+      stat1Label: 'Yıl Sektör Tecrübesi',
+      stat2Number: 500,
+      stat2Label: 'Endüstriyel Proje',
+      stat3Number: 10,
+      stat3Label: 'Farklı Uygulama Alanı',
+      ctaLabel: 'Tüm Hizmetler',
+      ctaUrl: '/services',
+    },
+  })
+
   // Create Mecmot representative
   const mecmot = await prisma.representative.upsert({
     where: { slug: 'mecmot' },

@@ -58,7 +58,7 @@ export default async function TestimonialsPage() {
                   <tr key={testimonial.id}>
                     <td style={{ fontWeight: '500' }}>{testimonial.name}</td>
                     <td style={{ color: 'var(--admin-gray-600)' }}>
-                      {testimonial.role}
+                      {testimonial.role || '-'}
                       {testimonial.company && ` - ${testimonial.company}`}
                     </td>
                     <td>

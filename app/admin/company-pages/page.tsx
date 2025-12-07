@@ -31,13 +31,21 @@ export default async function CompanyPagesPage() {
             Hakkımızda, Misyon & Vizyon gibi sayfaları yönetin
           </p>
         </div>
-        <Link
-          href="/admin/company-pages/new"
-          className="admin-btn admin-btn-primary"
-        >
-          <span>+</span>
-          <span>Yeni Sayfa</span>
-        </Link>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link
+            href="/admin/company-pages/home-about/edit"
+            className="admin-btn admin-btn-secondary"
+          >
+            Ana Sayfa Hakkımızda
+          </Link>
+          <Link
+            href="/admin/company-pages/new"
+            className="admin-btn admin-btn-primary"
+          >
+            <span>+</span>
+            <span>Yeni Sayfa</span>
+          </Link>
+        </div>
       </div>
 
       <div className="admin-card">

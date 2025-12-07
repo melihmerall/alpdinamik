@@ -57,7 +57,7 @@ export default async function TeamPage() {
                 {members.map((member) => (
                   <tr key={member.id}>
                     <td style={{ fontWeight: '500' }}>{member.name}</td>
-                    <td>{member.position}</td>
+                    <td>{member.role}</td>
                     <td>
                       {member.category ? (
                         <span className="admin-badge admin-badge-info">{member.category}</span>

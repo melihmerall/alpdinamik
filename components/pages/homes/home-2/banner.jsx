@@ -1,22 +1,72 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Thumbs, Autoplay, EffectFade, Navigation } from 'swiper/modules';
-import banner1 from "../../../../public/assets/img/banner/banner-1.jpg";
-import banner2 from "../../../../public/assets/img/banner/banner-2.jpg";
-import banner3 from "../../../../public/assets/img/banner/banner-3.jpg";
 import Link from "next/link";
 
 const BannerTwo = () => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [banners, setBanners] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchBanners() {
+            try {
+                const response = await fetch('/api/banners?active=true');
+                if (response.ok) {
+                    const data = await response.json();
+                    setBanners(data);
+                }
+            } catch (error) {
+                console.error('Error fetching banners:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchBanners();
+    }, []);
+
+    // Fallback banners if database is empty
+    const fallbackBanners = [
+        {
+            id: '1',
+            title: 'Mühendislik Ortağınız',
+            subtitle: 'Lineer Hareket Sistemleri',
+            imageUrl: '/assets/img/banner/banner-1.jpg',
+            ctaLabel: 'Daha Fazlasını Keşfedin',
+            ctaUrl: '/about-us'
+        },
+        {
+            id: '2',
+            title: 'Ürün Seçimi ve CAD Desteği',
+            subtitle: 'Proje Tasarımı',
+            imageUrl: '/assets/img/banner/banner-2.jpg',
+            ctaLabel: 'Hizmetlerimiz',
+            ctaUrl: '/services'
+        },
+        {
+            id: '3',
+            title: 'Vidalı Krikolar Yön Değiştiriciler',
+            subtitle: 'Mecmot Ürünleri',
+            imageUrl: '/assets/img/banner/banner-3.jpg',
+            ctaLabel: 'Ürün Portföyü',
+            ctaUrl: '/portfolio/3-columns'
+        }
+    ];
+
+    const displayBanners = banners.length > 0 ? banners : fallbackBanners;
+
+    if (loading) {
+        return null; // or a loading spinner
+    }
 
   	return (
 		<>
 			<div className="banner__two">
 				<Swiper
 					thumbs={{ swiper: thumbsSwiper }}
-					effect= 'fade'
-					loop={true}
+					effect='fade'
+					loop={displayBanners.length > 1}
 					autoplay={{
 						delay: 4500,
 						disableOnInteraction: false,
@@ -28,100 +78,90 @@ const BannerTwo = () => {
 					}}
 					modules={[Autoplay, Thumbs, EffectFade, Navigation]}
 				>
-				<SwiperSlide>
-					<div className="banner__two-area">	
-						<div className="banner__two-area-image" style={{backgroundImage: `url(${banner1.src})`}}></div>
-						<div className="container">
-							<div className="row align-items-center">
-								<div className="col-xl-12">
-									<div className="banner__two-content">
-										<span className="subtitle">Lineer Hareket Sistemleri</span>
-										<h2>Mühendislik</h2>
-										<h1>Ortağınız</h1>
-										<Link className="build_button" href="/about-us">Daha Fazlasını Keşfedin<i className="flaticon-right-up"></i></Link>
+				{displayBanners.map((banner) => (
+					<SwiperSlide key={banner.id}>
+						<div className="banner__two-area">	
+							<div 
+								className="banner__two-area-image" 
+								style={{backgroundImage: `url(${banner.imageUrl})`}}
+							></div>
+							<div className="container">
+								<div className="row align-items-center">
+									<div className="col-xl-12">
+										<div className="banner__two-content">
+											{banner.subtitle && (
+												<span className="subtitle">{banner.subtitle}</span>
+											)}
+											{banner.title && (() => {
+												const words = banner.title.split(' ');
+												if (words.length === 1) {
+													return <h1>{banner.title}</h1>;
+												} else {
+													// İlk kelimeyi h2, geri kalanını h1 yap
+													return (
+														<>
+															<h2>{words[0]}</h2>
+															<h1>{words.slice(1).join(' ')}</h1>
+														</>
+													);
+												}
+											})()}
+											{banner.ctaLabel && banner.ctaUrl && (
+												<Link className="build_button" href={banner.ctaUrl}>
+													{banner.ctaLabel}
+													<i className="flaticon-right-up"></i>
+												</Link>
+											)}
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</SwiperSlide>
-				<SwiperSlide>
-					<div className="banner__two-area">	
-						<div className="banner__two-area-image" style={{backgroundImage: `url(${banner2.src})`}}></div>
-						<div className="container">
-							<div className="row align-items-center">
-								<div className="col-xl-12">
-									<div className="banner__two-content">
-										<span className="subtitle">Proje Tasarımı</span>
-										<h2>Ürün Seçimi</h2>
-										<h1>ve CAD Desteği</h1>
-										<Link className="build_button" href="/services">Hizmetlerimiz<i className="flaticon-right-up"></i></Link>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</SwiperSlide>
-				<SwiperSlide>
-					<div className="banner__two-area">	
-						<div className="banner__two-area-image" style={{backgroundImage: `url(${banner3.src})`}}></div>
-						<div className="container">
-							<div className="row align-items-center">
-								<div className="col-xl-12">
-									<div className="banner__two-content">
-										<span className="subtitle">Mecmot Ürünleri</span>
-										<h2>Vidalı Krikolar</h2>
-										<h1>Yön Değiştiriciler</h1>
-										<Link className="build_button" href="/portfolio/3-columns">Ürün Portföyü<i className="flaticon-right-up"></i></Link>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</SwiperSlide>
+					</SwiperSlide>
+				))}
 				</Swiper>
 			</div>
-			<div className="banner__two-slide">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-12">
-							<div className="banner__two-slide-area">
-								<div className="banner__two-slide-area-thumb dark_image">
-									<Swiper
-										onSwiper={setThumbsSwiper}
-										slidesPerView={3}
-										freeMode={true}
-										watchSlidesProgress={true}
-										autoplay={{
-											delay: 4500,
-											disableOnInteraction: false,
-											reverseDirection: false,
-										}}
-										modules={[FreeMode, Thumbs, Autoplay]}
-									>
-										<SwiperSlide className='banner__two-slide-area-thumb-item'>
-											<img src={banner1.src} alt="banner" />
-											<h6>Mühendislik Ortağınız</h6>
-										</SwiperSlide>
-										<SwiperSlide className='banner__two-slide-area-thumb-item'>
-											<img src={banner2.src} alt="banner" />
-											<h6>Proje Tasarımı ve CAD Desteği</h6>
-										</SwiperSlide>
-										<SwiperSlide className='banner__two-slide-area-thumb-item'>
-											<img src={banner3.src} alt="banner" />
-											<h6>Mecmot Ürün Portföyü</h6>
-										</SwiperSlide>
-									</Swiper>
-								</div>
-								<div className="banner__two-slide-area-arrow">
-									<div className="banner__two-slide-area-arrow-prev banner_prev"><i className="fal fa-long-arrow-left"></i></div>
-									<div className="banner__two-slide-area-arrow-next banner_next"><i className="fal fa-long-arrow-right"></i></div>
+			{displayBanners.length > 1 && (
+				<div className="banner__two-slide">
+					<div className="container">
+						<div className="row">
+							<div className="col-lg-12">
+								<div className="banner__two-slide-area">
+									<div className="banner__two-slide-area-thumb dark_image">
+										<Swiper
+											onSwiper={setThumbsSwiper}
+											slidesPerView={Math.min(3, displayBanners.length)}
+											freeMode={true}
+											watchSlidesProgress={true}
+											autoplay={{
+												delay: 4500,
+												disableOnInteraction: false,
+												reverseDirection: false,
+											}}
+											modules={[FreeMode, Thumbs, Autoplay]}
+										>
+											{displayBanners.map((banner) => (
+												<SwiperSlide key={banner.id} className='banner__two-slide-area-thumb-item'>
+													<img src={banner.imageUrl} alt={banner.title || 'banner'} />
+													<h6>{banner.title || 'Banner'}</h6>
+												</SwiperSlide>
+											))}
+										</Swiper>
+									</div>
+									<div className="banner__two-slide-area-arrow">
+										<div className="banner__two-slide-area-arrow-prev banner_prev">
+											<i className="fal fa-long-arrow-left"></i>
+										</div>
+										<div className="banner__two-slide-area-arrow-next banner_next">
+											<i className="fal fa-long-arrow-right"></i>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			)}
 		</>
 	);
 };
