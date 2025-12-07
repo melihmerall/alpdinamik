@@ -2,29 +2,17 @@ import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
 
 export default createMiddleware({
-  // A list of all locales that are supported
   locales,
-
-  // Used when no locale matches
   defaultLocale,
-
-  // Don't use locale prefix for default locale
-  localePrefix: 'as-needed',
+  localePrefix: 'always' // Her locale için prefix göster
 });
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: [
-    // Enable a redirect to a matching locale at the root
-    '/',
-
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
-    '/(tr|en)/:path*',
-
-    // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/en/pathnames`)
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-  ],
+  // Match all pathnames except for
+  // - /api routes
+  // - /_next (Next.js internals)
+  // - /_vercel (Vercel internals)
+  // - /admin (admin panel)
+  // - Static files (e.g. /favicon.ico, /robots.txt, etc.)
+  matcher: ['/((?!api|_next|_vercel|admin|.*\\..*).*)']
 };
-
