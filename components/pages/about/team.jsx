@@ -1,15 +1,18 @@
 import React from 'react';
 import teamData from '../../data/team-data';
 
-const Team = () => {
+const Team = ({ aboutData }) => {
+    const subtitle = aboutData?.teamSubtitle || "Meet Our Experts";
+    const title = aboutData?.teamTitle || "Dedicated Professionals";
+
     return (
         <div className="team__area section-padding">
             <div className="container">
                 <div className="row mb-35">
                     <div className="col-xl-12">
                         <div className="team__area-title t-center">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Meet Our Experts</span>
-                            <h2 className="title_split_anim">Dedicated Professionals</h2>
+                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">{subtitle}</span>
+                            <h2 className="title_split_anim">{title}</h2>
                         </div>
                     </div>
                 </div>

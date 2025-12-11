@@ -13,6 +13,7 @@ const menuItems = [
     group: 'İçerik',
     items: [
       { href: '/admin/content-blocks', label: 'İçerik Blokları', icon: '📝' },
+      { href: '/admin/about', label: 'Hakkımızda', icon: 'ℹ️' },
       { href: '/admin/company-pages', label: 'Kurumsal Sayfalar', icon: '🏢' },
       { href: '/admin/banners', label: 'Bannerlar', icon: '🖼️' },
     ]
@@ -37,6 +38,7 @@ const menuItems = [
   {
     group: 'Sistem',
     items: [
+      { href: '/admin/settings', label: 'Site Ayarları', icon: '⚙️' },
       { href: '/admin/leads', label: 'Talepler', icon: '📧', badge: 'Yeni' },
       { href: '/admin/users', label: 'Kullanıcılar', icon: '👤' },
     ]

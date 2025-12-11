@@ -59,21 +59,13 @@ export default async function SectorsPage() {
               {sectors.map((sector: any) => (
                 <div key={sector.id} className="col-xl-4 col-lg-4 col-md-6 mb-4">
                   <div 
-                    className="card h-100" 
+                    className="card h-100 sector-card" 
                     style={{ 
                       border: '1px solid #e0e0e0', 
                       borderRadius: '8px', 
                       overflow: 'hidden',
                       transition: 'all 0.3s ease',
                       cursor: 'pointer'
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-                      e.currentTarget.style.transform = 'translateY(-5px)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >
                     {sector.imageUrl && (

@@ -1,10 +1,25 @@
 "use client"
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import breadCrumbBg from "../../../public/assets/img/page/breadcrumb.jpg";
 
 const BreadCrumb = ({title, innerTitle, backgroundImage}) => {
-    // Use provided background image or fallback to default
-    const bgImage = backgroundImage || breadCrumbBg.src;
+    const [defaultBreadcrumb, setDefaultBreadcrumb] = useState(null);
+
+    useEffect(() => {
+        // Fetch default breadcrumb from site settings
+        fetch('/api/site-settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.defaultBreadcrumbImageUrl) {
+                    setDefaultBreadcrumb(data.defaultBreadcrumbImageUrl);
+                }
+            })
+            .catch(err => console.error('Error fetching default breadcrumb:', err));
+    }, []);
+
+    // Priority: provided backgroundImage > default from settings > fallback image
+    const bgImage = backgroundImage || defaultBreadcrumb || breadCrumbBg.src;
     
     return (
         <div className="breadcrumb__area" style={{backgroundImage: `url(${bgImage})`}}>

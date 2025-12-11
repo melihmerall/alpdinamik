@@ -16,6 +16,7 @@ export default function EditCompanyPage() {
     subtitle: '',
     body: '',
     imageUrl: '',
+    breadcrumbImageUrl: '',
     stat1Number: 0,
     stat1Label: '',
     stat2Number: 0,
@@ -38,6 +39,7 @@ export default function EditCompanyPage() {
             subtitle: data.subtitle || '',
             body: data.body || '',
             imageUrl: data.imageUrl || '',
+            breadcrumbImageUrl: data.breadcrumbImageUrl || '',
             stat1Number: data.stat1Number || 0,
             stat1Label: data.stat1Label || '',
             stat2Number: data.stat2Number || 0,
@@ -70,7 +72,7 @@ export default function EditCompanyPage() {
     }))
   }
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'imageUrl' | 'breadcrumbImageUrl' = 'imageUrl') => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -92,7 +94,7 @@ export default function EditCompanyPage() {
       if (response.ok) {
         setFormData(prev => ({
           ...prev,
-          imageUrl: data.url,
+          [field]: data.url,
         }))
       } else {
         setError(data.error || 'Dosya yüklenirken bir hata oluştu')
@@ -270,6 +272,72 @@ export default function EditCompanyPage() {
               />
             </div>
 
+            <div>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: '0.5rem', 
+                fontWeight: '500',
+                color: 'var(--admin-gray-900)'
+              }}>
+                Breadcrumb Arka Plan Görseli
+              </label>
+              {formData.breadcrumbImageUrl && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <img 
+                    src={formData.breadcrumbImageUrl} 
+                    alt="Preview" 
+                    style={{ 
+                      maxWidth: '100%', 
+                      maxHeight: '300px', 
+                      borderRadius: '8px',
+                      objectFit: 'cover'
+                    }} 
+                  />
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, 'breadcrumbImageUrl')}
+                disabled={uploading}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid var(--admin-gray-300)',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              />
+              {uploading && (
+                <p style={{ marginTop: '0.5rem', color: 'var(--admin-gray-600)' }}>
+                  Yükleniyor...
+                </p>
+              )}
+              {formData.breadcrumbImageUrl && (
+                <input
+                  type="text"
+                  name="breadcrumbImageUrl"
+                  value={formData.breadcrumbImageUrl}
+                  onChange={handleChange}
+                  placeholder="Veya URL girin"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid var(--admin-gray-300)',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    marginTop: '0.5rem',
+                    fontFamily: 'monospace',
+                    fontSize: '0.875rem'
+                  }}
+                />
+              )}
+              <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--admin-gray-500)', fontSize: '0.875rem' }}>
+                Breadcrumb bölümünde arka plan olarak gösterilecek görsel. Maksimum 5MB, JPG, PNG, GIF, WebP formatları desteklenir
+              </small>
+            </div>
+
             {slug === 'home-about' && (
               <>
                 <div>
@@ -298,7 +366,7 @@ export default function EditCompanyPage() {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleFileUpload}
+                    onChange={(e) => handleFileUpload(e, 'imageUrl')}
                     disabled={uploading}
                     style={{
                       width: '100%',

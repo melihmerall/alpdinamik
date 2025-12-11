@@ -1,29 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
-export default function EditRepresentative({ params }: { params: { slug: string } }) {
+export default function EditRepresentative() {
   const router = useRouter();
+  const params = useParams();
+  const slug = params.slug as string;
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
     description: "",
     logoUrl: "",
     websiteUrl: "",
+    breadcrumbImageUrl: "",
     isActive: true,
     order: 0,
   });
 
   useEffect(() => {
     fetchRepresentative();
-  }, [params.slug]);
+  }, [slug]);
 
   const fetchRepresentative = async () => {
     try {
-      const response = await fetch(`/api/representatives/${params.slug}`);
+      const response = await fetch(`/api/representatives/${slug}`);
       if (response.ok) {
         const data = await response.json();
         setFormData({
@@ -32,38 +38,46 @@ export default function EditRepresentative({ params }: { params: { slug: string 
           description: data.description || "",
           logoUrl: data.logoUrl || "",
           websiteUrl: data.websiteUrl || "",
+          breadcrumbImageUrl: data.breadcrumbImageUrl || "",
           isActive: data.isActive !== undefined ? data.isActive : true,
           order: data.order || 0,
         });
+      } else {
+        setError("Temsilcilik bulunamadı");
       }
     } catch (error) {
       console.error("Error fetching representative:", error);
+      setError("Veri yüklenirken hata oluştu");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", file);
+    uploadFormData.append("folder", "representatives");
 
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: uploadFormData,
       });
 
       if (response.ok) {
         const data = await response.json();
-        setFormData((prev) => ({ ...prev, logoUrl: data.url }));
+        setFormData((prev) => ({ ...prev, [fieldName]: data.url }));
+      } else {
+        const error = await response.json();
+        alert(error.error || "Dosya yüklenirken hata oluştu");
       }
     } catch (error) {
-      console.error("Error uploading logo:", error);
-      alert("Logo yüklenirken hata oluştu");
+      console.error("Error uploading file:", error);
+      alert("Dosya yüklenirken hata oluştu");
     } finally {
       setUploading(false);
     }
@@ -71,226 +85,220 @@ export default function EditRepresentative({ params }: { params: { slug: string 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
+    setError("");
 
     try {
-      const response = await fetch(`/api/representatives/${params.slug}`, {
+      console.log('Updating representative:', slug, formData);
+      const response = await fetch(`/api/representatives/${slug}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          order: parseInt(formData.order.toString()),
+          order: parseInt(formData.order.toString()) || 0,
         }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        alert('Temsilcilik başarıyla güncellendi!');
         router.push("/admin/representatives");
+        router.refresh();
       } else {
-        const error = await response.json();
-        alert(error.error || "Temsil edilen firma güncellenirken hata oluştu");
+        console.error('Update error:', data);
+        setError(data.error || "Temsilcilik güncellenirken hata oluştu");
+        alert(data.error || "Temsilcilik güncellenirken hata oluştu");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating representative:", error);
-      alert("Temsil edilen firma güncellenirken hata oluştu");
+      setError("Temsilcilik güncellenirken hata oluştu: " + error.message);
+      alert("Temsilcilik güncellenirken hata oluştu: " + error.message);
+    } finally {
+      setSaving(false);
     }
   };
 
   if (loading) {
     return (
-      <div style={{ padding: "2rem" }}>
-        <p>Yükleniyor...</p>
+      <div className="admin-content">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Yükleniyor...</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <div style={{ marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "1.875rem", fontWeight: "700", marginBottom: "0.5rem" }}>
-          Temsil Edilen Firmayı Düzenle
-        </h1>
-        <p style={{ color: "#6b7280" }}>
-          Temsil edilen firma bilgilerini güncelleyin
-        </p>
+    <div className="admin-content">
+      <div className="admin-header">
+        <div>
+          <h1 className="admin-title">Temsilcilik Düzenle</h1>
+          <p className="admin-subtitle">{formData.name || slug}</p>
+        </div>
+        <Link href="/admin/representatives" className="admin-btn-secondary">
+          ← Geri Dön
+        </Link>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ 
-          background: "white", 
-          padding: "2rem", 
-          borderRadius: "12px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          marginBottom: "2rem"
+      {error && (
+        <div className="admin-card" style={{ 
+          background: "#fee2e2", 
+          border: "1px solid #fecaca",
+          color: "#991b1b",
+          padding: "1rem",
+          borderRadius: "8px",
+          marginBottom: "1.5rem"
         }}>
-          <div style={{ display: "grid", gap: "1.5rem" }}>
-            <div>
-              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                Firma Adı *
+          {error}
+        </div>
+      )}
+
+      <div className="admin-card">
+        <form onSubmit={handleSubmit}>
+          <div className="admin-form-grid">
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="admin-label">
+                Firma Adı <span style={{ color: '#dc3545' }}>*</span>
               </label>
               <input
                 type="text"
+                className="admin-input"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                }}
               />
             </div>
 
-            <div>
-              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                Slug *
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="admin-label">
+                Slug (URL) <span style={{ color: '#dc3545' }}>*</span>
               </label>
               <input
                 type="text"
+                className="admin-input"
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 required
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                }}
               />
+              <small className="admin-help-text">
+                URL'de kullanılacak benzersiz tanımlayıcı
+              </small>
             </div>
 
-            <div>
-              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                Açıklama
-              </label>
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="admin-label">Açıklama</label>
               <textarea
+                className="admin-textarea"
+                rows={4}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={4}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                }}
               />
             </div>
 
-            <div>
-              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                Logo
-              </label>
+            <div className="admin-form-group">
+              <label className="admin-label">Logo</label>
               <input
                 type="file"
+                className="admin-input"
                 accept="image/*"
-                onChange={handleLogoUpload}
+                onChange={(e) => handleFileUpload(e, 'logoUrl')}
                 disabled={uploading}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                }}
               />
-              {uploading && <p style={{ marginTop: "0.5rem", color: "#6b7280" }}>Yükleniyor...</p>}
+              {uploading && <p className="admin-help-text">Yükleniyor...</p>}
               {formData.logoUrl && (
-                <div style={{ marginTop: "1rem" }}>
+                <div className="admin-image-preview" style={{ marginTop: '0.75rem' }}>
                   <img
                     src={formData.logoUrl}
-                    alt="Preview"
-                    style={{ maxWidth: "200px", borderRadius: "8px" }}
+                    alt="Logo Preview"
                   />
                 </div>
               )}
+              <small className="admin-help-text">
+                Firma logosu (PNG, JPG, WebP - Maks. 5MB)
+              </small>
             </div>
 
-            <div>
-              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                Website
-              </label>
+            <div className="admin-form-group">
+              <label className="admin-label">Breadcrumb Arka Plan Görseli</label>
+              <input
+                type="file"
+                className="admin-input"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, 'breadcrumbImageUrl')}
+                disabled={uploading}
+              />
+              {formData.breadcrumbImageUrl && (
+                <div className="admin-image-preview" style={{ marginTop: '0.75rem' }}>
+                  <img
+                    src={formData.breadcrumbImageUrl}
+                    alt="Breadcrumb Preview"
+                  />
+                </div>
+              )}
+              <small className="admin-help-text">
+                Temsilcilik sayfası breadcrumb arka plan görseli
+              </small>
+            </div>
+
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="admin-label">Website URL</label>
               <input
                 type="url"
+                className="admin-input"
                 value={formData.websiteUrl}
                 onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
                 placeholder="https://example.com"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                }}
               />
+              <small className="admin-help-text">
+                Firma web sitesi URL'i (opsiyonel)
+              </small>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-              <div>
-                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}>
-                  <input
-                    type="checkbox"
-                    checked={formData.isActive}
-                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  />
-                  Aktif
-                </label>
-              </div>
+            <div className="admin-form-group">
+              <label className="admin-label">Sıralama</label>
+              <input
+                type="number"
+                className="admin-input"
+                value={formData.order}
+                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                min="0"
+              />
+              <small className="admin-help-text">
+                Menüde görünme sırası (düşük sayı önce görünür)
+              </small>
+            </div>
 
-              <div>
-                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
-                  Sıralama
-                </label>
-                <input
-                  type="number"
-                  value={formData.order}
-                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
-                  style={{
-                    width: "100%",
-                    padding: "0.75rem",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                    fontSize: "1rem",
-                  }}
-                />
-              </div>
+            <div className="admin-form-group">
+              <label className="admin-label">Durum</label>
+              <select
+                className="admin-select"
+                value={formData.isActive ? 'true' : 'false'}
+                onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'true' })}
+              >
+                <option value="true">Aktif</option>
+                <option value="false">Pasif</option>
+              </select>
+              <small className="admin-help-text">
+                Pasif temsilcilikler menüde görünmez
+              </small>
             </div>
           </div>
-        </div>
 
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <button
-            type="submit"
-            style={{
-              background: "#3b82f6",
-              color: "white",
-              padding: "0.75rem 1.5rem",
-              borderRadius: "8px",
-              border: "none",
-              fontWeight: "500",
-              cursor: "pointer",
-            }}
-          >
-            Güncelle
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push("/admin/representatives")}
-            style={{
-              background: "#f3f4f6",
-              color: "#374151",
-              padding: "0.75rem 1.5rem",
-              borderRadius: "8px",
-              border: "none",
-              fontWeight: "500",
-              cursor: "pointer",
-            }}
-          >
-            İptal
-          </button>
-        </div>
-      </form>
+          <div className="admin-form-actions">
+            <Link href="/admin/representatives" className="admin-btn-secondary">
+              İptal
+            </Link>
+            <button
+              type="submit"
+              className="admin-btn-primary"
+              disabled={saving || uploading}
+            >
+              {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

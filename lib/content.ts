@@ -115,12 +115,16 @@ export async function getReferenceProject(slug: string) {
   })
 }
 
-// Get active representatives with products
+// Get active representatives with categories
 export async function getActiveRepresentatives() {
   return await prisma.representative.findMany({
     where: { isActive: true },
     orderBy: { order: 'asc' },
     include: {
+      categories: {
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+      },
       products: {
         where: { isActive: true },
         orderBy: { order: 'asc' },

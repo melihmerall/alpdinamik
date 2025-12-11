@@ -1,33 +1,13 @@
 
 import Link from "next/link";
 import logo from "../../../public/assets/img/logo-2.png";
-import subscribeBg from "../../../public/assets/img/page/banner-video.png";
 import Social from "@/components/data/social";
 import blogData from "@/components/data/blog-data";
 
 const FooterTwo = () => {
     return (
         <>
-            <div className="footer__two">
-                <div className="subscribe__area">
-                    <div className="container">
-                        <div className="row align-items-center subscribe__area-bg" style={{backgroundImage: `url(${subscribeBg.src})`}}>
-                            <div className="col-lg-6 lg-mb-40 lg-t-center">
-                                <div className="subscribe__area-left title_split_anim">
-                                    <h2>Projeniz Hazır mı? Bugün Başlayın!</h2>
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="subscribe__area-form wow fadeInUp" data-wow-delay=".4s">
-                                    <form>
-                                        <input type="email" name="email" placeholder="E-posta adresiniz" />
-                                        <button className="build_button" type="submit">İletişime Geçin</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="footer__two" style={{ paddingTop: '20px' }}>
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-4 col-lg-4 col-md-6">

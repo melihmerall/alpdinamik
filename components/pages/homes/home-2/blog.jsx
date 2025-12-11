@@ -75,14 +75,8 @@ const BlogTwo = () => {
                                                 </div>
                                             </div>
                                             <div className="blog__one-item-content">
-                                                <div className="meta">
-                                                    <ul>
-                                                        <li><a href="#"><i className="far fa-user"></i>By-Admin</a></li>
-                                                        <li><a href="#"><i className="far fa-comment-dots"></i>Comments (0)</a></li>
-                                                    </ul>
-                                                </div>
-                                                <h4><Link href={`/blog/${data.slug}`}>{data.title}</Link></h4>
-                                                <Link className="more_btn" href={`/blog/${data.slug}`}>Daha Fazla Oku<i className="flaticon-right-up"></i></Link>
+                                                <h4><Link href={`/blog/${data.slug}`} style={{ color: '#333' }}>{data.title}</Link></h4>
+                                                <Link className="more_btn" href={`/blog/${data.slug}`} style={{ color: '#333' }}>Daha Fazla Oku<i className="flaticon-right-up"></i></Link>
                                             </div>
                                         </div>
                                     </SwiperSlide>

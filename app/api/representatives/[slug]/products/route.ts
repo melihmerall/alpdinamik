@@ -11,6 +11,13 @@ export async function GET(
       where: { slug: params.slug },
       include: {
         products: {
+          include: {
+            series: {
+              include: {
+                category: true,
+              },
+            },
+          },
           orderBy: { order: 'asc' },
         },
       },
@@ -61,11 +68,22 @@ export async function POST(
     const product = await prisma.product.create({
       data: {
         representativeId: representative.id,
+        seriesId: body.seriesId || null,
+        variantId: body.variantId || null,
         slug: body.slug,
         name: body.name,
         description: body.description,
         body: body.body,
         imageUrl: body.imageUrl,
+        infoImageUrl: body.infoImageUrl,
+        breadcrumbImageUrl: body.breadcrumbImageUrl,
+        svgBaseImage: body.svgBaseImage,
+        svgComponents: body.svgComponents,
+        maxCapacity: body.maxCapacity,
+        technicalPdfUrl: body.technicalPdfUrl,
+        file2dUrl: body.file2dUrl,
+        file3dUrl: body.file3dUrl,
+        externalProductUrl: body.externalProductUrl,
         order: body.order || 0,
         isActive: body.isActive !== undefined ? body.isActive : true,
       },

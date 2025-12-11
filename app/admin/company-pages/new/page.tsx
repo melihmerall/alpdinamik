@@ -31,6 +31,7 @@ export default function NewCompanyPage() {
     subtitle: "",
     body: "",
     imageUrl: "",
+    breadcrumbImageUrl: "",
     stat1Number: 0,
     stat1Label: "",
     stat2Number: 0,
@@ -49,13 +50,14 @@ export default function NewCompanyPage() {
     });
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'imageUrl' | 'breadcrumbImageUrl' = 'imageUrl') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("folder", "company-pages");
 
     try {
       const response = await fetch("/api/upload", {
@@ -65,7 +67,7 @@ export default function NewCompanyPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setFormData((prev) => ({ ...prev, imageUrl: data.url }));
+        setFormData((prev) => ({ ...prev, [field]: data.url }));
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -205,7 +207,7 @@ export default function NewCompanyPage() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageUpload}
+                onChange={(e) => handleImageUpload(e, 'imageUrl')}
                 disabled={uploading}
                 style={{
                   width: "100%",
@@ -225,6 +227,55 @@ export default function NewCompanyPage() {
                   />
                 </div>
               )}
+            </div>
+
+            <div>
+              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
+                Breadcrumb Arka Plan Görseli
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, 'breadcrumbImageUrl')}
+                disabled={uploading}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                }}
+              />
+              {uploading && <p style={{ marginTop: "0.5rem", color: "#6b7280" }}>Yükleniyor...</p>}
+              {formData.breadcrumbImageUrl && (
+                <div style={{ marginTop: "1rem" }}>
+                  <img
+                    src={formData.breadcrumbImageUrl}
+                    alt="Preview"
+                    style={{ maxWidth: "300px", borderRadius: "8px" }}
+                  />
+                </div>
+              )}
+              {formData.breadcrumbImageUrl && (
+                <input
+                  type="text"
+                  value={formData.breadcrumbImageUrl}
+                  onChange={(e) => setFormData({ ...formData, breadcrumbImageUrl: e.target.value })}
+                  placeholder="Veya URL girin"
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "8px",
+                    fontSize: "0.875rem",
+                    marginTop: "0.5rem",
+                    fontFamily: "monospace",
+                  }}
+                />
+              )}
+              <small style={{ display: "block", marginTop: "0.5rem", color: "#6b7280", fontSize: "0.875rem" }}>
+                Breadcrumb bölümünde arka plan olarak gösterilecek görsel. Maksimum 5MB, JPG, PNG, GIF, WebP formatları desteklenir
+              </small>
             </div>
 
             {/* Statistics Section */}

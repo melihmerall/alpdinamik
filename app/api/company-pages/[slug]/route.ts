@@ -38,6 +38,7 @@ export async function PUT(
       subtitle,
       body: bodyContent,
       imageUrl,
+      breadcrumbImageUrl,
       stat1Number,
       stat1Label,
       stat2Number,
@@ -46,6 +47,23 @@ export async function PUT(
       stat3Label,
       ctaLabel,
       ctaUrl,
+      missionSubtitle,
+      missionTitle,
+      videoUrl,
+      videoBackgroundImageUrl,
+      certificationSubtitle,
+      certificationTitle,
+      certificationImageUrl,
+      certificationStat1Number,
+      certificationStat1Label,
+      certificationStat2Number,
+      certificationStat2Label,
+      certificationStat3Number,
+      certificationStat3Label,
+      certificationStat4Number,
+      certificationStat4Label,
+      teamSubtitle,
+      teamTitle,
     } = requestBody
 
     const updateData: any = {}
@@ -53,6 +71,7 @@ export async function PUT(
     if (subtitle !== undefined) updateData.subtitle = subtitle || null
     if (bodyContent !== undefined) updateData.body = bodyContent
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl || null
+    if (breadcrumbImageUrl !== undefined) updateData.breadcrumbImageUrl = breadcrumbImageUrl || null
     if (stat1Number !== undefined) updateData.stat1Number = stat1Number || null
     if (stat1Label !== undefined) updateData.stat1Label = stat1Label || null
     if (stat2Number !== undefined) updateData.stat2Number = stat2Number || null
@@ -61,6 +80,23 @@ export async function PUT(
     if (stat3Label !== undefined) updateData.stat3Label = stat3Label || null
     if (ctaLabel !== undefined) updateData.ctaLabel = ctaLabel || null
     if (ctaUrl !== undefined) updateData.ctaUrl = ctaUrl || null
+    if (missionSubtitle !== undefined) updateData.missionSubtitle = missionSubtitle || null
+    if (missionTitle !== undefined) updateData.missionTitle = missionTitle || null
+    if (videoUrl !== undefined) updateData.videoUrl = videoUrl || null
+    if (videoBackgroundImageUrl !== undefined) updateData.videoBackgroundImageUrl = videoBackgroundImageUrl || null
+    if (certificationSubtitle !== undefined) updateData.certificationSubtitle = certificationSubtitle || null
+    if (certificationTitle !== undefined) updateData.certificationTitle = certificationTitle || null
+    if (certificationImageUrl !== undefined) updateData.certificationImageUrl = certificationImageUrl || null
+    if (certificationStat1Number !== undefined) updateData.certificationStat1Number = certificationStat1Number || null
+    if (certificationStat1Label !== undefined) updateData.certificationStat1Label = certificationStat1Label || null
+    if (certificationStat2Number !== undefined) updateData.certificationStat2Number = certificationStat2Number || null
+    if (certificationStat2Label !== undefined) updateData.certificationStat2Label = certificationStat2Label || null
+    if (certificationStat3Number !== undefined) updateData.certificationStat3Number = certificationStat3Number || null
+    if (certificationStat3Label !== undefined) updateData.certificationStat3Label = certificationStat3Label || null
+    if (certificationStat4Number !== undefined) updateData.certificationStat4Number = certificationStat4Number || null
+    if (certificationStat4Label !== undefined) updateData.certificationStat4Label = certificationStat4Label || null
+    if (teamSubtitle !== undefined) updateData.teamSubtitle = teamSubtitle || null
+    if (teamTitle !== undefined) updateData.teamTitle = teamTitle || null
 
     const page = await prisma.companyPage.update({
       where: { slug: params.slug },

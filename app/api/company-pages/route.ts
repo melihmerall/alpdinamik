@@ -37,13 +37,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const requestBody = await request.json()
     const {
       slug,
       title,
       subtitle,
       body,
       imageUrl,
+      breadcrumbImageUrl,
       stat1Number,
       stat1Label,
       stat2Number,
@@ -52,7 +53,24 @@ export async function POST(request: NextRequest) {
       stat3Label,
       ctaLabel,
       ctaUrl,
-    } = body
+      missionSubtitle,
+      missionTitle,
+      videoUrl,
+      videoBackgroundImageUrl,
+      certificationSubtitle,
+      certificationTitle,
+      certificationImageUrl,
+      certificationStat1Number,
+      certificationStat1Label,
+      certificationStat2Number,
+      certificationStat2Label,
+      certificationStat3Number,
+      certificationStat3Label,
+      certificationStat4Number,
+      certificationStat4Label,
+      teamSubtitle,
+      teamTitle,
+    } = requestBody
 
     if (!slug || !title || !body) {
       return NextResponse.json(
@@ -68,6 +86,7 @@ export async function POST(request: NextRequest) {
         subtitle: subtitle || null,
         body,
         imageUrl: imageUrl || null,
+        breadcrumbImageUrl: breadcrumbImageUrl || null,
         stat1Number: stat1Number || null,
         stat1Label: stat1Label || null,
         stat2Number: stat2Number || null,
@@ -76,6 +95,23 @@ export async function POST(request: NextRequest) {
         stat3Label: stat3Label || null,
         ctaLabel: ctaLabel || null,
         ctaUrl: ctaUrl || null,
+        missionSubtitle: missionSubtitle || null,
+        missionTitle: missionTitle || null,
+        videoUrl: videoUrl || null,
+        videoBackgroundImageUrl: videoBackgroundImageUrl || null,
+        certificationSubtitle: certificationSubtitle || null,
+        certificationTitle: certificationTitle || null,
+        certificationImageUrl: certificationImageUrl || null,
+        certificationStat1Number: certificationStat1Number || null,
+        certificationStat1Label: certificationStat1Label || null,
+        certificationStat2Number: certificationStat2Number || null,
+        certificationStat2Label: certificationStat2Label || null,
+        certificationStat3Number: certificationStat3Number || null,
+        certificationStat3Label: certificationStat3Label || null,
+        certificationStat4Number: certificationStat4Number || null,
+        certificationStat4Label: certificationStat4Label || null,
+        teamSubtitle: teamSubtitle || null,
+        teamTitle: teamTitle || null,
       },
     })
 

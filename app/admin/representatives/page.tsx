@@ -1,48 +1,85 @@
-import { prisma } from '@/lib/db'
-import Link from 'next/link'
+"use client";
 
-export default async function RepresentativesPage() {
-  const representatives = await prisma.representative.findMany({
-    include: {
-      products: {
-        where: { isActive: true },
-        orderBy: { order: 'asc' },
-      },
-    },
-    orderBy: { order: 'asc' },
-  })
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+export default function RepresentativesPage() {
+  const router = useRouter();
+  const [representatives, setRepresentatives] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRepresentatives();
+  }, []);
+
+  const fetchRepresentatives = async () => {
+    try {
+      const res = await fetch('/api/representatives');
+      if (res.ok) {
+        const data = await res.json();
+        setRepresentatives(data);
+      }
+    } catch (error) {
+      console.error('Error fetching representatives:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (slug: string, name: string) => {
+    if (!confirm(`"${name}" temsilciliğini silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz ve tüm kategoriler, seriler ve ürünler de silinecektir.`)) {
+      return;
+    }
+
+    try {
+      console.log('Deleting representative:', slug);
+      const res = await fetch(`/api/representatives/${slug}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Temsilcilik başarıyla silindi!');
+        fetchRepresentatives();
+      } else {
+        console.error('Delete error:', data);
+        alert(data.error || 'Temsilcilik silinemedi');
+      }
+    } catch (error: any) {
+      console.error('Error deleting representative:', error);
+      alert('Bir hata oluştu: ' + error.message);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="admin-content">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Yükleniyor...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: '2rem' 
-      }}>
+    <div className="admin-content">
+      <div className="admin-header">
         <div>
-          <h1 style={{ 
-            fontSize: '2rem', 
-            fontWeight: '700', 
-            color: 'var(--admin-gray-900)', 
-            margin: '0 0 0.5rem' 
-          }}>
-            Temsilcilikler
-          </h1>
-          <p style={{ 
-            fontSize: '0.875rem', 
-            color: 'var(--admin-gray-600)', 
-            margin: 0 
-          }}>
+          <h1 className="admin-title">Temsilcilikler</h1>
+          <p className="admin-subtitle">
             Temsil ettiğiniz markaları ve ürünlerini yönetin
           </p>
         </div>
         <Link
           href="/admin/representatives/new"
-          className="admin-btn admin-btn-primary"
+          className="admin-btn-primary"
         >
-          <span>+</span>
-          <span>Yeni Temsilcilik</span>
+          + Yeni Temsilcilik
         </Link>
       </div>
 
@@ -67,7 +104,14 @@ export default async function RepresentativesPage() {
                       {rep.slug}
                     </td>
                     <td>
-                      <span className="admin-badge admin-badge-info">{rep.products.length}</span>
+                      <span className="admin-badge admin-badge-info">
+                        {rep.categories?.reduce((acc: number, cat: any) => 
+                          acc + (cat.series?.reduce((acc2: number, ser: any) => 
+                            acc2 + (ser.products?.length || 0), 0) || 0), 0) || rep.products?.length || 0} Ürün
+                      </span>
+                      <div style={{ fontSize: '0.75rem', color: '#6c757d', marginTop: '0.25rem' }}>
+                        {rep.categories?.length || 0} Kategori
+                      </div>
                     </td>
                     <td>
                       {rep.isActive ? (
@@ -77,19 +121,36 @@ export default async function RepresentativesPage() {
                       )}
                     </td>
                     <td>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
                         <Link
                           href={`/admin/representatives/${rep.slug}/edit`}
-                          className="admin-btn admin-btn-secondary admin-btn-sm"
+                          className="admin-btn admin-btn-sm admin-btn-secondary"
                         >
-                          Düzenle
+                          ✏️ Düzenle
+                        </Link>
+                        <Link
+                          href={`/admin/representatives/${rep.slug}/categories`}
+                          className="admin-btn admin-btn-sm admin-btn-info"
+                        >
+                          📁 Kategoriler
                         </Link>
                         <Link
                           href={`/admin/representatives/${rep.slug}/products`}
-                          className="admin-btn admin-btn-primary admin-btn-sm"
+                          className="admin-btn admin-btn-sm admin-btn-primary"
                         >
-                          Ürünler
+                          📦 Ürünler
                         </Link>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDelete(rep.slug, rep.name);
+                          }}
+                          className="admin-btn admin-btn-sm admin-btn-danger"
+                        >
+                          🗑️ Sil
+                        </button>
                       </div>
                     </td>
                   </tr>

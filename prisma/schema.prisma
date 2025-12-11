@@ -40,6 +40,27 @@ model CompanyPage {
   stat3Label  String?  // Üçüncü istatistik etiketi (örn: "Farklı Uygulama Alanı")
   ctaLabel    String?  // CTA buton etiketi (örn: "Tüm Hizmetler")
   ctaUrl      String?  // CTA buton URL'i (örn: "/services")
+  // Mission Section
+  missionSubtitle    String?  // Misyon alt başlık
+  missionTitle       String?  // Misyon başlık
+  // Video Section
+  videoUrl           String?  // YouTube video ID (e.g., "SZEflIVnhH8")
+  videoBackgroundImageUrl String?  // Video section background image
+  // Certification Section
+  certificationSubtitle String?  // Certification alt başlık
+  certificationTitle    String?  // Certification başlık
+  certificationImageUrl  String?  // Certification görsel
+  certificationStat1Number Int?
+  certificationStat1Label  String?
+  certificationStat2Number Int?
+  certificationStat2Label  String?
+  certificationStat3Number Int?
+  certificationStat3Label  String?
+  certificationStat4Number Int?
+  certificationStat4Label  String?
+  // Team Section
+  teamSubtitle       String?  // Team alt başlık
+  teamTitle          String?  // Team başlık
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -184,6 +205,67 @@ enum LeadSource {
   QUICK_CONTACT
 }
 
+// Product Categories - Main product categories (e.g., "Vidalı Krikolar", "Yön Değiştiriciler")
+model ProductCategory {
+  id                 String   @id @default(cuid())
+  representativeId   String
+  slug               String   // e.g., "vidali-krikolar"
+  name               String   // e.g., "Vidalı Krikolar"
+  description        String?  @db.Text
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  order              Int      @default(0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  series             ProductSeries[]
+
+  @@unique([representativeId, slug])
+  @@map("product_categories")
+}
+
+// Product Series - Product series under categories (e.g., "VKT Serisi", "VKM Serisi")
+model ProductSeries {
+  id          String   @id @default(cuid())
+  categoryId  String
+  slug        String   // e.g., "vkt-serisi"
+  name        String   // e.g., "VKT Serisi"
+  description String?  @db.Text
+  imageUrl    String?  // Series image/icon
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  variants    ProductVariant[]
+  products    Product[]  // Direct products (if no variant)
+
+  @@unique([categoryId, slug])
+  @@map("product_series")
+}
+
+// Product Variant - Sub-series/variants under series (e.g., "VKT-VH-S", "VKT-VH-SI", "VKT-SH")
+model ProductVariant {
+  id          String   @id @default(cuid())
+  seriesId    String
+  slug        String   // e.g., "vkt-vh-s", "vkt-vh-si", "vkt-sh"
+  name        String   // e.g., "VKT-VH-S (Mil Hareketli)"
+  description String?  @db.Text
+  imageUrl    String?  // Variant image/icon
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  series      ProductSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@unique([seriesId, slug])
+  @@map("product_variants")
+}
+
 // Representatives - Brand/Company representations
 model Representative {
   id                 String   @id @default(cuid())
@@ -198,30 +280,61 @@ model Representative {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
+  categories  ProductCategory[]
   products    Product[]
 
   @@map("representatives")
 }
 
-// Products - Products under representatives
+// Products - Individual products under variants or series
 model Product {
   id                 String   @id @default(cuid())
   representativeId   String
-  slug               String   // e.g., "vidali-kriko", "yon-degistirici"
-  name               String
+  seriesId           String?  // Optional: Product can be directly in a series
+  variantId          String?  // Optional: Product can be in a variant (sub-series)
+  slug               String   // e.g., "vkt5-vh-s", "vkt10-vh-s"
+  name               String   // e.g., "VKT5-VH-S Vidalı Kriko"
   description        String?  @db.Text
   body               String?  @db.Text
-  imageUrl           String?
+  imageUrl           String?  // Main product image
+  infoImageUrl       String?  // Product info section image (shown under "ÜRÜN BİLGİSİ" title)
   breadcrumbImageUrl String?  // Breadcrumb background image
+  // Interactive SVG data
+  svgBaseImage       String?  // Base product image for SVG overlay
+  svgComponents      Json?    // SVG component data (positions, links, images)
+  // Technical specs
+  maxCapacity        String?  // e.g., "5 kN", "100 kN"
+  technicalPdfUrl    String?  // Link to technical PDF
+  file2dUrl          String?  // 2D file (PDF, image, etc.)
+  file3dUrl          String?  // 3D file (ZIP, image, etc.)
+  externalProductUrl String?  // External product page URL (manufacturer website)
   order              Int      @default(0)
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  representative    Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  series             ProductSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  variant            ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  images              ProductImage[]
 
   @@unique([representativeId, slug])
   @@map("products")
+}
+
+// Product Images - Multiple images for a product (gallery)
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  imageUrl  String   // Image URL
+  alt       String?  // Alt text for image
+  order     Int      @default(0) // Display order
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
 }
 
 // Users - Admin users
@@ -260,6 +373,30 @@ model TeamMember {
   updatedAt   DateTime @updatedAt
 
   @@map("team_members")
+}
+
+// Site Settings - Global site settings
+model SiteSettings {
+  id                    String   @id @default(cuid())
+  defaultBreadcrumbImageUrl String?  // Default breadcrumb background image
+  // Social Media Links
+  facebookUrl          String?
+  twitterUrl           String?
+  instagramUrl         String?
+  linkedinUrl          String?
+  youtubeUrl           String?
+  behanceUrl           String?
+  // Contact Info
+  email                String?
+  phone                String?
+  address              String?  @db.Text
+  // SEO
+  siteName             String?
+  siteDescription      String?  @db.Text
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("site_settings")
 }
 
 // Testimonials - Customer testimonials/reviews

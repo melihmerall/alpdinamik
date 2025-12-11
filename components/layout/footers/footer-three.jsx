@@ -5,18 +5,7 @@ import Link from "next/link";
 const FooterThree = () => {
     return (
         <>
-        <div className="cta__area">
-            <div className="container">
-                <div className="row al-center">
-                    <div className="col-lg-7 lg-mb-30 lg-t-center title_split_anim">
-                        <h2>Projeniz Hazır mı? Bugün Başlayın!</h2>
-                    </div>
-                    <div className="col-lg-5 t-right lg-t-center wow fadeInDown" data-wow-delay="1.2s">
-                        <Link className="build_button" href="/contact-us">İletişime Geçin<i className="flaticon-right-up"></i></Link>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div className="footer__one">
             <div className="container">
                 <div className="row">

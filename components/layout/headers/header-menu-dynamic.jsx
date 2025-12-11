@@ -55,27 +55,32 @@ const MainMenuDynamic = () => {
                     <li className='menu-item-has-children'>
                         <Link href='/temsilcilikler'>TEMSİLCİLİKLER</Link>
                         <ul className='sub-menu'>
-                            {representatives.map((rep) => (
-                                <li key={rep.id} className={rep.products.length > 0 ? 'menu-item-has-children' : ''}>
-                                    <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
-                                    {rep.products.length > 0 && (
-                                        <ul className='sub-menu'>
-                                            <li className='menu-item-has-children'>
-                                                <Link href={`/temsilcilikler/${rep.slug}/urunler`}>Ürünler</Link>
-                                                <ul className='sub-menu'>
-                                                    {rep.products.map((product) => (
-                                                        <li key={product.id}>
-                                                            <Link href={`/temsilcilikler/${rep.slug}/urunler/${product.slug}`}>
-                                                                {product.name}
-                                                            </Link>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    )}
-                                </li>
-                            ))}
+                            {representatives.map((rep) => {
+                                const hasCategories = rep.categories && rep.categories.length > 0;
+                                const hasSubmenu = hasCategories;
+                                
+                                return (
+                                    <li key={rep.id} className={hasSubmenu ? 'menu-item-has-children' : ''}>
+                                        <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
+                                        {hasSubmenu && (
+                                            <ul className='sub-menu'>
+                                                <li className='menu-item-has-children'>
+                                                    <Link href={`/temsilcilikler/${rep.slug}/urunler`}>Ürünler</Link>
+                                                    <ul className='sub-menu'>
+                                                        {rep.categories.map((category) => (
+                                                            <li key={category.id}>
+                                                                <Link href={`/temsilcilikler/${rep.slug}/kategoriler/${category.slug}`}>
+                                                                    {category.name}
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        )}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </li>
                 )}

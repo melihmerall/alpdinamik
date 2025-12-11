@@ -4,6 +4,10 @@ import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
 
+// Route segment config for App Router
+export const runtime = 'nodejs'
+export const maxDuration = 300 // 5 minutes for large file uploads
+
 export async function POST(request: NextRequest) {
   const user = await verifyAuth()
   if (!user || user.role !== 'ADMIN') {
@@ -25,20 +29,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
-    if (!allowedTypes.includes(file.type)) {
+    // Validate file type - allow images and documents
+    const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    const allowedDocumentTypes = [
+      'application/pdf',
+      'application/zip',
+      'application/x-zip-compressed',
+      'application/x-rar-compressed',
+      'application/x-7z-compressed',
+      'application/octet-stream', // For DWG, DXF, X_T files
+    ]
+    const allowedExtensions = ['.pdf', '.zip', '.rar', '.7z', '.dwg', '.dxf', '.x_t']
+    
+    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+    const isValidType = allowedImageTypes.includes(file.type) || 
+                        allowedDocumentTypes.includes(file.type) ||
+                        allowedExtensions.includes(fileExtension)
+    
+    if (!isValidType) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only images are allowed.' },
+        { error: 'Invalid file type. Allowed: Images (JPG, PNG, GIF, WebP), PDF, ZIP, RAR, 7Z, DWG, DXF, X_T' },
         { status: 400 }
       )
     }
 
-    // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    // Validate file size (max 500MB for documents, 5MB for images)
+    const isImage = allowedImageTypes.includes(file.type)
+    const maxSize = isImage ? 5 * 1024 * 1024 : 500 * 1024 * 1024 // 5MB for images, 500MB for documents
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File size exceeds 5MB limit' },
+        { error: `File size exceeds ${isImage ? '5MB' : '500MB'} limit` },
         { status: 400 }
       )
     }

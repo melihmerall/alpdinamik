@@ -5,14 +5,22 @@ import portfolioData from '../../data/portfolio-data';
 import videoBg from "../../../public/assets/img/service/service-1.jpg";
 import icon2 from '../../../public/assets/img/icon/star-dark.svg';
 
-const Video = () => {
+const Video = ({ videoUrl, videoBackgroundImageUrl }) => {
     const [openVideo, setOpenVideo] = useState(false);
     const openVideoModal = () => {
         setOpenVideo(true);
     };
+
+    // If no video URL, don't render the component
+    if (!videoUrl) {
+        return null;
+    }
+
+    const backgroundImage = videoBackgroundImageUrl || videoBg.src;
+
     return (
         <>
-            <div className="video__two" style={{backgroundImage: `url(${videoBg.src})`}}>
+            <div className="video__two" style={{backgroundImage: `url(${backgroundImage})`}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-12">
@@ -43,7 +51,7 @@ const Video = () => {
                     </div>
                 </div>
             </div>
-            <ModalVideo className='video-modal' channel="youtube" autoplay isOpen={openVideo} videoId="SZEflIVnhH8" onClose={() => setOpenVideo(false)} />
+            <ModalVideo className='video-modal' channel="youtube" autoplay isOpen={openVideo} videoId={videoUrl} onClose={() => setOpenVideo(false)} />
         </>
     );
 };
