@@ -30,7 +30,7 @@ const ProductsSlider = () => {
   const slideControl = {
     spaceBetween: 25,
     slidesPerView: 1,
-    speed: 1000,
+    speed: 500,
     loop: products.length > 3,
     autoplay: {
       delay: 4000,
@@ -41,10 +41,16 @@ const ProductsSlider = () => {
       prevEl: '.products-slider-prev',
     },
     breakpoints: {
-      640: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
         slidesPerView: 2,
       },
-      1024: {
+      1025: {
+        slidesPerView: 3,
+      },
+      1600: {
         slidesPerView: 3,
       },
     },
@@ -52,7 +58,11 @@ const ProductsSlider = () => {
 
   if (loading) {
     return (
-      <div className="price__area section-padding">
+      <div className="price__area section-padding" style={{ 
+        background: 'transparent',
+        paddingTop: '80px',
+        paddingBottom: '80px'
+      }}>
         <div className="container">
           <div className="row mb-50">
             <div className="col-xl-12">
@@ -77,7 +87,11 @@ const ProductsSlider = () => {
   }
 
   return (
-    <div className="price__area section-padding">
+    <div className="price__area section-padding" style={{ 
+      background: 'transparent !important',
+      paddingTop: '80px',
+      paddingBottom: '80px'
+    }}>
       <div className="container">
         <div className="row mb-50">
           <div className="col-xl-12">
@@ -98,94 +112,111 @@ const ProductsSlider = () => {
               >
                 {products.map((product, index) => (
                   <SwiperSlide key={product.id}>
-                    <div className="price__area-item product-card-slider wow fadeInUp" data-wow-delay={`${0.4 + (index * 0.1)}s`} style={{ 
+                    <div className="blog__one-item wow fadeInUp" data-wow-delay={`${0.4 + (index * 0.1)}s`} style={{
+                      background: 'var(--bg-white)',
+                      border: '1px solid rgba(0, 0, 0, 0.08)',
+                      borderRadius: '12px',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                      transition: 'all 0.3s ease',
+                      overflow: 'hidden',
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.12)';
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                      e.currentTarget.style.transform = 'translateY(0)';
                     }}>
-                      {product.imageUrl ? (
-                        <div className="price__area-item-image" style={{ 
-                          marginBottom: '1.5rem',
-                          borderRadius: '8px',
-                          overflow: 'hidden',
-                          height: '200px',
-                          background: '#f5f5f5',
-                          flexShrink: 0
-                        }}>
+                      <div className="blog__one-item-image" style={{ position: 'relative' }}>
+                        <Link href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`}>
                           <img 
-                            src={product.imageUrl} 
+                            src={product.imageUrl || '/assets/img/blog/blog-1.jpg'} 
                             alt={product.name}
                             style={{
                               width: '100%',
-                              height: '100%',
-                              objectFit: 'cover'
+                              height: '270px',
+                              objectFit: 'cover',
+                              borderRadius: '12px 12px 0 0'
                             }}
                           />
-                        </div>
-                      ) : (
-                        <div className="price__area-item-image" style={{ 
-                          marginBottom: '1.5rem',
-                          borderRadius: '8px',
-                          overflow: 'hidden',
-                          height: '200px',
-                          background: '#f5f5f5',
-                          flexShrink: 0,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#999'
-                        }}>
-                          <span>Görsel Yok</span>
-                        </div>
-                      )}
-                      <div className="price__area-item-price" style={{ flexShrink: 0 }}>
-                        <span>{product.representative?.name || 'Ürün'}</span>
-                        <h3>{product.name}</h3>
-                        {product.maxCapacity && (
-                          <h2>Max. <span>{product.maxCapacity}</span></h2>
-                        )}
-                      </div>
-                      <div className="price__area-item-list" style={{ 
-                        flex: '1 1 auto',
-                        display: 'flex',
-                        alignItems: 'flex-start'
-                      }}>
-                        {product.description ? (
-                          <p style={{ 
-                            padding: '1rem', 
-                            color: '#666', 
-                            fontSize: '0.9rem',
-                            lineHeight: '1.6',
-                            minHeight: '80px',
-                            width: '100%',
-                            margin: 0
-                          }}>
-                            {product.description.length > 120 
-                              ? `${product.description.substring(0, 120)}...` 
-                              : product.description}
-                          </p>
-                        ) : (
-                          <p style={{ 
-                            padding: '1rem', 
-                            color: '#999', 
-                            fontSize: '0.9rem',
-                            lineHeight: '1.6',
-                            minHeight: '80px',
-                            width: '100%',
-                            margin: 0,
-                            fontStyle: 'italic'
-                          }}>
-                            Açıklama bulunmuyor
-                          </p>
-                        )}
-                      </div>
-                      <div className="price__area-item-btn" style={{ flexShrink: 0, marginTop: 'auto' }}>
-                        <Link 
-                          className="build_button" 
-                          href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`}
-                        >
-                          Ürünü İncele<i className="flaticon-right-up"></i>
                         </Link>
+                        {product.representative?.name && (
+                          <div className="blog__one-item-image-date" style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            background: 'var(--bg-white)',
+                            padding: '8px 20px',
+                            borderRadius: '0 8px 0 0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start'
+                          }}>
+                            <span style={{ 
+                              fontSize: '12px', 
+                              color: 'var(--body-color)',
+                              textTransform: 'uppercase',
+                              marginBottom: '2px'
+                            }}>{product.representative.name}</span>
+                            {product.maxCapacity && (
+                              <h6 style={{ 
+                                margin: 0, 
+                                fontSize: '16px', 
+                                fontWeight: '600',
+                                color: 'var(--primary-color-1)',
+                                lineHeight: '1.2'
+                              }}>Max. {product.maxCapacity}</h6>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="blog__one-item-content" style={{ 
+                        padding: '20px 25px 25px 25px',
+                        flex: '1',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        {product.series?.category && (
+                          <span style={{
+                            fontSize: '12px',
+                            color: 'var(--primary-color-1)',
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px',
+                            marginBottom: '8px',
+                            display: 'inline-block'
+                          }}>
+                            {product.series.category.name}
+                          </span>
+                        )}
+                        <h6 style={{ 
+                          margin: 0,
+                          marginBottom: 'auto',
+                          fontSize: '18px',
+                          lineHeight: '1.5',
+                          fontWeight: '600'
+                        }}>
+                          <Link 
+                            href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`} 
+                            style={{ 
+                              color: 'var(--text-heading-color)',
+                              textDecoration: 'none',
+                              transition: 'color 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.color = 'var(--primary-color-1)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.color = 'var(--text-heading-color)';
+                            }}
+                          >
+                            {product.name}
+                          </Link>
+                        </h6>
                       </div>
                     </div>
                   </SwiperSlide>
@@ -203,6 +234,59 @@ const ProductsSlider = () => {
           </div>
         </div>
       </div>
+      <style jsx global>{`
+        /* Products Slider Responsive Styles */
+        @media (max-width: 1199px) {
+          .price__area {
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+          }
+          .price__area-title h2 {
+            font-size: clamp(28px, 5vw, 40px) !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .price__area {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+          }
+          .price__area-title {
+            margin-bottom: 30px !important;
+          }
+          .price__area-title .subtitle {
+            font-size: 14px !important;
+          }
+          .price__area-title h2 {
+            font-size: clamp(24px, 7vw, 32px) !important;
+            line-height: 1.3 !important;
+          }
+          .blog__one-item {
+            margin-bottom: 20px;
+          }
+          .blog-card-image {
+            height: 200px !important;
+          }
+          .blog__one-item-content {
+            padding: 15px 20px 20px 20px !important;
+          }
+          .blog__one-item-content h6 {
+            font-size: 16px !important;
+          }
+          .slider-arrow {
+            display: flex !important;
+            justify-content: center !important;
+            margin-top: 20px !important;
+          }
+        }
+        @media (max-width: 575px) {
+          .price__area-title h2 {
+            font-size: 22px !important;
+          }
+          .blog-card-image {
+            height: 180px !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }

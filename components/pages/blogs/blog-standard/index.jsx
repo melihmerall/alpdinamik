@@ -6,7 +6,7 @@ import FooterOne from "@/components/layout/footers/footer-one";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 import SwitchTab from "../../common/dark-light";
 import CustomCursor from "../../common/cursor";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 
 
 const BlogStandardPage = () => {
@@ -15,7 +15,7 @@ const BlogStandardPage = () => {
             <SEO pageTitle='Blog Standard' />
             <SwitchTab />
             <CustomCursor />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="Blog Standard" innerTitle="Blog Standard" />
             <BlogStandardMain />
             <FooterOne />

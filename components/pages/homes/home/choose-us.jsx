@@ -47,7 +47,7 @@ const ChooseUs = () => {
                                 </div>
                             </div>
                             <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                <Link className="build_button mt-50" href="/contact-us">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button mt-50" href="/iletisim">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>

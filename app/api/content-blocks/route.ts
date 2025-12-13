@@ -9,7 +9,12 @@ export async function GET(request: NextRequest) {
       orderBy: { key: "asc" },
     });
 
-    return NextResponse.json(contentBlocks);
+    // Cache for 5 minutes (300 seconds) - content blocks don't change frequently
+    return NextResponse.json(contentBlocks, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error("Error fetching content blocks:", error);
     return NextResponse.json(

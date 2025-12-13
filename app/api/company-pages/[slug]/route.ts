@@ -3,11 +3,12 @@ import { prisma } from '@/lib/db'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> | { slug: string } }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params)
     const page = await prisma.companyPage.findUnique({
-      where: { slug: params.slug },
+      where: { slug: resolvedParams.slug },
     })
 
     if (!page) {
@@ -17,7 +18,12 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(page)
+    // Cache for 5 minutes (300 seconds) - company pages don't change frequently
+    return NextResponse.json(page, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch (error) {
     console.error('Error fetching company page:', error)
     return NextResponse.json(
@@ -29,15 +35,17 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> | { slug: string } }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params)
     const requestBody = await request.json()
     const {
       title,
       subtitle,
       body: bodyContent,
       imageUrl,
+      image2Url,
       breadcrumbImageUrl,
       stat1Number,
       stat1Label,
@@ -49,6 +57,12 @@ export async function PUT(
       ctaUrl,
       missionSubtitle,
       missionTitle,
+      missionBody,
+      missionImageUrl,
+      visionSubtitle,
+      visionTitle,
+      visionBody,
+      visionImageUrl,
       videoUrl,
       videoBackgroundImageUrl,
       certificationSubtitle,
@@ -71,17 +85,24 @@ export async function PUT(
     if (subtitle !== undefined) updateData.subtitle = subtitle || null
     if (bodyContent !== undefined) updateData.body = bodyContent
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl || null
+    if (image2Url !== undefined) updateData.image2Url = image2Url || null
     if (breadcrumbImageUrl !== undefined) updateData.breadcrumbImageUrl = breadcrumbImageUrl || null
-    if (stat1Number !== undefined) updateData.stat1Number = stat1Number || null
+    if (stat1Number !== undefined) updateData.stat1Number = stat1Number !== null && stat1Number !== '' ? stat1Number : null
     if (stat1Label !== undefined) updateData.stat1Label = stat1Label || null
-    if (stat2Number !== undefined) updateData.stat2Number = stat2Number || null
+    if (stat2Number !== undefined) updateData.stat2Number = stat2Number !== null && stat2Number !== '' ? stat2Number : null
     if (stat2Label !== undefined) updateData.stat2Label = stat2Label || null
-    if (stat3Number !== undefined) updateData.stat3Number = stat3Number || null
+    if (stat3Number !== undefined) updateData.stat3Number = stat3Number !== null && stat3Number !== '' ? stat3Number : null
     if (stat3Label !== undefined) updateData.stat3Label = stat3Label || null
     if (ctaLabel !== undefined) updateData.ctaLabel = ctaLabel || null
     if (ctaUrl !== undefined) updateData.ctaUrl = ctaUrl || null
     if (missionSubtitle !== undefined) updateData.missionSubtitle = missionSubtitle || null
     if (missionTitle !== undefined) updateData.missionTitle = missionTitle || null
+    if (missionBody !== undefined) updateData.missionBody = missionBody || null
+    if (missionImageUrl !== undefined) updateData.missionImageUrl = missionImageUrl || null
+    if (visionSubtitle !== undefined) updateData.visionSubtitle = visionSubtitle || null
+    if (visionTitle !== undefined) updateData.visionTitle = visionTitle || null
+    if (visionBody !== undefined) updateData.visionBody = visionBody || null
+    if (visionImageUrl !== undefined) updateData.visionImageUrl = visionImageUrl || null
     if (videoUrl !== undefined) updateData.videoUrl = videoUrl || null
     if (videoBackgroundImageUrl !== undefined) updateData.videoBackgroundImageUrl = videoBackgroundImageUrl || null
     if (certificationSubtitle !== undefined) updateData.certificationSubtitle = certificationSubtitle || null
@@ -99,7 +120,7 @@ export async function PUT(
     if (teamTitle !== undefined) updateData.teamTitle = teamTitle || null
 
     const page = await prisma.companyPage.update({
-      where: { slug: params.slug },
+      where: { slug: resolvedParams.slug },
       data: updateData,
     })
 
@@ -115,11 +136,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> | { slug: string } }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params)
     await prisma.companyPage.delete({
-      where: { slug: params.slug },
+      where: { slug: resolvedParams.slug },
     })
 
     return NextResponse.json({ message: 'Company page deleted successfully' })

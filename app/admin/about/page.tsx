@@ -229,11 +229,11 @@ export default function AboutPage() {
             color: 'var(--admin-gray-600)', 
             margin: 0 
           }}>
-            /about-us sayfasının içeriğini yönetin
+            /hakkimizda sayfasının içeriğini yönetin
           </p>
         </div>
         <Link
-          href="/about-us"
+          href="/hakkimizda"
           target="_blank"
           className="admin-btn admin-btn-secondary"
         >

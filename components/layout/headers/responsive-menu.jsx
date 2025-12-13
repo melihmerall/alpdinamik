@@ -1,94 +1,142 @@
 "use client"
 import Link from "next/link";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ResponsiveMenu = () => {
+    const [representatives, setRepresentatives] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [activeMenu, setActiveMenu] = useState(null);
-    const active = (value) => setActiveMenu(value === activeMenu ? null : value),
-    activeIcon = (value) => (activeMenu == value ? "mean-clicked" : ""),
-    activeSubMenu = (value) =>
-    value == activeMenu ? { display: "block" } : { display: "none" };
-
     const [activeMenus, setActiveMenus] = useState(null);
-    const actives = (value) => setActiveMenus(value === activeMenus ? null : value),
-    activeIcons = (value) => (activeMenus == value ? "mean-clicked" : ""),
-    activeSubMenus = (value) =>
-    value == activeMenus ? { display: "block" } : { display: "none" };
-  return (
-    <>    
-    <ul>
-        <li className='menu-item-has-children'><Link href='/'>Home</Link>
-            <ul className='sub-menu' style={activeSubMenu("home")}>
-                <li><Link href='/'>Main Business</Link></li>
-                <li><Link href='/home-two'>Consulting Business</Link></li>
-                <li><Link href='/home-three'>Business Solutions</Link></li>
-            </ul>
-            <a className={`mean-expand ${activeIcon("home")}`} onClick={() => active("home")}></a>
-        </li>  
-        <li className='menu-item-has-children'><Link href='/about-us'>Pages</Link>
-            <ul className='sub-menu' style={activeSubMenu("pages")}>
-                <li><Link href='/about-us'>About Us</Link></li>
-                <li><Link href='/pricing-plans'>Price Plans</Link></li>
-                <li><Link href='/faq'>FAQ's</Link></li>
-                <li><Link href='/testimonial'>Testimonials</Link></li>
-				<li className='menu-item-has-children'><Link href='/team'>Teams</Link>
-                    <ul className='sub-menu' style={activeSubMenus("team")}>
-						<li><Link href='/team-filter'>Team Filter</Link></li>
-						<li><Link href='/team'>Team 01</Link></li>
-						<li><Link href='/team-two'>Team 02</Link></li>
-						<li><Link href='/team-three'>Team 03</Link></li>
-						<li><Link href='/team/grace-elizabeth'>Team Single</Link></li>
-					</ul>
-                    <a className={`mean-expand ${activeIcons("team")}`} onClick={() => actives("team")}></a>
-				</li>
-                <li><Link href='/request-quote'>Request Quote</Link></li>
-                <li><Link href='/404-error'>404 Page</Link></li>
-            </ul>
-            <a className={`mean-expand ${activeIcon("pages")}`} onClick={() => active("pages")}></a>
-        </li>
-		<li className='menu-item-has-children'><Link href='/services'>Services</Link>
-            <ul className='sub-menu' style={activeSubMenu("services")}>
-				<li><Link href='/services'>Services 01</Link></li>
-				<li><Link href='/services-two'>Services 02</Link></li>
-				<li><Link href='/services/business-model'>Services Details</Link></li>
-			</ul>
-            <a className={`mean-expand ${activeIcon("services")}`} onClick={() => active("services")}></a>
-		</li>
-        <li className='menu-item-has-children'><Link href='/portfolio/3-columns'>Project</Link>
-            <ul className='sub-menu' style={activeSubMenu("project")}>
-				<li><Link href='/portfolio-filter'>Project Filter</Link></li>
-				<li className='menu-item-has-children'><Link href='/portfolio/2-columns'>Project Grid</Link>
-                    <ul className='sub-menu' style={activeSubMenus("grid")}>
-						<li><Link href='/portfolio/2-columns'>2 Columns</Link></li>
-						<li><Link href='/portfolio/3-columns'>3 Columns</Link></li>
-						<li><Link href='/portfolio/4-columns'>4 Columns</Link></li>
-					</ul>
-                    <a className={`mean-expand ${activeIcons("grid")}`} onClick={() => actives("grid")}></a>
-				</li>
-                <li><Link href='/portfolio/business-analytics'>Project Details</Link></li>
-            </ul>
-            <a className={`mean-expand ${activeIcon("project")}`} onClick={() => active("project")}></a>
-        </li>
-        <li className='menu-item-has-children'><Link href='/blog'>Blog</Link>
-            <ul className='sub-menu' style={activeSubMenu("blog")}>
-                <li><Link href='/blog'>Blog Grid</Link></li>
-                <li><Link href='/blog-standard'>Blog Standard</Link></li>
-                <li><Link href='/blog/revamp-your-business-with-expert-consulting'>Blog Details</Link></li>
-            </ul>
-            <a className={`mean-expand ${activeIcon("blog")}`} onClick={() => active("blog")}></a>
-        </li>
-        <li className='menu-item-has-children'><Link href='/contact'>Contact</Link>
-            <ul className='sub-menu' style={activeSubMenu("contact")}>
-                <li><Link href='/contact'>Contact Style 01</Link></li>
-                <li><Link href='/contact-two'>Contact Style 02</Link></li>
-                <li><Link href='/contact-three'>Contact Style 03</Link></li>
-                <li><Link href='/contact-four'>Contact Style 04</Link></li>
-            </ul>
-            <a className={`mean-expand ${activeIcon("contact")}`} onClick={() => active("contact")}></a>
-        </li>      
-    </ul>  
-    </>
-  );
+    const [activeCategoryMenus, setActiveCategoryMenus] = useState({});
+
+    useEffect(() => {
+        async function loadMenu() {
+            try {
+                const response = await fetch('/api/menu');
+                if (response.ok) {
+                    const reps = await response.json();
+                    setRepresentatives(reps);
+                }
+            } catch (error) {
+                console.error('Error loading menu:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadMenu();
+    }, []);
+
+    const active = (value) => setActiveMenu(value === activeMenu ? null : value);
+    const activeIcon = (value) => (activeMenu == value ? "mean-clicked" : "");
+    const activeSubMenu = (value) => value == activeMenu ? { display: "block" } : { display: "none" };
+
+    const actives = (value) => setActiveMenus(value === activeMenus ? null : value);
+    const activeIcons = (value) => (activeMenus == value ? "mean-clicked" : "");
+    const activeSubMenus = (value) => value == activeMenus ? { display: "block" } : { display: "none" };
+
+    const activeCategory = (repId, catId) => {
+        const key = `${repId}-${catId}`;
+        setActiveCategoryMenus(prev => ({
+            ...prev,
+            [key]: prev[key] ? null : catId
+        }));
+    };
+    const activeCategoryIcon = (repId, catId) => {
+        const key = `${repId}-${catId}`;
+        return activeCategoryMenus[key] == catId ? "mean-clicked" : "";
+    };
+    const activeCategorySubMenu = (repId, catId) => {
+        const key = `${repId}-${catId}`;
+        return activeCategoryMenus[key] == catId ? { display: "block" } : { display: "none" };
+    };
+
+    // Get first product URL from category
+    const getFirstProductFromCategory = (category, repSlug) => {
+        if (category.series && category.series.length > 0) {
+            const firstSeries = category.series[0];
+            // Try variants first
+            for (const variant of firstSeries.variants || []) {
+                if (variant.products && variant.products.length > 0) {
+                    return `/temsilcilikler/${repSlug}/urunler/${variant.products[0].slug}`;
+                }
+            }
+            // Then try direct products
+            if (firstSeries.products && firstSeries.products.length > 0) {
+                return `/temsilcilikler/${repSlug}/urunler/${firstSeries.products[0].slug}`;
+            }
+        }
+        return null;
+    };
+
+    return (
+        <>    
+            <ul>
+                <li><Link href='/'>Anasayfa</Link></li>
+                
+                <li className='menu-item-has-children'>
+                    <Link href='/hakkimizda'>Kurumsal</Link>
+                    <ul className='sub-menu' style={activeSubMenu("kurumsal")}>
+                        <li><Link href='/hakkimizda'>Hakkımızda</Link></li>
+                        <li><Link href='/misyon-vizyon'>Misyon & Vizyon</Link></li>
+                    </ul>
+                    <a className={`mean-expand ${activeIcon("kurumsal")}`} onClick={() => active("kurumsal")}></a>
+                </li>
+
+                {!loading && representatives.length > 0 && (
+                    <li className='menu-item-has-children'>
+                        <Link href='/temsilcilikler'>TEMSİLCİLİKLER</Link>
+                        <ul className='sub-menu' style={activeSubMenu("temsilcilikler")}>
+                            {representatives.map((rep) => {
+                                const hasCategories = rep.categories && rep.categories.length > 0;
+                                
+                                return (
+                                    <li key={rep.id} className={hasCategories ? 'menu-item-has-children' : ''}>
+                                        <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
+                                        {hasCategories && (
+                                            <>
+                                                <ul className='sub-menu' style={activeSubMenus(`rep-${rep.id}`)}>
+                                                    <li className='menu-item-has-children'>
+                                                        <Link href='#'>Ürünler</Link>
+                                                        <ul className='sub-menu' style={activeCategorySubMenu(rep.id, 'urunler')}>
+                                                            {rep.categories.map((category) => {
+                                                                const firstProductUrl = getFirstProductFromCategory(category, rep.slug);
+                                                                return (
+                                                                    <li key={category.id}>
+                                                                        {firstProductUrl ? (
+                                                                            <Link href={firstProductUrl}>
+                                                                                {category.name}
+                                                                            </Link>
+                                                                        ) : (
+                                                                            <span style={{ cursor: 'default', color: 'var(--text-white)' }}>
+                                                                                {category.name}
+                                                                            </span>
+                                                                        )}
+                                                                    </li>
+                                                                );
+                                                            })}
+                                                        </ul>
+                                                        <a className={`mean-expand ${activeCategoryIcon(rep.id, 'urunler')}`} onClick={() => activeCategory(rep.id, 'urunler')}></a>
+                                                    </li>
+                                                </ul>
+                                                <a className={`mean-expand ${activeIcons(`rep-${rep.id}`)}`} onClick={() => actives(`rep-${rep.id}`)}></a>
+                                            </>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                        <a className={`mean-expand ${activeIcon("temsilcilikler")}`} onClick={() => active("temsilcilikler")}></a>
+                    </li>
+                )}
+
+                <li><Link href='/sektorler'>Sektörler</Link></li>
+
+                <li><Link href='/blog'>Blog</Link></li>
+
+                <li><Link href='/iletisim'>İLETİŞİM</Link></li>
+            </ul>  
+        </>
+    );
 };
 
 export default ResponsiveMenu;

@@ -23,7 +23,7 @@ const AboutThree = () => {
                                     <div className="col-lg-7 col-md-8 pr-25 md-mb-25">
                                         <p className="wow fadeInUp" data-wow-delay=".4s">Alp Dinamik olarak, lineer hareket çözümleri, proje tasarımı, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.</p>
                                         <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                            <a className="build_button mt-20" href="/about-us">Daha Fazlasını Keşfedin<i className="flaticon-right-up"></i></a>
+                                            <a className="build_button mt-20" href="/hakkimizda">Daha Fazlasını Keşfedin<i className="flaticon-right-up"></i></a>
                                         </div>
                                     </div>
                                     <div className="col-lg-5 col-md-4 t-right">

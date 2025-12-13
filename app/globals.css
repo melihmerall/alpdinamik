@@ -9,6 +9,71 @@
 @import url('/assets/css/meanmenu.min.css');
 @import url('/assets/sass/style.css');
 
+/* Prevent horizontal overflow on all pages */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Container overflow fix */
+.container,
+.container-fluid {
+  max-width: 100%;
+  overflow-x: hidden;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Row overflow fix */
+.row {
+  margin-left: -15px;
+  margin-right: -15px;
+  max-width: 100%;
+}
+
+/* Fix for about page margins on mobile */
+@media (max-width: 1199px) {
+  .mission__area-left.mr-40,
+  .mission__area-left.mr-40.xl-mr-0,
+  .about__five-right.ml-70,
+  .about__five-right.ml-70.xl-ml-0 {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .mr-40,
+  .ml-70 {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+  
+  [class*="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
+    max-width: 100%;
+  }
+}
+
 /* Products Slider Styles */
 .products-swiper {
   padding: 20px 0 60px 0 !important;
@@ -332,6 +397,43 @@ a:active {
 }
 
 /* Category Card Hover Effect */
+/* Category Card Styles */
+.category-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.category-image-link {
+  display: block;
+  overflow: hidden;
+}
+
+.category-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.category-card:hover .category-image {
+  transform: scale(1.05);
+}
+
+.category-placeholder {
+  width: 100%;
+  height: 280px;
+  background: var(--color-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--body-color);
+}
+
+.category-placeholder i {
+  font-size: 60px;
+  opacity: 0.3;
+}
+
 .category-card-link:hover {
   transform: translateY(-8px) !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
@@ -1434,5 +1536,169 @@ a:active {
   
   .product-info-content table {
     min-width: 800px;
+  }
+}
+
+/* Blog Card Hover Effects */
+.blog__three-item-image img {
+  transition: transform 0.3s ease;
+}
+
+.blog__three-item:hover .blog__three-item-image img {
+  transform: scale(1.05);
+}
+
+.blog__three-item {
+  transition: box-shadow 0.3s ease;
+}
+
+.blog__three-item:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Section Styles */
+.contact__section input::placeholder,
+.contact__section textarea::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .contact__section input::placeholder,
+.dark-mode .contact__section textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.contact__section input:focus,
+.contact__section textarea:focus {
+  outline: none;
+  border-color: var(--primary-color-1);
+  background: var(--bg-white);
+}
+
+.contact__panel {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact__panel-header i {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Contact Section Background Overlay - Dark Mode */
+.dark-mode .contact__section-overlay {
+  background: linear-gradient(135deg, rgba(255, 191, 67, 0.08) 0%, rgba(234, 179, 66, 0.12) 50%, rgba(30, 30, 30, 0.75) 100%) !important;
+}
+
+/* Contact Form Responsive */
+@media (max-width: 768px) {
+  .contact__section form > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Dark Mode - Heading Colors */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+  color: var(--text-heading-color) !important;
+}
+
+.dark-mode .section-title h1,
+.dark-mode .section-title h2,
+.dark-mode .section-title h3,
+.dark-mode .section-title h4,
+.dark-mode .section-title h5,
+.dark-mode .section-title h6 {
+  color: var(--text-heading-color) !important;
+}
+
+.dark-mode .title h1,
+.dark-mode .title h2,
+.dark-mode .title h3,
+.dark-mode .title h4,
+.dark-mode .title h5,
+.dark-mode .title h6 {
+  color: var(--text-heading-color) !important;
+}
+
+/* Dark Mode - Contact Page */
+.dark-mode .contact__area-left-contact-item-content span {
+  color: var(--body-color) !important;
+}
+
+.dark-mode .contact__area-left-contact-item-content h6,
+.dark-mode .contact__area-left-contact-item-content h6 a {
+  color: var(--text-heading-color) !important;
+}
+
+.dark-mode .contact__area-left-contact-item-content h6 a:hover {
+  color: var(--primary-color-1) !important;
+}
+
+.dark-mode .contact__area-form h4 {
+  color: var(--text-heading-color) !important;
+}
+
+.dark-mode .contact__area-left .title p {
+  color: var(--body-color) !important;
+}
+
+/* About Page Professional Enhancements */
+.about__five.section-padding.pt-0 {
+  margin-top: 4rem;
+}
+
+@media (max-width: 991px) {
+  .mission__area-left h2,
+  .about__five-right-title h2 {
+    font-size: 2rem !important;
+  }
+  
+  #stats-section h2 {
+    font-size: 2.5rem !important;
+  }
+  
+  .about__five.section-padding.pt-0 {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .mission__area-left h2,
+  .about__five-right-title h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  #stats-section h2 {
+    font-size: 2rem !important;
+  }
+  
+  #stats-section .col-lg-4 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .about__five.section-padding.pt-0 {
+    margin-top: 2rem;
   }
 }

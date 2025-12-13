@@ -2,7 +2,7 @@
 import SEO from "@/components/data/seo";
 import CustomCursor from "../../common/cursor";
 import SwitchTab from "../../common/dark-light";
-import HeaderOne from "@/components/layout/headers/header-one";
+import HeaderFour from "@/components/layout/headers/header-four";
 import BannerOne from "./banner";
 import About from "./about";
 import TextSlide from "./text-slide";
@@ -22,7 +22,7 @@ const HomeOne = () => {
             <SEO pageTitle='Lineer Hareket Sistemleri ve Mühendislik Çözümleri' />
             <CustomCursor />
             <SwitchTab />
-            <HeaderOne />
+            <HeaderFour />
             <BannerOne />
             <About />
             <TextSlide />

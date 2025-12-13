@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import SEO from "@/components/data/seo";
 import CustomCursor from "../common/cursor";
 import SwitchTab from "../common/dark-light";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import BreadCrumb from "../common/breadcrumb";
 import CompanyHistory from "./history";
 import FooterTwo from "@/components/layout/footers/footer-two";
@@ -36,7 +36,7 @@ const History = () => {
             <SEO pageTitle="Tarihçemiz" />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb 
                 title="Tarihçemiz" 
                 innerTitle="Tarihçemiz"

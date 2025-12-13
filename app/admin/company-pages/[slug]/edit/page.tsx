@@ -16,6 +16,7 @@ export default function EditCompanyPage() {
     subtitle: '',
     body: '',
     imageUrl: '',
+    image2Url: '',
     breadcrumbImageUrl: '',
     stat1Number: 0,
     stat1Label: '',
@@ -39,6 +40,7 @@ export default function EditCompanyPage() {
             subtitle: data.subtitle || '',
             body: data.body || '',
             imageUrl: data.imageUrl || '',
+            image2Url: data.image2Url || '',
             breadcrumbImageUrl: data.breadcrumbImageUrl || '',
             stat1Number: data.stat1Number || 0,
             stat1Label: data.stat1Label || '',
@@ -72,7 +74,7 @@ export default function EditCompanyPage() {
     }))
   }
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'imageUrl' | 'breadcrumbImageUrl' = 'imageUrl') => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'imageUrl' | 'image2Url' | 'breadcrumbImageUrl' = 'imageUrl') => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -338,7 +340,7 @@ export default function EditCompanyPage() {
               </small>
             </div>
 
-            {slug === 'home-about' && (
+            {(slug === 'home-about' || slug === 'hakkimizda') && (
               <>
                 <div>
                   <label style={{ 
@@ -382,6 +384,72 @@ export default function EditCompanyPage() {
                       Yükleniyor...
                     </p>
                   )}
+                </div>
+
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    İkinci Görsel (Sağ Alt)
+                  </label>
+                  {formData.image2Url && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <img 
+                        src={formData.image2Url} 
+                        alt="Preview" 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: '300px', 
+                          borderRadius: '8px',
+                          objectFit: 'cover'
+                        }} 
+                      />
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'image2Url')}
+                    disabled={uploading}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  {uploading && (
+                    <p style={{ marginTop: '0.5rem', color: 'var(--admin-gray-600)' }}>
+                      Yükleniyor...
+                    </p>
+                  )}
+                  {formData.image2Url && (
+                    <input
+                      type="text"
+                      name="image2Url"
+                      value={formData.image2Url}
+                      onChange={handleChange}
+                      placeholder="Veya URL girin"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid var(--admin-gray-300)',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        marginTop: '0.5rem',
+                        fontFamily: 'monospace',
+                        fontSize: '0.875rem'
+                      }}
+                    />
+                  )}
+                  <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--admin-gray-500)', fontSize: '0.875rem' }}>
+                    About-four bölümünde sağ altta gösterilecek ikinci görsel. Maksimum 5MB, JPG, PNG, GIF, WebP formatları desteklenir
+                  </small>
                 </div>
 
                 <div style={{ 

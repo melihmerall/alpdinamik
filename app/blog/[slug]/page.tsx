@@ -65,7 +65,11 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
     image: {
       src: post.imageUrl || '/assets/img/blog/blog-1.jpg'
     },
-    date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('tr-TR') : '',
+    date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('tr-TR', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }) : '',
     comment: 0,
     body: post.body,
     summary: post.summary,

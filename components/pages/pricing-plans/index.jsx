@@ -6,7 +6,7 @@ import FooterOne from "@/components/layout/footers/footer-one";
 import ScrollToTop from "../common/scroll/scroll-to-top";
 import CustomCursor from "../common/cursor";
 import SwitchTab from "../common/dark-light";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 
 const PricingPages = () => {
     return (
@@ -14,7 +14,7 @@ const PricingPages = () => {
             <SEO pageTitle='Pricing Plan' />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title='Pricing Plan' innerTitle='Pricing Plan' />
             <PricingPlansMain />
             <FooterOne />    

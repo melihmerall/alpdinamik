@@ -25,7 +25,7 @@ const ServicesSingleMain = ({singleData}) => {
                                 </div>
                                 <div className="all__sidebar-item-help mb-25" style={{backgroundImage: `url(${ctaImage.src})`}}>
                                     <h3>Projeniz İçin Hazır mısınız?</h3>
-                                    <Link className="build_button mt-20" href="/contact-us">Teklif Alın<i className="flaticon-right-up"></i></Link>
+                                    <Link className="build_button mt-20" href="/iletisim">Teklif Alın<i className="flaticon-right-up"></i></Link>
                                 </div>
                                 <div className="all__sidebar-item">
                                     <h4>İndir</h4>

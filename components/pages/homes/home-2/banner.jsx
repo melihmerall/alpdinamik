@@ -34,7 +34,7 @@ const BannerTwo = () => {
             subtitle: 'Lineer Hareket Sistemleri',
             imageUrl: '/assets/img/banner/banner-1.jpg',
             ctaLabel: 'Daha Fazlasını Keşfedin',
-            ctaUrl: '/about-us'
+            ctaUrl: '/hakkimizda'
         },
         {
             id: '2',

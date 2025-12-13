@@ -2,7 +2,24 @@ import React from 'react';
 import FormArea from './form';
 import Link from 'next/link';
 
-const ContactMain = () => {
+const ContactMain = ({ siteSettings }) => {
+    const phone = siteSettings?.phone || "+90 (212) 123 45 67";
+    const email = siteSettings?.email || "info@alpdinamik.com.tr";
+    const address = siteSettings?.address || "İstanbul, Türkiye";
+    
+    // Google Maps link oluştur
+    // Eğer mapEmbedUrl varsa ve embed URL ise, normal Google Maps linkine çevir
+    let mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    if (siteSettings?.mapEmbedUrl) {
+        // Embed URL ise (iframe için), normal linke çevir
+        if (siteSettings.mapEmbedUrl.includes('maps/embed')) {
+            mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        } else {
+            // Normal Google Maps URL ise direkt kullan
+            mapsLink = siteSettings.mapEmbedUrl;
+        }
+    }
+
     return (
         <>
             <div className="contact__area section-padding">
@@ -22,7 +39,7 @@ const ContactMain = () => {
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
                                             <span>Telefon:</span>
-                                            <h6><Link href="tel:+90 (212) 123 45 67">+90 (212) 123 45 67</Link></h6>
+                                            <h6><Link href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</Link></h6>
                                         </div>
                                     </div>
                                     <div className="contact__area-left-contact-item">
@@ -31,7 +48,7 @@ const ContactMain = () => {
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
                                             <span>E-posta:</span>
-                                            <h6><Link href="mailto:info@alpdinamik.com.tr">info@alpdinamik.com.tr</Link></h6>
+                                            <h6><Link href={`mailto:${email}`}>{email}</Link></h6>
                                         </div>
                                     </div>
                                     <div className="contact__area-left-contact-item">
@@ -40,7 +57,7 @@ const ContactMain = () => {
                                         </div>
                                         <div className="contact__area-left-contact-item-content">
                                             <span>Adres:</span>
-                                            <h6><Link href="https://google.com/maps" target="_blank">İstanbul, Türkiye</Link></h6>
+                                            <h6><Link href={mapsLink} target="_blank" rel="noopener noreferrer">{address}</Link></h6>
                                         </div>
                                     </div>
                                 </div>

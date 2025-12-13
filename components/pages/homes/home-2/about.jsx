@@ -11,10 +11,25 @@ const AboutTwo = () => {
     useEffect(() => {
         async function fetchAboutData() {
             try {
-                const response = await fetch('/api/company-pages/home-about')
+                // Önce home-about'u dene, yoksa hakkimizda'yı dene
+                let response = await fetch('/api/company-pages/home-about')
+                let data = null
+                
                 if (response.ok) {
-                    const data = await response.json()
+                    data = await response.json()
+                } else {
+                    // home-about yoksa hakkimizda'yı dene
+                    response = await fetch('/api/company-pages/hakkimizda')
+                    if (response.ok) {
+                        data = await response.json()
+                    }
+                }
+                
+                if (data) {
+                    console.log('About data fetched:', data)
                     setAboutData(data)
+                } else {
+                    console.log('No about data found, using fallback')
                 }
             } catch (error) {
                 console.error('Error fetching about data:', error)
@@ -41,7 +56,21 @@ const AboutTwo = () => {
         ctaUrl: '/services'
     }
 
-    const displayData = aboutData || fallbackData
+    // Veritabanından gelen veriyi kullan, eksik alanlar için fallback kullan
+    const displayData = aboutData ? {
+        subtitle: aboutData.subtitle || fallbackData.subtitle,
+        title: aboutData.title || fallbackData.title,
+        body: aboutData.body || fallbackData.body,
+        imageUrl: aboutData.imageUrl || fallbackData.imageUrl,
+        stat1Number: aboutData.stat1Number !== null && aboutData.stat1Number !== undefined ? aboutData.stat1Number : fallbackData.stat1Number,
+        stat1Label: aboutData.stat1Label || fallbackData.stat1Label,
+        stat2Number: aboutData.stat2Number !== null && aboutData.stat2Number !== undefined ? aboutData.stat2Number : fallbackData.stat2Number,
+        stat2Label: aboutData.stat2Label || fallbackData.stat2Label,
+        stat3Number: aboutData.stat3Number !== null && aboutData.stat3Number !== undefined ? aboutData.stat3Number : fallbackData.stat3Number,
+        stat3Label: aboutData.stat3Label || fallbackData.stat3Label,
+        ctaLabel: aboutData.ctaLabel || fallbackData.ctaLabel,
+        ctaUrl: aboutData.ctaUrl || fallbackData.ctaUrl,
+    } : fallbackData
 
     if (loading) {
         return null

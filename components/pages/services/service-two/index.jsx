@@ -1,6 +1,6 @@
 "use client"
 import SEO from "@/components/data/seo";
-import HeaderOne from "@/components/layout/headers/header/header-one";
+import HeaderFour from "@/components/layout/headers/header-four";
 import BreadCrumb from "../../common/breadcrumb";
 import ServicesMain from "./service-two";
 import FooterOne from "@/components/layout/footers/footer-one";
@@ -10,7 +10,7 @@ const ServicePageTwo = () => {
     return (
         <>
             <SEO pageTitle="Services Two" />
-            <HeaderOne />
+            <HeaderFour />
             <BreadCrumb title="Services Two" innerTitle="Services Two" />
             <ServicesMain />
             <FooterOne />

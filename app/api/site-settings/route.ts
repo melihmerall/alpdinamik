@@ -13,7 +13,12 @@ export async function GET() {
       })
     }
 
-    return NextResponse.json(settings)
+    // Cache for 5 minutes (300 seconds)
+    return NextResponse.json(settings, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch (error) {
     console.error('Error fetching site settings:', error)
     return NextResponse.json(
@@ -38,8 +43,20 @@ export async function PUT(request: NextRequest) {
       email,
       phone,
       address,
+      mapEmbedUrl,
       siteName,
       siteDescription,
+      smtpHost,
+      smtpPort,
+      smtpUser,
+      smtpPassword,
+      smtpSecure,
+      contactEmail,
+      kvkkText,
+      contactFormTitle,
+      contactFormSubtitle,
+      contactFormNote,
+      faviconUrl,
     } = body
 
     // Get or create settings
@@ -63,8 +80,23 @@ export async function PUT(request: NextRequest) {
     if (email !== undefined) updateData.email = email?.trim() || null
     if (phone !== undefined) updateData.phone = phone?.trim() || null
     if (address !== undefined) updateData.address = address?.trim() || null
+    if (mapEmbedUrl !== undefined) updateData.mapEmbedUrl = mapEmbedUrl?.trim() || null
     if (siteName !== undefined) updateData.siteName = siteName?.trim() || null
     if (siteDescription !== undefined) updateData.siteDescription = siteDescription?.trim() || null
+    if (smtpHost !== undefined) updateData.smtpHost = smtpHost?.trim() || null
+    if (smtpPort !== undefined) updateData.smtpPort = smtpPort ? parseInt(smtpPort.toString()) : null
+    if (smtpUser !== undefined) updateData.smtpUser = smtpUser?.trim() || null
+    // Only update password if it's provided and not empty
+    if (smtpPassword !== undefined && smtpPassword?.trim()) {
+      updateData.smtpPassword = smtpPassword.trim()
+    }
+    if (smtpSecure !== undefined) updateData.smtpSecure = smtpSecure
+    if (contactEmail !== undefined) updateData.contactEmail = contactEmail?.trim() || null
+    if (kvkkText !== undefined) updateData.kvkkText = kvkkText?.trim() || null
+    if (contactFormTitle !== undefined) updateData.contactFormTitle = contactFormTitle?.trim() || null
+    if (contactFormSubtitle !== undefined) updateData.contactFormSubtitle = contactFormSubtitle?.trim() || null
+    if (contactFormNote !== undefined) updateData.contactFormNote = contactFormNote?.trim() || null
+    if (faviconUrl !== undefined) updateData.faviconUrl = faviconUrl?.trim() || null
 
     console.log('Updating site settings with data:', updateData) // Debug log
 

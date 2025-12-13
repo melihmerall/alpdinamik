@@ -33,12 +33,15 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { title, subtitle, imageUrl, ctaLabel, ctaUrl, isActive, order } = body
+    const { title, subtitle, imageUrl, videoUrl, ctaLabel, ctaUrl, isActive, order } = body
 
     const updateData: any = {}
-    if (title !== undefined) updateData.title = title
+    if (title !== undefined) {
+      updateData.title = title && title.trim() !== '' ? title : null
+    }
     if (subtitle !== undefined) updateData.subtitle = subtitle || null
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl
+    if (videoUrl !== undefined) updateData.videoUrl = videoUrl || null
     if (ctaLabel !== undefined) updateData.ctaLabel = ctaLabel || null
     if (ctaUrl !== undefined) updateData.ctaUrl = ctaUrl || null
     if (isActive !== undefined) updateData.isActive = isActive

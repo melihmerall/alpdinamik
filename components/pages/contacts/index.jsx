@@ -1,27 +1,72 @@
 "use client";
+import { useState, useEffect } from 'react';
 import SEO from "@/components/data/seo";
 import FooterTwo from "../../layout/footers/footer-two";
-import HeaderTwo from "../../layout/headers/header-two";
+import HeaderFour from "../../layout/headers/header-four";
 import BreadCrumb from "../common/breadcrumb";
 import CustomCursor from "../common/cursor";
 import SwitchTab from "../common/dark-light";
 import ContactMain from "./contact";
 
 const ContactUs = () => {
+    const [siteSettings, setSiteSettings] = useState(null);
+
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Site Settings loaded:', data);
+                    console.log('Map Embed URL:', data.mapEmbedUrl);
+                    setSiteSettings(data);
+                }
+            } catch (error) {
+                console.error('Error fetching site settings:', error);
+            }
+        }
+        fetchSettings();
+    }, []);
+
+    // Default map for İstanbul, Türkiye (Alp Dinamik)
+    // Kullanıcı gerçek adresini site ayarlarına ekleyebilir
+    const defaultMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.424314489!2d28.9784!3d41.0082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab9e7a7777c43%3A0x4c76ed36d4b1c5a1!2sIstanbul%2C%20Turkey!5e0!3m2!1sen!2str!4v1234567890123!5m2!1sen!2str";
+    
+    // Extract URL from iframe if user pasted full iframe code
+    let rawMapUrl = siteSettings?.mapEmbedUrl || '';
+    if (rawMapUrl && rawMapUrl.includes('<iframe')) {
+        // Extract src from iframe tag
+        const srcMatch = rawMapUrl.match(/src=["']([^"']+)["']/);
+        if (srcMatch) {
+            rawMapUrl = srcMatch[1];
+        }
+    }
+    
+    const mapUrl = rawMapUrl || defaultMapUrl;
+    const mapTitle = siteSettings?.address || "Alp Dinamik - İstanbul, Türkiye";
+    
+    console.log('Final map URL:', mapUrl);
+
     return (
         <>
             <SEO pageTitle="İletişim" />
-            <HeaderTwo />
+            <HeaderFour />
             <CustomCursor />
             <SwitchTab />
             <BreadCrumb title="İletişim" innerTitle="İletişim" />
-            <ContactMain />
+            <ContactMain siteSettings={siteSettings} />
             <div className="map section-padding pt-0">
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-12 wow fadeInUp" data-wow-delay=".4s">
                             <div className="map-area">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830894606!2d-74.11976383964463!3d40.69766374865767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1652012644726!5m2!1sen!2sbd" loading="lazy" title="London Eye, London, United Kingdom" aria-label="London Eye, London, United Kingdom"></iframe>
+                                <iframe 
+                                    src={mapUrl} 
+                                    loading="lazy" 
+                                    title={mapTitle}
+                                    aria-label={mapTitle}
+                                    style={{ width: '100%', height: '450px', border: 0 }}
+                                ></iframe>
                             </div>
                         </div>
                     </div>

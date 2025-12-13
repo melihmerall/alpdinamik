@@ -15,7 +15,7 @@ const Experience = () => {
                             </div>
                             <div className="row mt-60 al-center">
                                 <div className="col-md-2 md-mb-25 wow fadeInLeft" data-wow-delay=".3s">
-                                    <Link href="/contact-us"><img className="h_rotate" src={content.src} alt="image" /></Link>
+                                    <Link href="/iletisim"><img className="h_rotate" src={content.src} alt="image" /></Link>
                                 </div>
                                 <div className="col-md-5 md-mb-25 wow fadeInLeft" data-wow-delay=".6s">
                                     <div className="experience__area-list-item">

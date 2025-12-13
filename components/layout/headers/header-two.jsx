@@ -2,43 +2,16 @@
 import Link from "next/link";
 import logo from "../../../public/assets/img/logo-2.png";
 import MainMenu from './header-menu';
-import Search from './search';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import MobileMenuOne from './menu_sidebar/menu-one';
 import SideBar from './offcanvas';
 
 const HeaderTwo = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [menuSidebar, setMenuSidebar] = useState(false);
-    const [search, setSearch] = useState(false);
-    const [dark, setDark] = useState(false);
-
-    useEffect(() => {
-        // Check localStorage for saved theme preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            setDark(true);
-            document.body.classList.add('dark-mode');
-        } else {
-            setDark(false);
-            document.body.classList.remove('dark-mode');
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        if (dark) {
-            setDark(false);
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-        } else {
-            setDark(true);
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
-        }
-    };
     return (
         <>
-            <div className="header__area two">
+            <div className="header__four">
                 <div className="custom_container">
                     <div className="header__area-menubar">
                         <div className="header__area-menubar-left one">
@@ -52,21 +25,28 @@ const HeaderTwo = () => {
                             </div>
                         </div>
                         <div className="header__area-menubar-right">
-                            <div className="header__area-menubar-right-theme" onClick={toggleTheme} style={{cursor: 'pointer', marginRight: '15px', fontSize: '20px', color: dark ? '#fff' : '#000', transition: 'all 0.3s'}}>
-                                {dark ? (
-                                    <i className="fas fa-sun" title="Light Mode"></i>
-                                ) : (
-                                    <i className="fas fa-moon" title="Dark Mode"></i>
-                                )}
-                            </div>
-                            <div className="header__area-menubar-right-search">
-                                <div className="search">	
-                                    <span className="header__area-menubar-right-search-icon open" onClick={() => setSearch(true)}><i className="fal fa-search"></i></span>
-                                </div>
-                                <Search isOpen={search} setIsOpen={setSearch} />
-                            </div>
                             <div className="header__area-menubar-right-btn one">
-                                <Link className="build_button" href="/request-quote">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
+                                <Link 
+                                    className="build_button" 
+                                    href="/#iletisim"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        const currentPath = window.location.pathname;
+                                        
+                                        if (currentPath === '/') {
+                                            // Same page, just scroll
+                                            const element = document.getElementById('iletisim');
+                                            if (element) {
+                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                            }
+                                        } else {
+                                            // Different page, navigate first
+                                            window.location.href = '/#iletisim';
+                                        }
+                                    }}
+                                >
+                                    Projenizi Paylaşın<i className="flaticon-right-up"></i>
+                                </Link>
                             </div>
                             <div className="header__area-menubar-right-sidebar">
                                 <div className="header__area-menubar-right-sidebar-icon" onClick={() => setSidebarOpen(true)}>

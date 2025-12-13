@@ -36,7 +36,7 @@ const Industry = () => {
                             <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">We Drive Client Success with Creative Building Designs</h2>
                             <p className="wow fadeInUp" data-wow-delay=".4s">At BuildGo, we pride ourselves on transforming our clients' visions into reality. Our innovative and client-focused designs ensure that every project stands out.</p>
                             <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                <Link className="build_button mt-25" href="/contact-us">Contact Us<i className="flaticon-right-up"></i></Link>                        
+                                <Link className="build_button mt-25" href="/iletisim">Contact Us<i className="flaticon-right-up"></i></Link>                        
                             </div>
                         </div>
                     </div>

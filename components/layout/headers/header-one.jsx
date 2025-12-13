@@ -33,7 +33,7 @@ const HeaderOne = () => {
                                 <Search isOpen={search} setIsOpen={setSearch} />
                             </div>
                             <div className="header__area-menubar-right-btn one">
-                                <Link className="build_button" href="/contact-us">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button" href="/iletisim">Projenizi Paylaşın<i className="flaticon-right-up"></i></Link>
                             </div>
                             <div className="header__area-menubar-right-sidebar">
                                 <div className="header__area-menubar-right-sidebar-icon" onClick={() => setSidebarOpen(true)}>

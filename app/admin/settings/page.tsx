@@ -21,8 +21,20 @@ export default function SiteSettingsPage() {
     email: '',
     phone: '',
     address: '',
+    mapEmbedUrl: '',
     siteName: '',
     siteDescription: '',
+    smtpHost: '',
+    smtpPort: '',
+    smtpUser: '',
+    smtpPassword: '',
+    smtpSecure: true,
+    contactEmail: '',
+    kvkkText: '',
+    contactFormTitle: '',
+    contactFormSubtitle: '',
+    contactFormNote: '',
+    faviconUrl: '',
   })
 
   useEffect(() => {
@@ -45,8 +57,20 @@ export default function SiteSettingsPage() {
           email: data.email || '',
           phone: data.phone || '',
           address: data.address || '',
+          mapEmbedUrl: data.mapEmbedUrl || '',
           siteName: data.siteName || '',
           siteDescription: data.siteDescription || '',
+          smtpHost: data.smtpHost || '',
+          smtpPort: data.smtpPort?.toString() || '',
+          smtpUser: data.smtpUser || '',
+          smtpPassword: data.smtpPassword || '',
+          smtpSecure: data.smtpSecure !== false,
+          contactEmail: data.contactEmail || '',
+          kvkkText: data.kvkkText || '',
+          contactFormTitle: data.contactFormTitle || '',
+          contactFormSubtitle: data.contactFormSubtitle || '',
+          contactFormNote: data.contactFormNote || '',
+          faviconUrl: data.faviconUrl || '',
         })
       }
     } catch (err) {
@@ -128,6 +152,17 @@ export default function SiteSettingsPage() {
     try {
       console.log('Saving formData:', formData) // Debug log
       
+      // Extract URL from iframe if user pasted full iframe code
+      let mapEmbedUrl = formData.mapEmbedUrl || null;
+      if (mapEmbedUrl && mapEmbedUrl.includes('<iframe')) {
+        // Extract src from iframe tag
+        const srcMatch = mapEmbedUrl.match(/src=["']([^"']+)["']/);
+        if (srcMatch) {
+          mapEmbedUrl = srcMatch[1];
+          console.log('Extracted map URL from iframe:', mapEmbedUrl);
+        }
+      }
+      
       // Prepare data - ensure all fields are sent
       const dataToSave = {
         defaultBreadcrumbImageUrl: formData.defaultBreadcrumbImageUrl || null,
@@ -140,8 +175,20 @@ export default function SiteSettingsPage() {
         email: formData.email || null,
         phone: formData.phone || null,
         address: formData.address || null,
+        mapEmbedUrl: mapEmbedUrl,
         siteName: formData.siteName || null,
         siteDescription: formData.siteDescription || null,
+        smtpHost: formData.smtpHost || null,
+        smtpPort: formData.smtpPort ? parseInt(formData.smtpPort.toString()) : null,
+        smtpUser: formData.smtpUser || null,
+        smtpPassword: formData.smtpPassword || null,
+        smtpSecure: formData.smtpSecure,
+        contactEmail: formData.contactEmail || null,
+        kvkkText: formData.kvkkText || null,
+        contactFormTitle: formData.contactFormTitle || null,
+        contactFormSubtitle: formData.contactFormSubtitle || null,
+        contactFormNote: formData.contactFormNote || null,
+        faviconUrl: formData.faviconUrl || null,
       }
       
       console.log('Data to save:', dataToSave) // Debug log
@@ -240,6 +287,88 @@ export default function SiteSettingsPage() {
           )}
 
           <div style={{ display: 'grid', gap: '2rem' }}>
+            {/* Favicon */}
+            <div>
+              <h2 style={{ 
+                fontSize: '1.25rem', 
+                fontWeight: '600', 
+                color: 'var(--admin-gray-900)',
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid var(--admin-gray-200)'
+              }}>
+                Favicon
+              </h2>
+              <div>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '0.5rem', 
+                  fontWeight: '500',
+                  color: 'var(--admin-gray-900)'
+                }}>
+                  Favicon Görseli
+                </label>
+                {formData.faviconUrl && (
+                  <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <img 
+                      src={formData.faviconUrl} 
+                      alt="Favicon Preview" 
+                      style={{ 
+                        width: '32px', 
+                        height: '32px',
+                        borderRadius: '4px',
+                        objectFit: 'contain'
+                      }} 
+                    />
+                    <span style={{ fontSize: '0.875rem', color: 'var(--admin-gray-600)' }}>
+                      Tarayıcı sekmesinde görünecek ikon
+                    </span>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, 'faviconUrl')}
+                  disabled={uploading}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid var(--admin-gray-300)',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontFamily: 'inherit'
+                  }}
+                />
+                {uploading && (
+                  <p style={{ marginTop: '0.5rem', color: 'var(--admin-gray-600)' }}>
+                    Yükleniyor...
+                  </p>
+                )}
+                {formData.faviconUrl && (
+                  <input
+                    type="text"
+                    name="faviconUrl"
+                    value={formData.faviconUrl}
+                    onChange={handleChange}
+                    placeholder="Veya URL girin"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      marginTop: '0.5rem',
+                      fontFamily: 'monospace',
+                      fontSize: '0.875rem'
+                    }}
+                  />
+                )}
+                <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--admin-gray-500)', fontSize: '0.875rem' }}>
+                  Site favicon'u. Önerilen boyut: 32x32px veya 16x16px. Maksimum 1MB, ICO, PNG formatları desteklenir
+                </small>
+              </div>
+            </div>
+
             {/* Default Breadcrumb Image */}
             <div>
               <h2 style={{ 
@@ -581,6 +710,40 @@ export default function SiteSettingsPage() {
                     }}
                   />
                 </div>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    Google Maps Embed URL
+                  </label>
+                  <textarea
+                    name="mapEmbedUrl"
+                    value={formData.mapEmbedUrl}
+                    onChange={handleChange}
+                    rows={3}
+                    placeholder="https://www.google.com/maps/embed?pb=..."
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
+                  />
+                  <p style={{ 
+                    fontSize: '0.875rem', 
+                    color: 'var(--admin-gray-600)', 
+                    marginTop: '0.5rem' 
+                  }}>
+                    Google Maps'ten "Haritayı paylaş" > "Haritayı yerleştir" seçeneğinden embed URL'ini kopyalayın.<br/>
+                    <strong>Not:</strong> Eğer iframe kodunun tamamını yapıştırdıysanız, sadece src="..." içindeki URL'yi kullanın.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -648,6 +811,345 @@ export default function SiteSettingsPage() {
                       resize: 'vertical'
                     }}
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* SMTP Settings */}
+            <div>
+              <h2 style={{ 
+                fontSize: '1.25rem', 
+                fontWeight: '600', 
+                color: 'var(--admin-gray-900)',
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid var(--admin-gray-200)'
+              }}>
+                SMTP Ayarları (E-posta Gönderimi)
+              </h2>
+              <div style={{ display: 'grid', gap: '1rem' }}>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    SMTP Host
+                  </label>
+                  <input
+                    type="text"
+                    name="smtpHost"
+                    value={formData.smtpHost}
+                    onChange={handleChange}
+                    placeholder="melihmeral.dev"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ 
+                      display: 'block', 
+                      marginBottom: '0.5rem', 
+                      fontWeight: '500',
+                      color: 'var(--admin-gray-900)'
+                    }}>
+                      SMTP Port
+                    </label>
+                    <input
+                      type="number"
+                      name="smtpPort"
+                      value={formData.smtpPort}
+                      onChange={handleChange}
+                      placeholder="465"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid var(--admin-gray-300)',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        fontFamily: 'inherit'
+                      }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', paddingTop: '2rem' }}>
+                    <label style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.5rem',
+                      cursor: 'pointer'
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={formData.smtpSecure}
+                        onChange={(e) => setFormData(prev => ({ ...prev, smtpSecure: e.target.checked }))}
+                      />
+                      <span>SSL/TLS Kullan</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    SMTP Kullanıcı Adı
+                  </label>
+                  <input
+                    type="text"
+                    name="smtpUser"
+                    value={formData.smtpUser}
+                    onChange={handleChange}
+                    placeholder="coder@melihmeral.dev"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  <p style={{ 
+                    fontSize: '0.875rem', 
+                    color: 'var(--admin-gray-600)', 
+                    marginTop: '0.5rem' 
+                  }}>
+                    SMTP sunucusuna bağlanmak için kullanılacak e-posta adresi (örn: coder@melihmeral.dev)
+                  </p>
+                </div>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    SMTP Şifre
+                  </label>
+                  <input
+                    type="password"
+                    name="smtpPassword"
+                    value={formData.smtpPassword}
+                    onChange={handleChange}
+                    placeholder="SMTP şifresi"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    İletişim Formu E-posta Adresi
+                  </label>
+                  <input
+                    type="email"
+                    name="contactEmail"
+                    value={formData.contactEmail}
+                    onChange={handleChange}
+                    placeholder="alpdinamik@alpdinamik.com.tr"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  <p style={{ 
+                    fontSize: '0.875rem', 
+                    color: 'var(--admin-gray-600)', 
+                    marginTop: '0.5rem' 
+                  }}>
+                    İletişim formundan gelen mesajlar bu adrese gönderilecektir.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* KVKK Settings */}
+            <div>
+              <h2 style={{ 
+                fontSize: '1.25rem', 
+                fontWeight: '600', 
+                color: 'var(--admin-gray-900)',
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid var(--admin-gray-200)'
+              }}>
+                KVKK Metni
+              </h2>
+              <div>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '0.5rem', 
+                  fontWeight: '500',
+                  color: 'var(--admin-gray-900)'
+                }}>
+                  KVKK Aydınlatma Metni
+                </label>
+                <textarea
+                  name="kvkkText"
+                  value={formData.kvkkText}
+                  onChange={handleChange}
+                  rows={15}
+                  placeholder="KVKK aydınlatma metnini buraya yazın..."
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid var(--admin-gray-300)',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontFamily: 'inherit',
+                    resize: 'vertical'
+                  }}
+                />
+                <p style={{ 
+                  fontSize: '0.875rem', 
+                  color: 'var(--admin-gray-600)', 
+                  marginTop: '0.5rem' 
+                }}>
+                  Bu metin iletişim formunda KVKK modalında gösterilecektir. Boş bırakılırsa varsayılan metin gösterilir.
+                </p>
+              </div>
+            </div>
+
+            {/* İletişim Formu Metinleri */}
+            <div style={{
+              background: 'var(--admin-white)',
+              padding: '2rem',
+              borderRadius: '12px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+              marginBottom: '2rem'
+            }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                color: 'var(--admin-gray-900)',
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid var(--admin-gray-200)'
+              }}>
+                İletişim Formu Metinleri
+              </h2>
+              <div style={{ display: 'grid', gap: '1.5rem' }}>
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    Form Başlığı
+                  </label>
+                  <input
+                    type="text"
+                    name="contactFormTitle"
+                    value={formData.contactFormTitle}
+                    onChange={handleChange}
+                    placeholder="Projenizi paylaşın"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--admin-gray-600)',
+                    marginTop: '0.5rem'
+                  }}>
+                    Footer üstündeki iletişim formunun başlığı
+                  </p>
+                </div>
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    Form Alt Başlığı
+                  </label>
+                  <textarea
+                    name="contactFormSubtitle"
+                    value={formData.contactFormSubtitle}
+                    onChange={handleChange}
+                    rows={3}
+                    placeholder="Kısa formu doldurun; en geç 2 iş saati içinde CAD veya teklif dosya paylaşımı için dönüş."
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
+                  />
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--admin-gray-600)',
+                    marginTop: '0.5rem'
+                  }}>
+                    Form başlığının altında gösterilecek açıklama metni
+                  </p>
+                </div>
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    color: 'var(--admin-gray-900)'
+                  }}>
+                    Form Notu
+                  </label>
+                  <textarea
+                    name="contactFormNote"
+                    value={formData.contactFormNote}
+                    onChange={handleChange}
+                    rows={2}
+                    placeholder="CAD & FEM doğrulama gerektiren taleplerde örnek çizim eklemek süreci hızlandırır."
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid var(--admin-gray-300)',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
+                  />
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--admin-gray-600)',
+                    marginTop: '0.5rem'
+                  }}>
+                    Form altında gösterilecek bilgilendirme notu
+                  </p>
                 </div>
               </div>
             </div>

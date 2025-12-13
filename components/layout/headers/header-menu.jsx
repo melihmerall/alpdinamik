@@ -29,10 +29,10 @@ const MainMenu = () => {
                 <li><Link href='/'>Anasayfa</Link></li>
                 
                 <li className='menu-item-has-children'>
-                    <Link href='/about-us'>Kurumsal</Link>
+                    <Link href='/hakkimizda'>Kurumsal</Link>
                     <ul className='sub-menu'>
-                        <li><Link href='/about-us'>Hakkımızda</Link></li>
-                        <li><Link href='/history'>Misyon & Vizyon</Link></li>
+                        <li><Link href='/hakkimizda'>Hakkımızda</Link></li>
+                        <li><Link href='/misyon-vizyon'>Misyon & Vizyon</Link></li>
                     </ul>
                 </li>
 
@@ -42,23 +42,49 @@ const MainMenu = () => {
                         <ul className='sub-menu'>
                             {representatives.map((rep) => {
                                 const hasCategories = rep.categories && rep.categories.length > 0;
-                                const hasSubmenu = hasCategories;
+                                
+                                // Get first product URL from category
+                                const getFirstProductFromCategory = (category) => {
+                                    if (category.series && category.series.length > 0) {
+                                        const firstSeries = category.series[0];
+                                        // Try variants first
+                                        for (const variant of firstSeries.variants || []) {
+                                            if (variant.products && variant.products.length > 0) {
+                                                return `/temsilcilikler/${rep.slug}/urunler/${variant.products[0].slug}`;
+                                            }
+                                        }
+                                        // Then try direct products
+                                        if (firstSeries.products && firstSeries.products.length > 0) {
+                                            return `/temsilcilikler/${rep.slug}/urunler/${firstSeries.products[0].slug}`;
+                                        }
+                                    }
+                                    return null;
+                                };
                                 
                                 return (
-                                    <li key={rep.id} className={hasSubmenu ? 'menu-item-has-children' : ''}>
+                                    <li key={rep.id} className={hasCategories ? 'menu-item-has-children' : ''}>
                                         <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
-                                        {hasSubmenu && (
+                                        {hasCategories && (
                                             <ul className='sub-menu'>
                                                 <li className='menu-item-has-children'>
-                                                    <Link href={`/temsilcilikler/${rep.slug}/urunler`}>Ürünler</Link>
+                                                    <Link href='#'>Ürünler</Link>
                                                     <ul className='sub-menu'>
-                                                        {rep.categories.map((category) => (
-                                                            <li key={category.id}>
-                                                                <Link href={`/temsilcilikler/${rep.slug}/kategoriler/${category.slug}`}>
-                                                                    {category.name}
-                                                                </Link>
-                                                            </li>
-                                                        ))}
+                                                        {rep.categories.map((category) => {
+                                                            const firstProductUrl = getFirstProductFromCategory(category);
+                                                            return (
+                                                                <li key={category.id}>
+                                                                    {firstProductUrl ? (
+                                                                        <Link href={firstProductUrl}>
+                                                                            {category.name}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <span style={{ cursor: 'default', color: 'var(--text-heading-color)' }}>
+                                                                            {category.name}
+                                                                        </span>
+                                                                    )}
+                                                                </li>
+                                                            );
+                                                        })}
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -72,15 +98,9 @@ const MainMenu = () => {
 
                 <li><Link href='/sektorler'>Sektörler</Link></li>
 
-                <li className='menu-item-has-children'>
-                    <Link href='/blog'>Blog</Link>
-                    <ul className='sub-menu'>
-                        <li><Link href='/blog'>Blog Grid</Link></li>
-                        <li><Link href='/blog-standard'>Blog Standard</Link></li>
-                    </ul>
-                </li>
+                <li><Link href='/blog'>Blog</Link></li>
 
-                <li><Link href='/contact-us'>İLETİŞİM</Link></li>
+                <li><Link href='/iletisim'>İLETİŞİM</Link></li>
             </ul>
         </>
     );

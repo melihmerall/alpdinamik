@@ -124,6 +124,38 @@ export async function getActiveRepresentatives() {
       categories: {
         where: { isActive: true },
         orderBy: { order: 'asc' },
+        include: {
+          series: {
+            where: { isActive: true },
+            orderBy: { order: 'asc' },
+            include: {
+              variants: {
+                where: { isActive: true },
+                orderBy: { order: 'asc' },
+                include: {
+                  products: {
+                    where: { isActive: true },
+                    orderBy: { order: 'asc' },
+                    select: {
+                      id: true,
+                      slug: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
+              products: {
+                where: { isActive: true },
+                orderBy: { order: 'asc' },
+                select: {
+                  id: true,
+                  slug: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
       },
       products: {
         where: { isActive: true },

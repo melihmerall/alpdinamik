@@ -1,45 +1,82 @@
-
-import blogData from '@/components/data/blog-data';
-import Link from 'next/link';
+"use client"
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 const BlogSidebar = () => {
+    const [recentBlogs, setRecentBlogs] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function fetchRecentBlogs() {
+            try {
+                const response = await fetch('/api/blog?published=true&limit=3')
+                if (response.ok) {
+                    const result = await response.json()
+                    const posts = result.data || result
+                    setRecentBlogs(posts)
+                }
+            } catch (error) {
+                console.error('Error fetching recent blogs:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchRecentBlogs()
+    }, [])
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('tr-TR', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    };
+
     return (
         <div className="all__sidebar">
             <div className="all__sidebar-item">
-                <h4>Search Here</h4>
-                <div className="all__sidebar-item-search">
-                    <form action="#">
-                        <input type="text" placeholder="Search....." />
-                        <button type="submit"><i className="fal fa-search"></i></button>
-                    </form>
-                </div>
-            </div>
-            <div className="all__sidebar-item">
-                <h4>Recent Blog</h4>
+                <h4>Son Yazılar</h4>
                 <div className="all__sidebar-item-post">
-                    {blogData?.slice(0, 3)?.map((data, id) => (
-                        <div className="post__item" key={id}>
-                            <div className="post__item-image">
-                                <Link href={`/blog/${data.id}`}><img src={data.image.src} alt="image" /></Link>
+                    {loading ? (
+                        <p style={{ color: 'var(--body-color)' }}>Yükleniyor...</p>
+                    ) : recentBlogs.length > 0 ? (
+                        recentBlogs.map((data) => (
+                            <div className="post__item" key={data.id || data.slug}>
+                                <div className="post__item-image">
+                                    <Link href={`/blog/${data.slug}`}>
+                                        <img 
+                                            src={data.imageUrl || data.image?.src || '/assets/img/blog/blog-1.jpg'} 
+                                            alt={data.title || 'image'}
+                                            style={{
+                                                width: '80px',
+                                                height: '80px',
+                                                objectFit: 'cover',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                    </Link>
+                                </div>
+                                <div className="post__item-title">
+                                    <span style={{ color: 'var(--body-color)', fontSize: '0.875rem' }}>
+                                        <i className="far fa-calendar-alt" style={{ marginRight: '0.25rem' }}></i>
+                                        {formatDate(data.publishedAt || data.createdAt)}
+                                    </span>
+                                    <h6>
+                                        <Link 
+                                            href={`/blog/${data.slug}`}
+                                            style={{ color: 'var(--text-heading-color)' }}
+                                        >
+                                            {data.title}
+                                        </Link>
+                                    </h6>
+                                </div>
                             </div>
-                            <div className="post__item-title">
-                                <span><i className="far fa-calendar-alt"></i>Mar {data.date}, 2025</span>
-                                <h6><Link href={`/blog/${data.id}`}>{data.title}</Link></h6>
-                            </div>
-                        </div>
-                    ))}                        
-                </div>
-            </div>
-            <div className="all__sidebar-item">
-                <h4>Popular Tag</h4>
-                <div className="all__sidebar-item-tag">
-                    <ul>
-                        <li><Link href="/blog">Innovation</Link></li>
-                        <li><Link href="/blog">Insights</Link></li>
-                        <li><Link href="/blog">Resources</Link></li>
-                        <li><Link href="/blog">Tips</Link></li>
-                        <li><Link href="/blog">Trends</Link></li>
-                    </ul>
+                        ))
+                    ) : (
+                        <p style={{ color: 'var(--body-color)' }}>Henüz blog yazısı yok.</p>
+                    )}
                 </div>
             </div>
         </div>

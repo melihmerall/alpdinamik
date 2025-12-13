@@ -1,6 +1,6 @@
 "use client"
 import SEO from "../../../data/seo";
-import HeaderTwo from "../../../layout/headers/header-two";
+import HeaderFour from "../../../layout/headers/header-four";
 import BreadCrumb from "../../common/breadcrumb";
 import TeamMain from "./team";
 import FooterOne from "../../../layout/footers/footer-one";
@@ -14,7 +14,7 @@ const TeamPageThree = () => {
             <SEO pageTitle="Team Three" />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="Team Three" innerTitle="Team Three" />
             <TeamMain />
             <FooterOne />

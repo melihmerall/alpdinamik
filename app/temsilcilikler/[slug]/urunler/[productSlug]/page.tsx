@@ -114,8 +114,6 @@ export default function ProductPage() {
 
         if (productRes.ok) {
           const productData = await productRes.json();
-          console.log('Product body:', productData.body);
-          console.log('Product body length:', productData.body?.length);
           setProduct(productData);
           
           // Auto-expand current category, series and variant
@@ -143,15 +141,15 @@ export default function ProductPage() {
               if (catRes.ok) {
                 const categoryData = await catRes.json();
                 // Debug: Check if products are included
-                if (categoryData.series && categoryData.series.length > 0) {
-                  categoryData.series.forEach((series: any) => {
-                    if (series.variants && series.variants.length > 0) {
-                      series.variants.forEach((variant: any) => {
-                        console.log(`Variant ${variant.name} products:`, variant.products?.length || 0);
+                    if (categoryData.series && categoryData.series.length > 0) {
+                      categoryData.series.forEach((series: any) => {
+                        if (series.variants && series.variants.length > 0) {
+                          series.variants.forEach((variant: any) => {
+                            // Variant products are available in variant.products
+                          });
+                        }
                       });
                     }
-                  });
-                }
                 return categoryData;
               }
               return cat;
@@ -235,10 +233,10 @@ export default function ProductPage() {
             <div className="container">
               <div className="row">
                 <div className="col-xl-12 text-center py-5">
-                  <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#333" }}>
+                  <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "var(--text-heading-color)" }}>
                     {error || "Ürün bulunamadı"}
                   </h2>
-                  <p style={{ fontSize: "1.1rem", color: "#666", marginBottom: "2rem" }}>
+                  <p style={{ fontSize: "1.1rem", color: "var(--body-color)", marginBottom: "2rem" }}>
                     Aradığınız ürün mevcut değil veya silinmiş olabilir.
                   </p>
                   <Link

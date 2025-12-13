@@ -4,7 +4,7 @@ import BreadCrumb from "../common/breadcrumb";
 import TestimonialMain from "./testimonial";
 import FooterOne from "@/components/layout/footers/footer-one";
 import ScrollToTop from "../common/scroll/scroll-to-top";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import SwitchTab from "../common/dark-light";
 import CustomCursor from "../common/cursor";
 
@@ -14,7 +14,7 @@ const Testimonial = () => {
             <SEO pageTitle='Testimonials' />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title='Testimonials' innerTitle='Testimonials' />
             <TestimonialMain />
             <FooterOne />

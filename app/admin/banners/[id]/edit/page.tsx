@@ -15,6 +15,7 @@ export default function EditBannerPage() {
     title: '',
     subtitle: '',
     imageUrl: '',
+    videoUrl: '',
     ctaLabel: '',
     ctaUrl: '',
     isActive: true,
@@ -32,6 +33,7 @@ export default function EditBannerPage() {
             title: data.title || '',
             subtitle: data.subtitle || '',
             imageUrl: data.imageUrl || '',
+            videoUrl: data.videoUrl || '',
             ctaLabel: data.ctaLabel || '',
             ctaUrl: data.ctaUrl || '',
             isActive: data.isActive !== undefined ? data.isActive : true,
@@ -189,14 +191,13 @@ export default function EditBannerPage() {
                 fontWeight: '500',
                 color: 'var(--admin-gray-900)'
               }}>
-                Başlık <span style={{ color: '#ef4444' }}>*</span>
+                Başlık
               </label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                required
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -231,6 +232,41 @@ export default function EditBannerPage() {
                   fontFamily: 'inherit'
                 }}
               />
+            </div>
+
+            <div>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: '0.5rem', 
+                fontWeight: '500',
+                color: 'var(--admin-gray-900)'
+              }}>
+                Video URL (Opsiyonel)
+              </label>
+              <input
+                type="url"
+                name="videoUrl"
+                value={formData.videoUrl}
+                onChange={handleChange}
+                placeholder="https://html.nextwpcook.com/buildgo/assets/img/banner/banner.mp4"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid var(--admin-gray-300)',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit',
+                  marginBottom: '1.5rem'
+                }}
+              />
+              <p style={{ 
+                fontSize: '0.875rem', 
+                color: 'var(--admin-gray-600)', 
+                marginTop: '0.5rem',
+                marginBottom: '1rem'
+              }}>
+                Video URL girilirse, görsel yerine video gösterilir.
+              </p>
             </div>
 
             <div>
@@ -318,7 +354,7 @@ export default function EditBannerPage() {
                   name="ctaUrl"
                   value={formData.ctaUrl}
                   onChange={handleChange}
-                  placeholder="/about-us"
+                  placeholder="/hakkimizda"
                   style={{
                     width: '100%',
                     padding: '0.75rem',

@@ -1,0 +1,82 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: alpdinamik-db-prod
+    environment:
+      POSTGRES_USER: ${DB_USER:-alpdinamik}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-alpdinamik_db}
+    volumes:
+      - postgres-data-prod:/var/lib/postgresql/data
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-alpdinamik}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - alpdinamik-network
+    restart: unless-stopped
+    # Don't expose ports in production - only accessible via Docker network
+    # ports:
+    #   - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alpdinamik-app-prod
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-alpdinamik}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-alpdinamik_db}?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://yourdomain.com}
+      NODE_ENV: production
+      # Email settings (if needed)
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - alpdinamik-network
+    restart: unless-stopped
+    volumes:
+      # Mount uploads directory to persist uploaded files
+      - ./public/uploads:/app/public/uploads
+    # Run migrations on startup (only for first deployment)
+    # After first deployment, remove this command line
+    # command: sh -c "npx prisma migrate deploy && node server.js"
+    command: node server.js
+
+  nginx:
+    image: nginx:alpine
+    container_name: alpdinamik-nginx-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - app
+    networks:
+      - alpdinamik-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data-prod:
+    driver: local
+
+networks:
+  alpdinamik-network:
+    driver: bridge
+

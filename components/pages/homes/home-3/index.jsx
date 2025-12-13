@@ -2,7 +2,7 @@
 import SEO from "@/components/data/seo";
 import CustomCursor from "../../common/cursor";
 import SwitchTab from "../../common/dark-light";
-import HeaderThree from "@/components/layout/headers/header-three";
+import HeaderFour from "@/components/layout/headers/header-four";
 import BannerThree from "./banner";
 import AboutThree from "./about";
 import CounterUp from "./counter";
@@ -22,7 +22,7 @@ const HomeThree = () => {
             <SEO pageTitle="Lineer Hareket Sistemleri ve Mühendislik Çözümleri" />
             <CustomCursor />
             <SwitchTab />
-            <HeaderThree />
+            <HeaderFour />
             <BannerThree />
             <AboutThree />
             <CounterUp />

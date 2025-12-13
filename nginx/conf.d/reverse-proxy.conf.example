@@ -1,0 +1,36 @@
+# Reverse Proxy Configuration Example
+# Bu dosyayı kopyalayıp düzenleyerek farklı bir hosting'deki domaine yönlendirme yapabilirsiniz
+# Dosya adını reverse-proxy.conf olarak kaydedin ve domain bilgilerini güncelleyin
+
+# Upstream - External domain (farklı hosting'deki domain)
+upstream external_domain {
+    server your-external-domain.com:443;
+    # Veya IP adresi kullanıyorsanız:
+    # server 123.456.789.0:443;
+}
+
+# Reverse Proxy Server
+server {
+    listen 443 ssl http2;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # SSL Configuration
+    ssl_certificate /etc/nginx/ssl/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+    
+    # SSL Security Settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # Proxy all requests to external domain
+    location / {
+        proxy_pass https://external_domain;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_ssl_verify off; # SSL doğrulamasını kapat (gerekirse)
+    }
+}
+

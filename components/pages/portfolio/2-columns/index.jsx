@@ -4,7 +4,7 @@ import BreadCrumb from "../../common/breadcrumb";
 import TwoColumns from "./two-columns";
 import FooterOne from "@/components/layout/footers/footer-one";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import SwitchTab from "../../common/dark-light";
 import CustomCursor from "../../common/cursor";
 
@@ -14,7 +14,7 @@ const PortfolioTowColumns = () => {
             <SEO pageTitle='Portfolio Grid - 02 Columns' />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="02 Columns" innerTitle="Portfolio Grid" />
             <TwoColumns />        
             <FooterOne />    

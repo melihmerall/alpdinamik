@@ -4,7 +4,7 @@ import BreadCrumb from "../../common/breadcrumb";
 import ThreeColumns from "./three-columns";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import SwitchTab from "../../common/dark-light";
 import CustomCursor from "../../common/cursor";
 
@@ -14,7 +14,7 @@ const PortfolioThreeColumns = () => {
             <SEO pageTitle='Referanslar' />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="Referanslar" innerTitle="Referanslar" />
             <ThreeColumns />        
             <FooterTwo />          

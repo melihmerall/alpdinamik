@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
       prisma.blogPost.count({ where }),
     ])
 
+    // Cache for 2 minutes (120 seconds) - blog posts change more frequently
     return NextResponse.json({
       success: true,
       data: posts,
@@ -38,6 +39,10 @@ export async function GET(request: NextRequest) {
               totalPages: Math.ceil(total / pageSize),
             },
           },
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
+      },
     })
   } catch (error) {
     console.error('Error fetching blog posts:', error)

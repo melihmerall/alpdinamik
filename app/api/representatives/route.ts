@@ -27,7 +27,12 @@ export async function GET(request: NextRequest) {
       orderBy: { order: 'asc' },
     });
 
-    return NextResponse.json(representatives);
+    // Cache for 5 minutes (300 seconds) - representatives don't change frequently
+    return NextResponse.json(representatives, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error('Error fetching representatives:', error);
     return NextResponse.json(

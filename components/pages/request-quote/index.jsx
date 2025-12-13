@@ -6,7 +6,7 @@ import FooterTwo from '@/components/layout/footers/footer-two';
 import ScrollToTop from '../common/scroll/scroll-to-top';
 import CustomCursor from '../common/cursor';
 import SwitchTab from '../common/dark-light';
-import HeaderTwo from '@/components/layout/headers/header-two';
+import HeaderFour from '@/components/layout/headers/header-four';
 
 const RequestQuotePage = () => {
     return (
@@ -14,7 +14,7 @@ const RequestQuotePage = () => {
             <SEO pageTitle="Projenizi Paylaşın" />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="Projenizi Paylaşın" innerTitle="Projenizi Paylaşın" />
             <RequestQuoteMain />
             <FooterTwo />

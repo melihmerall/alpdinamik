@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import SEO from "@/components/data/seo";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "@/components/pages/common/scroll/scroll-to-top";
+import BreadCrumb from "@/components/pages/common/breadcrumb";
+import CustomCursor from "@/components/pages/common/cursor";
+import SwitchTab from "@/components/pages/common/dark-light";
 
 interface Series {
   id: string;
@@ -153,10 +157,10 @@ export default function CategoryPage() {
             <div className="container">
               <div className="row">
                 <div className="col-xl-12 text-center py-5">
-                  <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#333" }}>
+                  <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "var(--text-heading-color)" }}>
                     {error || "Kategori bulunamadı"}
                   </h2>
-                  <p style={{ fontSize: "1.1rem", color: "#666", marginBottom: "2rem" }}>
+                  <p style={{ fontSize: "1.1rem", color: "var(--body-color)", marginBottom: "2rem" }}>
                     Aradığınız kategori mevcut değil veya silinmiş olabilir.
                   </p>
                   <Link
@@ -181,45 +185,23 @@ export default function CategoryPage() {
     );
   }
 
+  // Priority: category breadcrumbImageUrl (kategori görseli) > representative breadcrumbImageUrl > default
+  const breadcrumbBgImage = category.breadcrumbImageUrl 
+    || representative?.breadcrumbImageUrl 
+    || '/assets/img/breadcrumb.jpg';
+
   return (
     <>
+      <SEO pageTitle={category.name} />
+      <CustomCursor />
+      <SwitchTab />
       <HeaderTwo />
+      <BreadCrumb 
+        title={category.name} 
+        innerTitle={category.name}
+        backgroundImage={breadcrumbBgImage}
+      />
       <div className="page-wrapper">
-        {/* Breadcrumb */}
-        <div
-          className="breadcrumb__area"
-          style={{
-            backgroundImage: category.breadcrumbImageUrl
-              ? `url('${category.breadcrumbImageUrl}')`
-              : `url('/assets/img/breadcrumb.jpg')`,
-            padding: "120px 0",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="breadcrumb__area-content">
-                  <h2>{category.name}</h2>
-                  <ul>
-                    <li>
-                      <Link href="/">Anasayfa</Link>
-                      <i className="fa-regular fa-angle-right"></i>
-                    </li>
-                    <li>
-                      <Link href={`/temsilcilikler/${repSlug}`}>
-                        {representative.name}
-                      </Link>
-                      <i className="fa-regular fa-angle-right"></i>
-                    </li>
-                    <li>{category.name}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Category Content */}
         <div className="section-padding">
@@ -342,91 +324,90 @@ export default function CategoryPage() {
 
               {/* Right Content - Series Grid */}
               <div className="col-lg-9">
-                {category.description && (
-                  <div className="modern-category-intro">
-                    <div className="section-title">
-                      <h2 className="modern-category-title">{category.name}</h2>
-                      <p className="modern-category-description">
-                        {category.description}
-                      </p>
-                    </div>
+                <div className="mb-50">
+                  <div className="t-center">
+                    <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Kategori</span>
+                    <h2 className="title_split_anim wow fadeInRight" data-wow-delay=".6s" style={{ marginBottom: category.description ? '1.5rem' : '0' }}>
+                      {category.name}
+                    </h2>
+                    {category.description && (
+                      <div 
+                        className="wow fadeInUp" 
+                        data-wow-delay=".8s"
+                        style={{ 
+                          fontSize: '1.05rem', 
+                          lineHeight: '1.8', 
+                          color: 'var(--body-color)',
+                          maxWidth: '800px',
+                          margin: '0 auto',
+                          marginTop: '1.5rem'
+                        }}
+                        dangerouslySetInnerHTML={{ __html: category.description.replace(/\n/g, '<br />') }}
+                      />
+                    )}
                   </div>
-                )}
+                </div>
 
                 {category.series && category.series.length > 0 ? (
-                  <div className="modern-series-layout">
-                    {category.series.map((series: Series) => {
-                      const firstProductUrl = getFirstProductUrl(series);
-                      const seriesFeatures = series.description
-                        ? series.description
-                            .split("\n")
-                            .filter((line: string) => line.trim())
-                            .map((line: string) => line.replace(/^[-•]\s*/, "").trim())
-                        : [];
+                  <div className="three__columns">
+                    <div className="row">
+                      {category.series.map((series: Series) => {
+                        const firstProductUrl = getFirstProductUrl(series);
+                        const totalProducts = (series.variants?.reduce((acc: number, v: any) => acc + (v.products?.length || 0), 0) || 0) + (series.products?.length || 0);
 
-                      return (
-                        <div key={series.id} className="modern-series-card">
-                          {series.imageUrl && firstProductUrl ? (
-                            <Link href={firstProductUrl} className="modern-series-image-wrapper">
-                              <div className="modern-series-image-overlay">
-                                <span className="modern-view-details">Detayları Gör</span>
+                        return (
+                          <div key={series.id} className="col-lg-4 col-md-6 mt-25">
+                            <div className="portfolio__three-item">
+                              {series.imageUrl ? (
+                                <img src={series.imageUrl} alt={series.name} />
+                              ) : (
+                                <div style={{
+                                  width: '100%',
+                                  height: '480px',
+                                  background: 'var(--color-2)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: 'var(--body-color)'
+                                }}>
+                                  <i className="flaticon-box" style={{ fontSize: '60px', opacity: 0.3 }}></i>
+                                </div>
+                              )}
+                              <div className="portfolio__three-item-content">
+                                {firstProductUrl ? (
+                                  <Link href={firstProductUrl}>
+                                    <i className="flaticon flaticon-right-up"></i>
+                                  </Link>
+                                ) : null}
+                                <span>Seri</span>
+                                {firstProductUrl ? (
+                                  <h4>
+                                    <Link href={firstProductUrl}>{series.name}</Link>
+                                  </h4>
+                                ) : (
+                                  <h4>{series.name}</h4>
+                                )}
                               </div>
-                              <img
-                                src={series.imageUrl}
-                                alt={series.name}
-                                loading="lazy"
-                                decoding="async"
-                                className="modern-series-image"
-                              />
-                            </Link>
-                          ) : series.imageUrl ? (
-                            <div className="modern-series-image-wrapper">
-                              <img
-                                src={series.imageUrl}
-                                alt={series.name}
-                                loading="lazy"
-                                decoding="async"
-                                className="modern-series-image"
-                              />
                             </div>
-                          ) : null}
-
-                          <div className="modern-series-content">
-                            {firstProductUrl ? (
-                              <h2 className="modern-series-title">
-                                <Link href={firstProductUrl} className="modern-series-title-link">
-                                  {series.name}
-                                </Link>
-                              </h2>
-                            ) : (
-                              <h2 className="modern-series-title">{series.name}</h2>
-                            )}
-
-                            {seriesFeatures.length > 0 && (
-                              <ul className="modern-series-features">
-                                {seriesFeatures.map((feature: string, idx: number) => (
-                                  <li key={idx} className="modern-feature-item">
-                                    <span className="modern-feature-icon">✓</span>
-                                    <span className="modern-feature-text">{feature}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 ) : (
                   <div className="row">
-                    <div className="col-xl-12 text-center py-5">
-                      <p className="lead">Bu kategoride henüz seri bulunmamaktadır.</p>
-                      <Link
-                        href={`/temsilcilikler/${repSlug}`}
-                        className="btn btn-primary mt-3"
-                      >
-                        Temsilciliğe Dön
-                      </Link>
+                    <div className="col-xl-12">
+                      <div className="t-center" style={{ padding: '3rem', background: 'var(--color-2)', borderRadius: '10px' }}>
+                        <p style={{ fontSize: '1.1rem', color: 'var(--body-color)', marginBottom: '1.5rem' }}>
+                          Bu kategoride henüz seri bulunmamaktadır.
+                        </p>
+                        <Link
+                          href={`/temsilcilikler/${repSlug}`}
+                          className="build_button"
+                        >
+                          Temsilciliğe Dön<i className="flaticon-right-up"></i>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 )}

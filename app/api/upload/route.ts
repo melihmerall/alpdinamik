@@ -81,12 +81,21 @@ export async function POST(request: NextRequest) {
     const filepath = join(uploadDir, filename)
     await writeFile(filepath, buffer)
 
-    // Return public URL
-    const publicUrl = `/uploads/${folder}/${filename}`
+    // Get base URL from request or environment
+    const host = request.headers.get('host') || ''
+    const protocol = request.headers.get('x-forwarded-proto') || 
+                    (host.includes('localhost') ? 'http' : 'https')
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 
+                   (host ? `${protocol}://${host}` : 'https://alpdinamik.com.tr')
+    
+    // Return public URL (relative for client-side, but we have baseUrl available)
+    const relativeUrl = `/uploads/${folder}/${filename}`
+    const absoluteUrl = `${baseUrl}${relativeUrl}`
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
+      url: relativeUrl, // Keep relative for client-side usage
+      absoluteUrl: absoluteUrl, // Also provide absolute URL for email/API usage
       filename: filename,
     })
   } catch (error) {

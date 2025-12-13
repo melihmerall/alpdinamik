@@ -67,12 +67,24 @@ const RequestQuoteMain = () => {
 								<p className="text-s" style={{opacity: 0.85}}>CAD & FEM doğrulama gerektiren taleplerde örnek çizim eklemek süreci hızlandırır.</p>
 							</div>
 							{success && (
-								<div className="alert alert-success mb-30" style={{padding: '1rem', background: '#d1fae5', color: '#065f46', borderRadius: '4px'}}>
+								<div className="alert alert-success mb-30" style={{
+									padding: '1rem', 
+									background: 'var(--color-2)', 
+									color: 'var(--body-color)', 
+									borderRadius: '4px',
+									border: '1px solid var(--border-color-1)'
+								}}>
 									Form başarıyla gönderildi! En kısa sürede size dönüş yapacağız.
 								</div>
 							)}
 							{error && (
-								<div className="alert alert-error mb-30" style={{padding: '1rem', background: '#fee2e2', color: '#991b1b', borderRadius: '4px'}}>
+								<div className="alert alert-error mb-30" style={{
+									padding: '1rem', 
+									background: 'var(--color-2)', 
+									color: 'var(--body-color)', 
+									borderRadius: '4px',
+									border: '1px solid var(--border-color-1)'
+								}}>
 									{error}
 								</div>
 							)}

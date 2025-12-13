@@ -3,12 +3,10 @@ import { useState, useEffect } from 'react';
 import SEO from "@/components/data/seo";
 import CustomCursor from "../common/cursor";
 import SwitchTab from "../common/dark-light";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import BreadCrumb from "../common/breadcrumb";
 import AboutMain from "./about";
 import Video from "./video";
-import Certification from "./certification";
-import Team from "./team";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../common/scroll/scroll-to-top";
 
@@ -55,7 +53,7 @@ const AboutUs = () => {
             <SEO pageTitle={pageTitle} />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb 
                 title={pageTitle} 
                 innerTitle={pageTitle}
@@ -68,8 +66,6 @@ const AboutUs = () => {
                     videoBackgroundImageUrl={aboutData.videoBackgroundImageUrl}
                 />
             )}
-            <Certification aboutData={aboutData} />
-            <Team aboutData={aboutData} />
             <FooterTwo />
             <ScrollToTop />
         </>

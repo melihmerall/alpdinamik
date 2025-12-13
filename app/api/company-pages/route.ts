@@ -55,6 +55,12 @@ export async function POST(request: NextRequest) {
       ctaUrl,
       missionSubtitle,
       missionTitle,
+      missionBody,
+      missionImageUrl,
+      visionSubtitle,
+      visionTitle,
+      visionBody,
+      visionImageUrl,
       videoUrl,
       videoBackgroundImageUrl,
       certificationSubtitle,
@@ -72,9 +78,9 @@ export async function POST(request: NextRequest) {
       teamTitle,
     } = requestBody
 
-    if (!slug || !title || !body) {
+    if (!slug || !title) {
       return NextResponse.json(
-        { error: 'Slug, title, and body are required' },
+        { error: 'Slug and title are required' },
         { status: 400 }
       )
     }
@@ -84,7 +90,7 @@ export async function POST(request: NextRequest) {
         slug,
         title,
         subtitle: subtitle || null,
-        body,
+        body: body || '',
         imageUrl: imageUrl || null,
         breadcrumbImageUrl: breadcrumbImageUrl || null,
         stat1Number: stat1Number || null,
@@ -97,6 +103,12 @@ export async function POST(request: NextRequest) {
         ctaUrl: ctaUrl || null,
         missionSubtitle: missionSubtitle || null,
         missionTitle: missionTitle || null,
+        missionBody: missionBody || null,
+        missionImageUrl: missionImageUrl || null,
+        visionSubtitle: visionSubtitle || null,
+        visionTitle: visionTitle || null,
+        visionBody: visionBody || null,
+        visionImageUrl: visionImageUrl || null,
         videoUrl: videoUrl || null,
         videoBackgroundImageUrl: videoBackgroundImageUrl || null,
         certificationSubtitle: certificationSubtitle || null,

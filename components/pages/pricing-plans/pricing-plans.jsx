@@ -24,7 +24,7 @@ const PricingPlansMain = () => {
 										</ul>
 									</div>
 									<div className="price__area-item-btn">
-										<Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+										<Link className="build_button" href="/iletisim">Get Started<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>
@@ -46,7 +46,7 @@ const PricingPlansMain = () => {
 										
 									</div>
 									<div className="price__area-item-btn">
-										<Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+										<Link className="build_button" href="/iletisim">Get Started<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>
@@ -67,7 +67,7 @@ const PricingPlansMain = () => {
 										</ul>                            
 									</div>
 									<div className="price__area-item-btn">
-										<Link className="build_button" href="/contact-us">Get Started<i className="flaticon-right-up"></i></Link>
+										<Link className="build_button" href="/iletisim">Get Started<i className="flaticon-right-up"></i></Link>
 									</div>
 								</div>
 							</div>

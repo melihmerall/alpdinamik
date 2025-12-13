@@ -1,7 +1,7 @@
 "use client"
 import SEO from "../../../data/seo";
 import BreadCrumb from "../../common/breadcrumb";
-import HeaderTwo from "../../../layout/headers/header-two";
+import HeaderFour from "../../../layout/headers/header-four";
 import PortfolioFilter from "./portfolio-filter";
 import FooterOne from "../../../layout/footers/footer-one";
 import CustomCursor from "../../common/cursor";
@@ -14,7 +14,7 @@ const PortfolioFilterPage = () => {
             <SEO pageTitle="Filterable Gallery" />
             <CustomCursor />
             <SwitchTab />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title="Filterable Gallery" innerTitle="Filterable Gallery" />
             <PortfolioFilter />
             <FooterOne />

@@ -1,0 +1,439 @@
+// MySQL Schema - PostgreSQL yerine MySQL kullanmak için
+// Bu dosyayı schema.prisma olarak kopyalayın ve provider'ı mysql yapın
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Content Blocks - Static text blocks (hero, header, footer, etc.)
+model ContentBlock {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g., "home_hero_title", "home_hero_subtitle"
+  title     String?
+  body      String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("content_blocks")
+}
+
+// Company Pages - Corporate pages (About, Mission & Vision, etc.)
+model CompanyPage {
+  id                 String   @id @default(cuid())
+  slug               String   @unique // e.g., "hakkimizda", "misyon-vizyon", "home-about"
+  title              String
+  subtitle           String?  // Ana sayfa için alt başlık
+  body               String   @db.Text
+  imageUrl           String?  // Ana sayfa için görsel
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  // Stats for home page about section
+  stat1Number Int?     // İlk istatistik sayısı (örn: 25)
+  stat1Label  String?  // İlk istatistik etiketi (örn: "Yıl Sektör Tecrübesi")
+  stat2Number Int?     // İkinci istatistik sayısı (örn: 500)
+  stat2Label  String?  // İkinci istatistik etiketi (örn: "Endüstriyel Proje")
+  stat3Number Int?     // Üçüncü istatistik sayısı (örn: 10)
+  stat3Label  String?  // Üçüncü istatistik etiketi (örn: "Farklı Uygulama Alanı")
+  ctaLabel    String?  // CTA buton etiketi (örn: "Tüm Hizmetler")
+  ctaUrl      String?  // CTA buton URL'i (örn: "/services")
+  // Mission Section
+  missionSubtitle    String?  // Misyon alt başlık
+  missionTitle       String?  // Misyon başlık
+  missionBody        String?  @db.Text // Misyon açıklaması
+  missionImageUrl    String?  // Misyon görseli
+  // Vision Section
+  visionSubtitle     String?  // Vizyon alt başlık
+  visionTitle        String?  // Vizyon başlık
+  visionBody         String?  @db.Text // Vizyon açıklaması
+  visionImageUrl     String?  // Vizyon görseli
+  // Video Section
+  videoUrl           String?  // YouTube video ID (e.g., "SZEflIVnhH8")
+  videoBackgroundImageUrl String?  // Video section background image
+  // Certification Section
+  certificationSubtitle String?  // Certification alt başlık
+  certificationTitle    String?  // Certification başlık
+  certificationImageUrl  String?  // Certification görsel
+  certificationStat1Number Int?
+  certificationStat1Label  String?
+  certificationStat2Number Int?
+  certificationStat2Label  String?
+  certificationStat3Number Int?
+  certificationStat3Label  String?
+  certificationStat4Number Int?
+  certificationStat4Label  String?
+  // Team Section
+  teamSubtitle       String?  // Team alt başlık
+  teamTitle          String?  // Team başlık
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("company_pages")
+}
+
+// Services - Services offered
+model Service {
+  id                String   @id @default(cuid())
+  slug              String   @unique // e.g., "proje-tasarimi", "urun-secimi"
+  title             String
+  summary           String   @db.Text
+  body              String?  @db.Text
+  icon              String?
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("services")
+}
+
+// Sectors - Industry sectors
+model Sector {
+  id                 String   @id @default(cuid())
+  slug               String   @unique // e.g., "celik-endustrisi", "gunes-enerjisi"
+  name               String
+  description        String   @db.Text
+  body               String?  @db.Text
+  icon               String?
+  imageUrl           String?
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  references  ReferenceProject[]
+
+  @@map("sectors")
+}
+
+// Banners - Hero slider/banner
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String?
+  imageUrl  String
+  ctaLabel  String?
+  ctaUrl    String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("banners")
+}
+
+// Banner Messages - Scrolling text / highlight messages
+model BannerMessage {
+  id        String   @id @default(cuid())
+  message   String   @db.Text
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("banner_messages")
+}
+
+// Blog Posts - Blog / News
+model BlogPost {
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  title             String
+  summary           String    @db.Text
+  body              String    @db.Text
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  publishedAt       DateTime?
+  isPublished       Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("blog_posts")
+}
+
+// Reference Projects - Reference projects / example projects
+model ReferenceProject {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  summary           String   @db.Text
+  body              String?  @db.Text
+  sectorId          String?
+  year              Int?
+  customerName      String?
+  location          String?
+  imageUrl          String?
+  breadcrumbImageUrl String? // Breadcrumb background image
+  // SEO Fields
+  metaTitle         String?  // SEO Title
+  metaDescription   String?  @db.Text // SEO Description
+  metaKeywords      String?  // SEO Keywords (comma separated)
+  ogImage           String?  // Open Graph Image
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  sector            Sector?  @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+
+  @@map("reference_projects")
+}
+
+// Leads - Form submissions
+model Lead {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String?
+  phone     String?
+  source    LeadSource @default(CONTACT_FORM)
+  message   String?  @db.Text
+  meta      Json?    // Additional data as JSON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("leads")
+}
+
+enum LeadSource {
+  CONTACT_FORM
+  PROJECT_FORM
+  QUICK_CONTACT
+}
+
+// Product Categories - Main product categories (e.g., "Vidalı Krikolar", "Yön Değiştiriciler")
+model ProductCategory {
+  id                 String   @id @default(cuid())
+  representativeId   String
+  slug               String   // e.g., "vidali-krikolar"
+  name               String   // e.g., "Vidalı Krikolar"
+  description        String?  @db.Text
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  order              Int      @default(0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  series             ProductSeries[]
+
+  @@unique([representativeId, slug])
+  @@map("product_categories")
+}
+
+// Product Series - Product series under categories (e.g., "VKT Serisi", "VKM Serisi")
+model ProductSeries {
+  id          String   @id @default(cuid())
+  categoryId  String
+  slug        String   // e.g., "vkt-serisi"
+  name        String   // e.g., "VKT Serisi"
+  description String?  @db.Text
+  imageUrl    String?  // Series image/icon
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  variants    ProductVariant[]
+  products    Product[]  // Direct products (if no variant)
+
+  @@unique([categoryId, slug])
+  @@map("product_series")
+}
+
+// Product Variant - Sub-series/variants under series (e.g., "VKT-VH-S", "VKT-VH-SI", "VKT-SH")
+model ProductVariant {
+  id          String   @id @default(cuid())
+  seriesId    String
+  slug        String   // e.g., "vkt-vh-s", "vkt-vh-si", "vkt-sh"
+  name        String   // e.g., "VKT-VH-S (Mil Hareketli)"
+  description String?  @db.Text
+  imageUrl    String?  // Variant image/icon
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  series      ProductSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@unique([seriesId, slug])
+  @@map("product_variants")
+}
+
+// Representatives - Brand/Company representations
+model Representative {
+  id                 String   @id @default(cuid())
+  slug               String   @unique // e.g., "mecmot"
+  name               String
+  description        String?  @db.Text
+  logoUrl            String?
+  websiteUrl         String?
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  order              Int      @default(0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  categories  ProductCategory[]
+  products    Product[]
+
+  @@map("representatives")
+}
+
+// Products - Individual products under variants or series
+model Product {
+  id                 String   @id @default(cuid())
+  representativeId   String
+  seriesId           String?  // Optional: Product can be directly in a series
+  variantId          String?  // Optional: Product can be in a variant (sub-series)
+  slug               String   // e.g., "vkt5-vh-s", "vkt10-vh-s"
+  name               String   // e.g., "VKT5-VH-S Vidalı Kriko"
+  description        String?  @db.Text
+  body               String?  @db.Text
+  imageUrl           String?  // Main product image
+  infoImageUrl       String?  // Product info section image (shown under "ÜRÜN BİLGİSİ" title)
+  breadcrumbImageUrl String?  // Breadcrumb background image
+  // Interactive SVG data
+  svgBaseImage       String?  // Base product image for SVG overlay
+  svgComponents      Json?    // SVG component data (positions, links, images)
+  // Technical specs
+  maxCapacity        String?  // e.g., "5 kN", "100 kN"
+  technicalPdfUrl    String?  // Link to technical PDF
+  file2dUrl          String?  // 2D file (PDF, image, etc.)
+  file3dUrl          String?  // 3D file (ZIP, image, etc.)
+  externalProductUrl String?  // External product page URL (manufacturer website)
+  order              Int      @default(0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  series             ProductSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  variant            ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  images              ProductImage[]
+
+  @@unique([representativeId, slug])
+  @@map("products")
+}
+
+// Product Images - Multiple images for a product (gallery)
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  imageUrl  String   // Image URL
+  alt       String?  // Alt text for image
+  order     Int      @default(0) // Display order
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// Users - Admin users
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole @default(EDITOR)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+// Team Members - Team/Staff
+model TeamMember {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  role        String   // position
+  bio         String?  @db.Text
+  imageUrl    String?
+  email       String?
+  phone       String?
+  socialLinks Json?    // {linkedin, twitter, facebook, behance, etc.}
+  category    String?  // founder, manager, engineer, etc.
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+// Site Settings - Global site settings
+model SiteSettings {
+  id                    String   @id @default(cuid())
+  defaultBreadcrumbImageUrl String?  // Default breadcrumb background image
+  // Social Media Links
+  facebookUrl          String?
+  twitterUrl           String?
+  instagramUrl         String?
+  linkedinUrl          String?
+  youtubeUrl           String?
+  behanceUrl           String?
+  // Contact Info
+  email                String?
+  phone                String?
+  address              String?  @db.Text
+  mapEmbedUrl          String?  @db.Text // Google Maps embed URL
+  // SEO
+  siteName             String?
+  siteDescription      String?  @db.Text
+  // SMTP Settings
+  smtpHost             String?  // e.g., "melihmeral.dev"
+  smtpPort             Int?     // e.g., 465
+  smtpUser             String?  // e.g., "coder@melihmeral.dev"
+  smtpPassword         String?  // SMTP password (encrypted)
+  smtpSecure            Boolean  @default(true) // Use SSL/TLS
+  // Email Settings
+  contactEmail         String?  // Email address to receive contact form submissions
+  kvkkText             String?  @db.Text // KVKK text content
+  // Contact Form Texts
+  contactFormTitle     String?  // "Projenizi paylaşın"
+  contactFormSubtitle  String?  @db.Text // "Kısa formu doldurun; en geç 2 iş saati içinde..."
+  contactFormNote      String?  @db.Text // "CAD & FEM doğrulama gerektiren taleplerde..."
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// Testimonials - Customer testimonials/reviews
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?  // position
+  company   String?
+  imageUrl  String?
+  message   String   @db.Text
+  rating    Int?     // 1-5
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
+}
+

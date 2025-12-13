@@ -6,7 +6,7 @@ import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "../../common/scroll/scroll-to-top";
 import SwitchTab from "../../common/dark-light";
 import CustomCursor from "../../common/cursor";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 
 const BlogDetails = ({singleData}) => {
     const firstThreeWords = singleData?.title.split(' ').slice(0, 3).join(' ') + '...';
@@ -14,7 +14,7 @@ const BlogDetails = ({singleData}) => {
         <>
             <SwitchTab />
             <CustomCursor />
-            <HeaderTwo />
+            <HeaderFour />
             <BreadCrumb title={firstThreeWords} innerTitle={singleData?.title} backgroundImage={singleData?.breadcrumbImageUrl} />
             <BlogSingleMain singleData={singleData}/>
             <FooterTwo />

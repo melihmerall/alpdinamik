@@ -14,6 +14,7 @@ const menuItems = [
     items: [
       { href: '/admin/content-blocks', label: 'İçerik Blokları', icon: '📝' },
       { href: '/admin/about', label: 'Hakkımızda', icon: 'ℹ️' },
+      { href: '/admin/mission-vision', label: 'Misyon & Vizyon', icon: '🎯' },
       { href: '/admin/company-pages', label: 'Kurumsal Sayfalar', icon: '🏢' },
       { href: '/admin/banners', label: 'Bannerlar', icon: '🖼️' },
     ]
@@ -31,8 +32,6 @@ const menuItems = [
     items: [
       { href: '/admin/blog', label: 'Blog Yazıları', icon: '📰' },
       { href: '/admin/references', label: 'Portfolyo', icon: '⭐' },
-      { href: '/admin/team', label: 'Ekip Üyeleri', icon: '👥' },
-      { href: '/admin/testimonials', label: 'Müşteri Yorumları', icon: '💬' },
     ]
   },
   {

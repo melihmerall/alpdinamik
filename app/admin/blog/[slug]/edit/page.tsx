@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import RichTextEditor from '@/components/admin/RichTextEditor'
 
 export default function EditBlogPage() {
   const router = useRouter()
@@ -237,20 +238,10 @@ export default function EditBlogPage() {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: 'var(--admin-gray-700)' }}>
                 İçerik *
               </label>
-              <textarea
-                name="body"
+              <RichTextEditor
                 value={formData.body}
-                onChange={handleChange}
-                required
-                rows={10}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid var(--admin-gray-300)',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  resize: 'vertical'
-                }}
+                onChange={(value) => setFormData(prev => ({ ...prev, body: value }))}
+                placeholder="Blog içeriğinizi buraya yazın..."
               />
             </div>
 

@@ -50,10 +50,10 @@ const FooterFour = () => {
                                             <h4>Quick links</h4>
                                             <div className="footer-widget-menu">
                                                 <ul>
-                                                    <li><Link href="/about-us">About Us</Link></li>
+                                                    <li><Link href="/hakkimizda">About Us</Link></li>
                                                     <li><Link href="/blog">Blog</Link></li>
                                                     <li><Link href="/testimonial">Testimonials</Link></li>
-                                                    <li><Link href="/contact-us">Contact Us</Link></li>
+                                                    <li><Link href="/iletisim">Contact Us</Link></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -63,8 +63,8 @@ const FooterFour = () => {
                                             <h4>Support</h4>
                                             <div className="footer-widget-menu">
                                                 <ul>
-                                                    <li><Link href="/contact-us">Term & Conditions</Link></li>
-                                                    <li><Link href="/contact-us">Privacy policy</Link></li>
+                                                    <li><Link href="/iletisim">Term & Conditions</Link></li>
+                                                    <li><Link href="/iletisim">Privacy policy</Link></li>
                                                 </ul>
                                             </div>
                                         </div>

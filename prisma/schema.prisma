@@ -30,6 +30,7 @@ model CompanyPage {
   subtitle           String?  // Ana sayfa için alt başlık
   body               String   @db.Text
   imageUrl           String?  // Ana sayfa için görsel
+  image2Url          String?  // İkinci görsel (about-four için sağ alttaki)
   breadcrumbImageUrl String?  // Breadcrumb background image
   // Stats for home page about section
   stat1Number Int?     // İlk istatistik sayısı (örn: 25)
@@ -43,6 +44,13 @@ model CompanyPage {
   // Mission Section
   missionSubtitle    String?  // Misyon alt başlık
   missionTitle       String?  // Misyon başlık
+  missionBody        String?  @db.Text // Misyon açıklaması
+  missionImageUrl    String?  // Misyon görseli
+  // Vision Section
+  visionSubtitle     String?  // Vizyon alt başlık
+  visionTitle        String?  // Vizyon başlık
+  visionBody         String?  @db.Text // Vizyon açıklaması
+  visionImageUrl     String?  // Vizyon görseli
   // Video Section
   videoUrl           String?  // YouTube video ID (e.g., "SZEflIVnhH8")
   videoBackgroundImageUrl String?  // Video section background image
@@ -111,9 +119,10 @@ model Sector {
 // Banners - Hero slider/banner
 model Banner {
   id        String   @id @default(cuid())
-  title     String
+  title     String?
   subtitle  String?
   imageUrl  String
+  videoUrl  String?  // Video URL for background video
   ctaLabel  String?
   ctaUrl    String?
   isActive  Boolean  @default(true)
@@ -390,9 +399,25 @@ model SiteSettings {
   email                String?
   phone                String?
   address              String?  @db.Text
+  mapEmbedUrl          String?  @db.Text // Google Maps embed URL
   // SEO
   siteName             String?
   siteDescription      String?  @db.Text
+  // SMTP Settings
+  smtpHost             String?  // e.g., "melihmeral.dev"
+  smtpPort             Int?     // e.g., 465
+  smtpUser             String?  // e.g., "coder@melihmeral.dev"
+  smtpPassword         String?  // SMTP password (encrypted)
+  smtpSecure            Boolean  @default(true) // Use SSL/TLS
+  // Email Settings
+  contactEmail         String?  // Email address to receive contact form submissions
+  kvkkText             String?  @db.Text // KVKK text content
+  // Contact Form Texts
+  contactFormTitle     String?  // "Projenizi paylaşın"
+  contactFormSubtitle  String?  @db.Text // "Kısa formu doldurun; en geç 2 iş saati içinde..."
+  contactFormNote      String?  @db.Text // "CAD & FEM doğrulama gerektiren taleplerde..."
+  // Favicon
+  faviconUrl           String?  // Site favicon URL
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 

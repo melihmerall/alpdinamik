@@ -32,10 +32,10 @@ const FooterThree = () => {
                                         <h4>Hızlı Linkler</h4>
                                         <div className="footer-widget-menu">
                                             <ul>
-                                                <li><Link href="/about-us">Hakkımızda</Link></li>
+                                                <li><Link href="/hakkimizda">Hakkımızda</Link></li>
                                                 <li><Link href="/blog">Blog</Link></li>
                                                 <li><Link href="/services">Hizmetler</Link></li>
-                                                <li><Link href="/contact-us">İletişim</Link></li>
+                                                <li><Link href="/iletisim">İletişim</Link></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -45,8 +45,8 @@ const FooterThree = () => {
                                         <h4>Destek</h4>
                                         <div className="footer-widget-menu">
                                             <ul>
-                                                <li><Link href="/contact-us">Şartlar & Koşullar</Link></li>
-                                                <li><Link href="/contact-us">Gizlilik Politikası</Link></li>
+                                                <li><Link href="/iletisim">Şartlar & Koşullar</Link></li>
+                                                <li><Link href="/iletisim">Gizlilik Politikası</Link></li>
                                             </ul>
                                         </div>
                                     </div>

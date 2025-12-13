@@ -18,7 +18,12 @@ export async function GET(request: NextRequest) {
       take: limit ? parseInt(limit) : undefined,
     })
 
-    return NextResponse.json(banners)
+    // Cache for 2 minutes (120 seconds) - banners don't change frequently
+    return NextResponse.json(banners, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
+      },
+    })
   } catch (error) {
     console.error('Error fetching banners:', error)
     return NextResponse.json(
@@ -31,20 +36,21 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { title, subtitle, imageUrl, ctaLabel, ctaUrl, isActive, order } = body
+    const { title, subtitle, imageUrl, videoUrl, ctaLabel, ctaUrl, isActive, order } = body
 
-    if (!title || !imageUrl) {
+    if (!imageUrl && !videoUrl) {
       return NextResponse.json(
-        { error: 'Title and imageUrl are required' },
+        { error: 'ImageUrl or VideoUrl is required' },
         { status: 400 }
       )
     }
 
     const banner = await prisma.banner.create({
       data: {
-        title,
+        title: title || null,
         subtitle: subtitle || null,
-        imageUrl,
+        imageUrl: imageUrl || '',
+        videoUrl: videoUrl || null,
         ctaLabel: ctaLabel || null,
         ctaUrl: ctaUrl || null,
         isActive: isActive !== undefined ? isActive : true,

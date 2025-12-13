@@ -14,7 +14,7 @@ const Advices = () => {
                             <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">Building Success With Expert Advisory Services</h2>
                             <p className="wow fadeInUp" data-wow-delay=".4s">With a focus on innovation and sustainability, we help you navigate complex challenges, ensuring</p>
                             <div className="wow fadeInDown" data-wow-delay="1.2s">
-                                <Link className="build_button mt-25" href="/contact-us">Get Advices<i className="flaticon-right-up"></i></Link>
+                                <Link className="build_button mt-25" href="/iletisim">Get Advices<i className="flaticon-right-up"></i></Link>
                             </div>
                         </div>
                     </div>
