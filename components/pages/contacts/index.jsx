@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import SEO from "@/components/data/seo";
 import FooterTwo from "../../layout/footers/footer-two";
 import HeaderFour from "../../layout/headers/header-four";
@@ -12,40 +12,44 @@ const ContactUs = () => {
     const [siteSettings, setSiteSettings] = useState(null);
 
     useEffect(() => {
+        let isMounted = true;
         async function fetchSettings() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Site Settings loaded:', data);
-                    console.log('Map Embed URL:', data.mapEmbedUrl);
-                    setSiteSettings(data);
+                    if (isMounted) {
+                        setSiteSettings(data);
+                    }
                 }
             } catch (error) {
-                console.error('Error fetching site settings:', error);
+                // Error fetching site settings
             }
         }
         fetchSettings();
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     // Default map for İstanbul, Türkiye (Alp Dinamik)
-    // Kullanıcı gerçek adresini site ayarlarına ekleyebilir
     const defaultMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.424314489!2d28.9784!3d41.0082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab9e7a7777c43%3A0x4c76ed36d4b1c5a1!2sIstanbul%2C%20Turkey!5e0!3m2!1sen!2str!4v1234567890123!5m2!1sen!2str";
     
-    // Extract URL from iframe if user pasted full iframe code
-    let rawMapUrl = siteSettings?.mapEmbedUrl || '';
-    if (rawMapUrl && rawMapUrl.includes('<iframe')) {
-        // Extract src from iframe tag
-        const srcMatch = rawMapUrl.match(/src=["']([^"']+)["']/);
-        if (srcMatch) {
-            rawMapUrl = srcMatch[1];
+    // Memoize map URL calculation to prevent unnecessary re-renders
+    const mapUrl = useMemo(() => {
+        let rawMapUrl = siteSettings?.mapEmbedUrl || '';
+        if (rawMapUrl && rawMapUrl.includes('<iframe')) {
+            const srcMatch = rawMapUrl.match(/src=["']([^"']+)["']/);
+            if (srcMatch) {
+                rawMapUrl = srcMatch[1];
+            }
         }
-    }
+        return rawMapUrl || defaultMapUrl;
+    }, [siteSettings?.mapEmbedUrl, defaultMapUrl]);
     
-    const mapUrl = rawMapUrl || defaultMapUrl;
-    const mapTitle = siteSettings?.address || "Alp Dinamik - İstanbul, Türkiye";
-    
-    console.log('Final map URL:', mapUrl);
+    const mapTitle = useMemo(() => {
+        return siteSettings?.address || "Alp Dinamik - İstanbul, Türkiye";
+    }, [siteSettings?.address]);
 
     return (
         <>

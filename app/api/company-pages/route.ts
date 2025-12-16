@@ -5,11 +5,19 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const slug = searchParams.get('slug')
+    const fallback = searchParams.get('fallback') // For home-about -> hakkimizda fallback
 
     if (slug) {
-      const page = await prisma.companyPage.findUnique({
+      let page = await prisma.companyPage.findUnique({
         where: { slug },
       })
+
+      // Fallback logic: if page not found and fallback is true, try hakkimizda
+      if (!page && fallback === 'true' && slug !== 'hakkimizda') {
+        page = await prisma.companyPage.findUnique({
+          where: { slug: 'hakkimizda' },
+        })
+      }
 
       if (!page) {
         return NextResponse.json(
@@ -18,14 +26,24 @@ export async function GET(request: NextRequest) {
         )
       }
 
-      return NextResponse.json(page)
+      // Cache for 5 minutes (300 seconds) - company pages don't change frequently
+      return NextResponse.json(page, {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        },
+      })
     }
 
     const pages = await prisma.companyPage.findMany({
       orderBy: { slug: 'asc' },
     })
 
-    return NextResponse.json(pages)
+    // Cache for 5 minutes (300 seconds)
+    return NextResponse.json(pages, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch (error) {
     console.error('Error fetching company pages:', error)
     return NextResponse.json(

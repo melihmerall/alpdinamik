@@ -21,7 +21,7 @@ const FormArea = () => {
 					setKvkkText(data.kvkkText || '');
 				}
 			} catch (error) {
-				console.error('Error fetching KVKK text:', error);
+				// Error fetching KVKK text
 			}
 		}
 		fetchKvkkText();
@@ -81,7 +81,7 @@ const FormArea = () => {
 					throw new Error('Dosya yüklenemedi');
 				}
 			} catch (err) {
-				console.error('File upload error:', err);
+				// File upload error
 				setError('Dosya yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
 				setSuccess(false);
 				setLoading(false);
@@ -127,7 +127,7 @@ const FormArea = () => {
 				setError(result.error?.message || 'Bir hata oluştu');
 			}
 		} catch (err) {
-			console.error('Error:', err);
+			// Error occurred
 			setSuccess(false);
 			setError('Form gönderilirken bir hata oluştu');
 		} finally {

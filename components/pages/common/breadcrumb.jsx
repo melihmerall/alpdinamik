@@ -1,7 +1,6 @@
 "use client"
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import breadCrumbBg from "../../../public/assets/img/page/breadcrumb.jpg";
 
 const BreadCrumb = ({title, innerTitle, backgroundImage}) => {
     const [defaultBreadcrumb, setDefaultBreadcrumb] = useState(null);
@@ -18,8 +17,8 @@ const BreadCrumb = ({title, innerTitle, backgroundImage}) => {
             .catch(err => console.error('Error fetching default breadcrumb:', err));
     }, []);
 
-    // Priority: provided backgroundImage > default from settings > fallback image
-    const bgImage = backgroundImage || defaultBreadcrumb || breadCrumbBg.src;
+    // Priority: provided backgroundImage > default from settings > gradient fallback
+    const bgImage = backgroundImage || defaultBreadcrumb || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     
     return (
         <div className="breadcrumb__area" style={{backgroundImage: `url(${bgImage})`}}>

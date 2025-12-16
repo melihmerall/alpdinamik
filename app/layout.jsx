@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { LoadingProvider } from "@/lib/loading-context";
+import PageLoaderV2 from "@/components/common/page-loader-v2";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
@@ -44,9 +46,14 @@ export default function RootLayout({ children }) {
                 {/* Preconnect to Google Fonts for faster loading */}
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                {/* DNS Prefetch for external resources */}
+                <link rel="dns-prefetch" href="https://html.nextwpcook.com" />
             </head>
             <body>
-                {children}
+                <LoadingProvider>
+                    <PageLoaderV2 />
+                    {children}
+                </LoadingProvider>
             </body>
         </html>
     );

@@ -24,7 +24,7 @@ const ContactSection = () => {
 					setSiteSettings(data);
 				}
 			} catch (error) {
-				console.error('Error fetching site settings:', error);
+				// Error fetching site settings
 			}
 		}
 		fetchSiteSettings();
@@ -149,54 +149,279 @@ const ContactSection = () => {
 			}}
 		>
 			<div className="container" style={{ position: 'relative' }}>
-				<div className="row justify-content-center">
-					{/* Ortalanmış Form - Proje Paylaşım */}
-					<div className="col-lg-6 col-md-8 col-12 mb-30">
-						<div className="contact__panel" style={{
-							background: 'var(--bg-white)',
-							padding: '2rem',
+				<div className="row">
+					{/* İletişim Kartı - Sol Taraf */}
+					<div className="col-lg-4 col-md-5 mb-30">
+						<div className="contact__info-card" style={{
+							background: 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)',
+							padding: '2.5rem',
 							borderRadius: '12px',
-							border: '1px solid rgba(0, 0, 0, 0.08)',
-							boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+							border: '1px solid rgba(255, 193, 7, 0.3)',
+							boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+							height: '100%',
+							display: 'flex',
+							flexDirection: 'column',
 							transition: 'all 0.3s ease',
 							position: 'relative',
 							overflow: 'hidden'
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.transform = 'translateY(-2px)';
-							e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.12)';
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.transform = 'translateY(0)';
-							e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.08)';
-						}}
-						>
-							<div className="contact__panel-header" style={{ marginBottom: '1rem' }}>
-								<div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-									<i className="flaticon-file" style={{ 
-										fontSize: '1.5rem', 
-										color: 'var(--primary-color-1)',
-										transition: 'all 0.3s ease',
+						}}>
+							<div style={{ marginBottom: '2rem' }}>
+								<div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+									<i className="flaticon-phone" style={{ 
+										fontSize: '2rem', 
+										color: '#FFC107',
 										display: 'inline-block'
-									}}
-									onMouseEnter={(e) => {
-										e.currentTarget.style.transform = 'scale(1.15) rotate(-5deg)';
-									}}
-									onMouseLeave={(e) => {
-										e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-									}}
-									></i>
-									<h4 style={{ color: 'var(--text-heading-color)', margin: 0, fontSize: '1.25rem' }}>
-										{siteSettings?.contactFormTitle || 'Projenizi paylaşın'}
+									}}></i>
+									<h4 style={{ 
+										color: '#ffffff', 
+										margin: 0,
+										fontSize: '1.5rem',
+										fontWeight: '600'
+									}}>
+										İletişim
 									</h4>
 								</div>
+								<p style={{ 
+									color: 'rgba(255, 255, 255, 0.8)', 
+									fontSize: '0.9rem',
+									margin: 0,
+									lineHeight: '1.6'
+								}}>
+									{siteSettings?.contactDescription || 'Müşteri Deneyim Ekibimiz ihtiyaçlarınızı aynı gün içinde analiz eder ve ilgili mühendisle buluşturur.'}
+								</p>
+							</div>
+							
+							{siteSettings?.address && (
+								<div style={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									marginBottom: '1.5rem',
+									padding: '1rem',
+									background: 'rgba(255, 255, 255, 0.05)',
+									borderRadius: '8px',
+									transition: 'all 0.3s ease'
+								}}
+								onMouseEnter={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+									e.currentTarget.style.transform = 'translateX(5px)';
+								}}
+								onMouseLeave={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+									e.currentTarget.style.transform = 'translateX(0)';
+								}}
+								>
+									<div style={{
+										width: '40px',
+										height: '40px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										background: 'linear-gradient(135deg, #FFC107 0%, #FFA000 100%)',
+										borderRadius: '8px',
+										marginRight: '1rem',
+										flexShrink: 0
+									}}>
+										<i className="flaticon-location" style={{ color: '#1a1a1a', fontSize: '18px', fontWeight: 'bold' }}></i>
+									</div>
+									<div style={{ flex: 1 }}>
+										<span style={{
+											color: '#FFC107',
+											fontSize: '0.75rem',
+											textTransform: 'uppercase',
+											letterSpacing: '1px',
+											display: 'block',
+											marginBottom: '0.5rem',
+											fontWeight: '600'
+										}}>Merkez Ofis</span>
+										<Link 
+											href={siteSettings.mapEmbedUrl && siteSettings.mapEmbedUrl.includes('maps/embed') 
+												? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteSettings.address)}`
+												: siteSettings.mapEmbedUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteSettings.address)}`
+											} 
+											target="_blank" 
+											rel="noopener noreferrer"
+											style={{
+												color: '#ffffff',
+												textDecoration: 'none',
+												fontSize: '0.9rem',
+												lineHeight: '1.6',
+												transition: 'color 0.3s ease',
+												display: 'block'
+											}}
+											onMouseEnter={(e) => e.currentTarget.style.color = '#FFC107'}
+											onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
+										>
+											{siteSettings.address}
+										</Link>
+									</div>
+								</div>
+							)}
+							
+							{siteSettings?.phone && (
+								<div style={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									marginBottom: '1.5rem',
+									padding: '1rem',
+									background: 'rgba(255, 255, 255, 0.05)',
+									borderRadius: '8px',
+									transition: 'all 0.3s ease'
+								}}
+								onMouseEnter={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+									e.currentTarget.style.transform = 'translateX(5px)';
+								}}
+								onMouseLeave={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+									e.currentTarget.style.transform = 'translateX(0)';
+								}}
+								>
+									<div style={{
+										width: '40px',
+										height: '40px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										background: 'linear-gradient(135deg, #FFC107 0%, #FFA000 100%)',
+										borderRadius: '8px',
+										marginRight: '1rem',
+										flexShrink: 0
+									}}>
+										<i className="flaticon-phone" style={{ color: '#1a1a1a', fontSize: '18px', fontWeight: 'bold' }}></i>
+									</div>
+									<div style={{ flex: 1 }}>
+										<Link 
+											href={`tel:${siteSettings.phone.replace(/\s/g, '')}`}
+											style={{
+												color: '#ffffff',
+												textDecoration: 'none',
+												fontSize: '0.95rem',
+												fontWeight: '500',
+												transition: 'color 0.3s ease',
+												display: 'block',
+												lineHeight: '1.6'
+											}}
+											onMouseEnter={(e) => e.currentTarget.style.color = '#FFC107'}
+											onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
+										>
+											{siteSettings.phone}
+										</Link>
+									</div>
+								</div>
+							)}
+							
+							{siteSettings?.email && (
+								<div style={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									marginBottom: '1.5rem',
+									padding: '1rem',
+									background: 'rgba(255, 255, 255, 0.05)',
+									borderRadius: '8px',
+									transition: 'all 0.3s ease'
+								}}
+								onMouseEnter={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+									e.currentTarget.style.transform = 'translateX(5px)';
+								}}
+								onMouseLeave={(e) => {
+									e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+									e.currentTarget.style.transform = 'translateX(0)';
+								}}
+								>
+									<div style={{
+										width: '40px',
+										height: '40px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										background: 'linear-gradient(135deg, #FFC107 0%, #FFA000 100%)',
+										borderRadius: '8px',
+										marginRight: '1rem',
+										flexShrink: 0
+									}}>
+										<i className="flaticon-email-3" style={{ color: '#1a1a1a', fontSize: '18px', fontWeight: 'bold' }}></i>
+									</div>
+									<div style={{ flex: 1 }}>
+										<Link 
+											href={`mailto:${siteSettings.email}`}
+											style={{
+												color: '#ffffff',
+												textDecoration: 'none',
+												fontSize: '0.95rem',
+												fontWeight: '500',
+												transition: 'color 0.3s ease',
+												display: 'block',
+												wordBreak: 'break-word',
+												lineHeight: '1.6'
+											}}
+											onMouseEnter={(e) => e.currentTarget.style.color = '#FFC107'}
+											onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
+										>
+											{siteSettings.email}
+										</Link>
+									</div>
+								</div>
+							)}
+							
+							{siteSettings?.contactNote && (
+								<div style={{
+									marginTop: '1.5rem',
+									padding: '1rem',
+									background: 'rgba(255, 193, 7, 0.1)',
+									borderRadius: '8px',
+									border: '1px solid rgba(255, 193, 7, 0.2)'
+								}}>
+									<p style={{
+										color: 'rgba(255, 255, 255, 0.9)',
+										fontSize: '0.85rem',
+										margin: 0,
+										lineHeight: '1.6'
+									}}>
+										{siteSettings.contactNote}
+									</p>
+								</div>
+							)}
+							
+							{(!siteSettings?.phone && !siteSettings?.email && !siteSettings?.address) && (
+								<div style={{
+									padding: '1rem',
+									background: 'rgba(255, 255, 255, 0.05)',
+									borderRadius: '8px',
+									textAlign: 'center',
+									color: 'rgba(255, 255, 255, 0.6)',
+									fontSize: '0.875rem'
+								}}>
+									İletişim bilgileri yükleniyor...
+								</div>
+							)}
+						</div>
+					</div>
+					{/* Form - Proje Paylaşım - Sağ Taraf */}
+					<div className="col-lg-8 col-md-7 mb-30">
+						<div className="contact__panel" style={{
+							background: 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)',
+							padding: '2.5rem',
+							borderRadius: '12px',
+							border: '1px solid rgba(255, 193, 7, 0.3)',
+							borderTop: '2px solid #FFC107',
+							borderRight: '2px solid #FFC107',
+							boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+							transition: 'all 0.3s ease',
+							position: 'relative',
+							overflow: 'hidden'
+						}}>
+							<div className="contact__panel-header" style={{ marginBottom: '1.5rem' }}>
+								<h4 style={{ color: '#ffffff', margin: 0, fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>
+									{siteSettings?.contactFormTitle || 'Projenizi paylaşın'}
+								</h4>
 								{siteSettings?.contactFormSubtitle && (
-									<p style={{ color: 'var(--body-color)', fontSize: '0.875rem', lineHeight: '1.5', marginBottom: '0.4rem' }}>
+									<p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '0.5rem' }}>
 										{siteSettings.contactFormSubtitle}
 									</p>
 								)}
 								{siteSettings?.contactFormNote && (
-									<p style={{ color: 'var(--body-color)', fontSize: '0.8rem', lineHeight: '1.5', opacity: 0.85 }}>
+									<p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.85rem', lineHeight: '1.6', marginBottom: '0' }}>
 										{siteSettings.contactFormNote}
 									</p>
 								)}
@@ -206,9 +431,9 @@ const ContactSection = () => {
 								<div className="alert alert-success mb-30" style={{
 									padding: '1rem', 
 									background: 'rgba(34, 197, 94, 0.2)', 
-									color: 'var(--text-heading-color)', 
-									borderRadius: '4px',
-									border: '1px solid rgba(34, 197, 94, 0.3)',
+									color: '#ffffff', 
+									borderRadius: '6px',
+									border: '1px solid rgba(34, 197, 94, 0.4)',
 									marginBottom: '1rem'
 								}}>
 									Form başarıyla gönderildi! En kısa sürede size dönüş yapacağız.
@@ -218,9 +443,9 @@ const ContactSection = () => {
 								<div className="alert alert-error mb-30" style={{
 									padding: '1rem', 
 									background: 'rgba(239, 68, 68, 0.2)', 
-									color: 'var(--text-heading-color)', 
-									borderRadius: '4px',
-									border: '1px solid rgba(239, 68, 68, 0.3)',
+									color: '#ffffff', 
+									borderRadius: '6px',
+									border: '1px solid rgba(239, 68, 68, 0.4)',
 									marginBottom: '1rem'
 								}}>
 									{error}
@@ -230,8 +455,8 @@ const ContactSection = () => {
 							<form ref={formRef} onSubmit={handleSubmit}>
 								<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
 									<div>
-										<label htmlFor="contact-name" style={{ display: 'block', color: 'var(--body-color)', marginBottom: '0.4rem', fontSize: '0.875rem' }}>
-											Ad Soyad <span style={{ color: 'var(--primary-color-1)' }}>*</span>
+										<label htmlFor="contact-name" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>
+											Ad Soyad <span style={{ color: '#FFC107' }}>*</span>
 										</label>
 										<input 
 											id="contact-name" 
@@ -241,29 +466,30 @@ const ContactSection = () => {
 											required
 											style={{
 												width: '100%',
-												padding: '0.6rem',
-												borderRadius: '4px',
-												border: '1px solid var(--border-color-1)',
-												background: 'var(--bg-white)',
-												color: 'var(--text-heading-color)',
-												fontSize: '0.875rem',
+												padding: '0.75rem',
+												borderRadius: '6px',
+												border: '1px solid rgba(255, 255, 255, 0.2)',
+												background: 'rgba(255, 255, 255, 0.1)',
+												color: '#ffffff',
+												fontSize: '0.9rem',
 												transition: 'all 0.3s ease'
 											}}
+											className="contact-input"
 											onFocus={(e) => {
-												e.target.style.borderColor = 'var(--primary-color-1)';
-												e.target.style.boxShadow = '0 0 0 3px rgba(255, 191, 67, 0.1)';
-												e.target.style.transform = 'scale(1.02)';
+												e.target.style.borderColor = '#FFC107';
+												e.target.style.boxShadow = '0 0 0 3px rgba(255, 193, 7, 0.2)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.15)';
 											}}
 											onBlur={(e) => {
-												e.target.style.borderColor = 'var(--border-color-1)';
+												e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
 												e.target.style.boxShadow = 'none';
-												e.target.style.transform = 'scale(1)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.1)';
 											}}
 										/>
 									</div>
 									<div>
-										<label htmlFor="contact-email" style={{ display: 'block', color: 'var(--body-color)', marginBottom: '0.4rem', fontSize: '0.875rem' }}>
-											E-posta <span style={{ color: 'var(--primary-color-1)' }}>*</span>
+										<label htmlFor="contact-email" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>
+											E-posta <span style={{ color: '#FFC107' }}>*</span>
 										</label>
 										<input 
 											id="contact-email" 
@@ -273,30 +499,31 @@ const ContactSection = () => {
 											required
 											style={{
 												width: '100%',
-												padding: '0.6rem',
-												borderRadius: '4px',
-												border: '1px solid var(--border-color-1)',
-												background: 'var(--bg-white)',
-												color: 'var(--text-heading-color)',
-												fontSize: '0.875rem',
+												padding: '0.75rem',
+												borderRadius: '6px',
+												border: '1px solid rgba(255, 255, 255, 0.2)',
+												background: 'rgba(255, 255, 255, 0.1)',
+												color: '#ffffff',
+												fontSize: '0.9rem',
 												transition: 'all 0.3s ease'
 											}}
+											className="contact-input"
 											onFocus={(e) => {
-												e.target.style.borderColor = 'var(--primary-color-1)';
-												e.target.style.boxShadow = '0 0 0 3px rgba(255, 191, 67, 0.1)';
-												e.target.style.transform = 'scale(1.02)';
+												e.target.style.borderColor = '#FFC107';
+												e.target.style.boxShadow = '0 0 0 3px rgba(255, 193, 7, 0.2)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.15)';
 											}}
 											onBlur={(e) => {
-												e.target.style.borderColor = 'var(--border-color-1)';
+												e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
 												e.target.style.boxShadow = 'none';
-												e.target.style.transform = 'scale(1)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.1)';
 											}}
 										/>
 									</div>
 								</div>
 								<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
 									<div>
-										<label htmlFor="contact-phone" style={{ display: 'block', color: 'var(--body-color)', marginBottom: '0.4rem', fontSize: '0.875rem' }}>
+										<label htmlFor="contact-phone" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>
 											Telefon
 										</label>
 										<input 
@@ -306,29 +533,30 @@ const ContactSection = () => {
 											placeholder="+90 ___ ___ __ __"
 											style={{
 												width: '100%',
-												padding: '0.6rem',
-												borderRadius: '4px',
-												border: '1px solid var(--border-color-1)',
-												background: 'var(--bg-white)',
-												color: 'var(--text-heading-color)',
-												fontSize: '0.875rem',
+												padding: '0.75rem',
+												borderRadius: '6px',
+												border: '1px solid rgba(255, 255, 255, 0.2)',
+												background: 'rgba(255, 255, 255, 0.1)',
+												color: '#ffffff',
+												fontSize: '0.9rem',
 												transition: 'all 0.3s ease'
 											}}
+											className="contact-input"
 											onFocus={(e) => {
-												e.target.style.borderColor = 'var(--primary-color-1)';
-												e.target.style.boxShadow = '0 0 0 3px rgba(255, 191, 67, 0.1)';
-												e.target.style.transform = 'scale(1.02)';
+												e.target.style.borderColor = '#FFC107';
+												e.target.style.boxShadow = '0 0 0 3px rgba(255, 193, 7, 0.2)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.15)';
 											}}
 											onBlur={(e) => {
-												e.target.style.borderColor = 'var(--border-color-1)';
+												e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
 												e.target.style.boxShadow = 'none';
-												e.target.style.transform = 'scale(1)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.1)';
 											}}
 										/>
 									</div>
 									<div>
-										<label htmlFor="contact-file" style={{ display: 'block', color: 'var(--body-color)', marginBottom: '0.4rem', fontSize: '0.875rem' }}>
-											Dosya Ekle (ZIP veya PDF) <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>(Opsiyonel, Max 10MB)</span>
+										<label htmlFor="contact-file" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>
+											Dosya Ekle (ZIP veya PDF) <span style={{ fontSize: '0.75rem', opacity: 0.7, fontWeight: 'normal' }}>(Opsiyonel, Max 10MB)</span>
 										</label>
 										<input 
 											id="contact-file" 
@@ -337,67 +565,69 @@ const ContactSection = () => {
 											onChange={handleFileChange}
 											style={{
 												width: '100%',
-												padding: '0.6rem',
-												borderRadius: '4px',
-												border: '1px solid var(--border-color-1)',
-												background: 'var(--bg-white)',
-												color: 'var(--text-heading-color)',
-												fontSize: '0.875rem',
+												padding: '0.75rem',
+												borderRadius: '6px',
+												border: '1px solid rgba(255, 255, 255, 0.2)',
+												background: 'rgba(255, 255, 255, 0.1)',
+												color: '#ffffff',
+												fontSize: '0.9rem',
 												transition: 'all 0.3s ease'
 											}}
+											className="contact-input"
 											onFocus={(e) => {
-												e.target.style.borderColor = 'var(--primary-color-1)';
-												e.target.style.boxShadow = '0 0 0 3px rgba(255, 191, 67, 0.1)';
-												e.target.style.transform = 'scale(1.02)';
+												e.target.style.borderColor = '#FFC107';
+												e.target.style.boxShadow = '0 0 0 3px rgba(255, 193, 7, 0.2)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.15)';
 											}}
 											onBlur={(e) => {
-												e.target.style.borderColor = 'var(--border-color-1)';
+												e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
 												e.target.style.boxShadow = 'none';
-												e.target.style.transform = 'scale(1)';
+												e.target.style.background = 'rgba(255, 255, 255, 0.1)';
 											}}
 										/>
 										{selectedFile && (
-											<div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: 'var(--body-color)' }}>
+											<div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.8)' }}>
 												{selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
 											</div>
 										)}
 									</div>
 								</div>
 								<div style={{ marginBottom: '1rem' }}>
-									<label htmlFor="contact-message" style={{ display: 'block', color: 'var(--body-color)', marginBottom: '0.4rem', fontSize: '0.875rem' }}>
-										İhtiyaç detayları <span style={{ color: 'var(--primary-color-1)' }}>*</span>
+									<label htmlFor="contact-message" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>
+										İhtiyaç detayları <span style={{ color: '#FFC107' }}>*</span>
 									</label>
 									<textarea 
 										id="contact-message" 
 										name="message" 
 										placeholder="Kaldırma kuvveti, hız, strok, ortam bilgisi..." 
-										rows="3" 
+										rows="4" 
 										required
 										style={{
 											width: '100%',
-											padding: '0.6rem',
-											borderRadius: '4px',
-											border: '1px solid var(--border-color-1)',
-											background: 'var(--bg-white)',
-											color: 'var(--text-heading-color)',
-											fontSize: '0.875rem',
+											padding: '0.75rem',
+											borderRadius: '6px',
+											border: '1px solid rgba(255, 255, 255, 0.2)',
+											background: 'rgba(255, 255, 255, 0.1)',
+											color: '#ffffff',
+											fontSize: '0.9rem',
 											resize: 'vertical',
 											transition: 'all 0.3s ease'
 										}}
+										className="contact-input"
 										onFocus={(e) => {
-											e.target.style.borderColor = 'var(--primary-color-1)';
-											e.target.style.boxShadow = '0 0 0 3px rgba(255, 191, 67, 0.1)';
-											e.target.style.transform = 'scale(1.01)';
+											e.target.style.borderColor = '#FFC107';
+											e.target.style.boxShadow = '0 0 0 3px rgba(255, 193, 7, 0.2)';
+											e.target.style.background = 'rgba(255, 255, 255, 0.15)';
 										}}
 										onBlur={(e) => {
-											e.target.style.borderColor = 'var(--border-color-1)';
+											e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
 											e.target.style.boxShadow = 'none';
-											e.target.style.transform = 'scale(1)';
+											e.target.style.background = 'rgba(255, 255, 255, 0.1)';
 										}}
 									></textarea>
 								</div>
 								<div style={{ marginBottom: '1rem' }}>
-									<label style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', color: 'var(--body-color)', fontSize: '0.875rem', position: 'relative' }}>
+									<label style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', position: 'relative' }}>
 										<input 
 											type="checkbox" 
 											checked={kvkkAccepted}
@@ -408,7 +638,14 @@ const ContactSection = () => {
 													setKvkkAccepted(true);
 												}
 											}}
-											style={{ marginRight: '0.5rem', marginTop: '0.25rem', zIndex: 1 }}
+											style={{ 
+												marginRight: '0.5rem', 
+												marginTop: '0.25rem', 
+												zIndex: 1,
+												width: '18px',
+												height: '18px',
+												accentColor: '#FFC107'
+											}}
 										/>
 										<span style={{ position: 'relative', zIndex: 1 }}>
 											KVKK metnini{' '}
@@ -422,7 +659,7 @@ const ContactSection = () => {
 												style={{
 													background: 'transparent',
 													border: 'none',
-													color: 'var(--primary-color-1)',
+													color: '#FFC107',
 													textDecoration: 'underline',
 													cursor: 'pointer',
 													padding: '2px 4px',
@@ -434,19 +671,19 @@ const ContactSection = () => {
 													display: 'inline-block'
 												}}
 												onMouseEnter={(e) => {
-													e.currentTarget.style.color = '#0056b3';
+													e.currentTarget.style.color = '#FFD54F';
 													e.currentTarget.style.textDecoration = 'underline';
-													e.currentTarget.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+													e.currentTarget.style.backgroundColor = 'rgba(255, 193, 7, 0.2)';
 												}}
 												onMouseLeave={(e) => {
-													e.currentTarget.style.color = 'var(--primary-color-1)';
+													e.currentTarget.style.color = '#FFC107';
 													e.currentTarget.style.textDecoration = 'underline';
 													e.currentTarget.style.backgroundColor = 'transparent';
 												}}
 											>
 												okudum
 											</button>
-											, verilerimin işlenmesini onaylıyorum. <span style={{ color: 'var(--primary-color-1)' }}>*</span>
+											, verilerimin işlenmesini onaylıyorum. <span style={{ color: '#FFC107' }}>*</span>
 										</span>
 									</label>
 								</div>
@@ -456,34 +693,40 @@ const ContactSection = () => {
 									className="build_button"
 									style={{
 										width: '100%',
-										background: 'var(--primary-color-1)',
-										color: 'var(--text-white)',
-										padding: '0.6rem 1.2rem',
-										borderRadius: '4px',
+										background: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)',
+										color: '#ffffff',
+										padding: '1rem 1.5rem',
+										borderRadius: '6px',
 										border: 'none',
 										cursor: loading ? 'not-allowed' : 'pointer',
-										fontSize: '0.875rem',
-										marginBottom: '0.5rem',
+										fontSize: '1rem',
+										fontWeight: '600',
+										textTransform: 'uppercase',
+										letterSpacing: '1px',
+										marginBottom: '0.75rem',
 										transition: 'all 0.3s ease',
 										position: 'relative',
-										overflow: 'hidden'
+										overflow: 'hidden',
+										boxShadow: loading ? 'none' : '0 4px 15px rgba(255, 107, 53, 0.3)'
 									}}
 									onMouseEnter={(e) => {
 										if (!loading) {
 											e.currentTarget.style.transform = 'translateY(-2px)';
-											e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 191, 67, 0.4)';
+											e.currentTarget.style.boxShadow = '0 6px 25px rgba(255, 107, 53, 0.5)';
+											e.currentTarget.style.background = 'linear-gradient(135deg, #FF7B45 0%, #FFA133 100%)';
 										}
 									}}
 									onMouseLeave={(e) => {
 										if (!loading) {
 											e.currentTarget.style.transform = 'translateY(0)';
-											e.currentTarget.style.boxShadow = 'none';
+											e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 107, 53, 0.3)';
+											e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)';
 										}
 									}}
 								>
-									{loading ? 'Gönderiliyor...' : 'Gönder'}
+									{loading ? 'Gönderiliyor...' : 'GÖNDER'}
 								</button>
-								<p style={{ fontSize: '0.75rem', color: 'var(--body-color)', textAlign: 'center', margin: 0, opacity: 0.8 }}>
+								<p style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center', margin: 0 }}>
 									Gönderimler TLS korumalıdır ve verileriniz yalnızca proje süresince saklanır.
 								</p>
 							</form>
@@ -500,6 +743,67 @@ const ContactSection = () => {
 				}}
 				kvkkText={kvkkText}
 			/>
+			<style jsx global>{`
+				/* Contact Input Placeholder Styles */
+				.contact-input::placeholder {
+					color: rgba(255, 255, 255, 0.5) !important;
+					opacity: 1;
+				}
+				.contact-input::-webkit-input-placeholder {
+					color: rgba(255, 255, 255, 0.5) !important;
+					opacity: 1;
+				}
+				.contact-input::-moz-placeholder {
+					color: rgba(255, 255, 255, 0.5) !important;
+					opacity: 1;
+				}
+				.contact-input:-ms-input-placeholder {
+					color: rgba(255, 255, 255, 0.5) !important;
+					opacity: 1;
+				}
+				.contact-input:-moz-placeholder {
+					color: rgba(255, 255, 255, 0.5) !important;
+					opacity: 1;
+				}
+				.contact-input:focus::placeholder {
+					color: rgba(255, 255, 255, 0.7) !important;
+				}
+				/* File input text color */
+				.contact-input[type="file"] {
+					color: rgba(255, 255, 255, 0.8) !important;
+				}
+				.contact-input[type="file"]::file-selector-button {
+					background: rgba(255, 193, 7, 0.2);
+					color: #FFC107;
+					border: 1px solid #FFC107;
+					padding: 0.5rem 1rem;
+					border-radius: 4px;
+					cursor: pointer;
+					margin-right: 1rem;
+					transition: all 0.3s ease;
+				}
+				.contact-input[type="file"]::file-selector-button:hover {
+					background: rgba(255, 193, 7, 0.3);
+				}
+				/* Contact Section Responsive */
+				@media (max-width: 991px) {
+					.contact__section .row > div {
+						margin-bottom: 2rem !important;
+					}
+					.contact__info-card {
+						margin-top: 0 !important;
+					}
+				}
+				@media (max-width: 767px) {
+					.contact__section {
+						padding: 60px 0 !important;
+					}
+					.contact__panel,
+					.contact__info-card {
+						padding: 1.5rem !important;
+					}
+				}
+			`}</style>
 		</div>
 	);
 };

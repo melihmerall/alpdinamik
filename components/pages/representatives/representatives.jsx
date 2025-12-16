@@ -12,9 +12,8 @@ const RepresentativesMain = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/representatives`)
         if (response.ok) {
           const data = await response.json()
-          // Filter only active representatives
-          const activeReps = Array.isArray(data) ? data.filter(rep => rep.isActive !== false) : []
-          setRepresentativesData(activeReps)
+          // API already returns only active representatives, no need to filter
+          setRepresentativesData(Array.isArray(data) ? data : [])
         }
       } catch (error) {
         console.error('Error fetching representatives:', error)

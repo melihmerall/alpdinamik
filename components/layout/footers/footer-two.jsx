@@ -2,14 +2,20 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import logo from "../../../public/assets/img/logo-2.png";
 import Social from "@/components/data/social";
 import ContactSection from "@/components/pages/common/contact-section";
 
 const FooterTwo = () => {
+    const pathname = usePathname();
     const [recentBlogs, setRecentBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [siteSettings, setSiteSettings] = useState(null);
+    const [mecmotLogo, setMecmotLogo] = useState(null);
+    
+    // Sadece anasayfada ContactSection göster
+    const isHomePage = pathname === '/';
 
     useEffect(() => {
         async function fetchData() {
@@ -30,6 +36,19 @@ const FooterTwo = () => {
                     const recentPosts = Array.isArray(posts) ? posts.slice(0, 3) : [];
                     setRecentBlogs(recentPosts);
                 }
+
+                // Fetch Mecmot logo
+                const representativesResponse = await fetch('/api/representatives?lightweight=true');
+                if (representativesResponse.ok) {
+                    const representativesData = await representativesResponse.json();
+                    const mecmot = representativesData.find(rep => 
+                        rep.slug === 'mecmot' || 
+                        rep.name?.toLowerCase().includes('mecmot')
+                    );
+                    if (mecmot && mecmot.logoUrl) {
+                        setMecmotLogo(mecmot.logoUrl);
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -48,7 +67,7 @@ const FooterTwo = () => {
 
     return (
         <>
-            <ContactSection />
+            {isHomePage && <ContactSection />}
             <div className="footer__two" style={{
                 background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
                 paddingTop: '80px',
@@ -77,8 +96,27 @@ const FooterTwo = () => {
                                         color: 'rgba(255, 255, 255, 0.8)',
                                         fontSize: '16px',
                                         lineHeight: '1.8',
-                                        marginBottom: '25px'
+                                        marginBottom: '20px'
                                     }}>Lineer hareket sistemlerinde doğru ürün ve mühendislik çözümleri sunuyoruz. Mecmot markasının Türkiye temsilciliği ile projelerinize değer katıyoruz.</p>
+                                    {mecmotLogo && (
+                                        <div style={{
+                                            marginBottom: '25px',
+                                            display: 'flex',
+                                            alignItems: 'center'
+                                        }}>
+                                            <img 
+                                                src={mecmotLogo} 
+                                                alt="Mecmot Logo" 
+                                                style={{
+                                                    maxHeight: '50px',
+                                                    maxWidth: '150px',
+                                                    objectFit: 'contain',
+                                                    filter: 'brightness(0) invert(1)',
+                                                    opacity: 0.9
+                                                }}
+                                            />
+                                        </div>
+                                    )}
                                     <div className="footer__two-widget-about-social">
                                         <Social />
                                     </div>							

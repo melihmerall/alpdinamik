@@ -24,7 +24,13 @@ export async function GET(request: NextRequest) {
 
     const products = await prisma.product.findMany({
       where: whereClause,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        imageUrl: true,
+        maxCapacity: true,
+        order: true,
         representative: {
           select: {
             id: true,
@@ -33,7 +39,10 @@ export async function GET(request: NextRequest) {
           },
         },
         series: {
-          include: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
             category: {
               select: {
                 id: true,
@@ -50,7 +59,12 @@ export async function GET(request: NextRequest) {
       take: limit,
     })
 
-    return NextResponse.json(products)
+    // Cache for 5 minutes (300 seconds) - products don't change frequently
+    return NextResponse.json(products, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch (error) {
     console.error('Error fetching all products:', error)
     return NextResponse.json(

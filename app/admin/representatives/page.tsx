@@ -15,7 +15,7 @@ export default function RepresentativesPage() {
 
   const fetchRepresentatives = async () => {
     try {
-      const res = await fetch('/api/representatives');
+      const res = await fetch('/api/representatives?all=true');
       if (res.ok) {
         const data = await res.json();
         setRepresentatives(data);

@@ -130,6 +130,7 @@ model Banner {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([isActive, order])
   @@map("banners")
 }
 
@@ -164,6 +165,7 @@ model BlogPost {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
+  @@index([isPublished, publishedAt])
   @@map("blog_posts")
 }
 
@@ -230,6 +232,7 @@ model ProductCategory {
   representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
   series             ProductSeries[]
 
+  @@index([representativeId, isActive, order])
   @@unique([representativeId, slug])
   @@map("product_categories")
 }
@@ -251,6 +254,7 @@ model ProductSeries {
   variants    ProductVariant[]
   products    Product[]  // Direct products (if no variant)
 
+  @@index([categoryId, isActive, order])
   @@unique([categoryId, slug])
   @@map("product_series")
 }
@@ -271,6 +275,7 @@ model ProductVariant {
   series      ProductSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
   products    Product[]
 
+  @@index([seriesId, isActive, order])
   @@unique([seriesId, slug])
   @@map("product_variants")
 }
@@ -292,6 +297,7 @@ model Representative {
   categories  ProductCategory[]
   products    Product[]
 
+  @@index([isActive, order])
   @@map("representatives")
 }
 
@@ -327,6 +333,9 @@ model Product {
   variant            ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   images              ProductImage[]
 
+  @@index([representativeId, isActive, order])
+  @@index([seriesId, isActive, order])
+  @@index([variantId, isActive, order])
   @@unique([representativeId, slug])
   @@map("products")
 }

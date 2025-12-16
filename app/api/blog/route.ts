@@ -18,6 +18,16 @@ export async function GET(request: NextRequest) {
     const [posts, total] = await Promise.all([
       prisma.blogPost.findMany({
         where,
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          summary: true,
+          imageUrl: true,
+          publishedAt: true,
+          createdAt: true,
+          // body ve diğer ağır alanları homepage için çekme
+        },
         orderBy: { publishedAt: 'desc' },
         take: limit || pageSize,
         skip: limit ? 0 : (page - 1) * pageSize,

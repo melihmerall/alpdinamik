@@ -16,7 +16,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
                     setSiteSettings(data);
                 }
             } catch (error) {
-                console.error('Error fetching site settings:', error);
+                // Error fetching site settings
             }
         }
         fetchSettings();

@@ -6,6 +6,8 @@ const ScrollToTop = () => {
     const { stick, onClickHandler } = useScrollToTop();
     useEffect(() => {
         const scrollPath = document.querySelector(".scroll-up path");
+        if (!scrollPath) return;
+        
         const pathLength = scrollPath.getTotalLength();
         scrollPath.style.transition = "none";
         scrollPath.style.strokeDasharray = `${pathLength} ${pathLength}`;
@@ -17,8 +19,10 @@ const ScrollToTop = () => {
             const docHeight = document.body.offsetHeight;
             const winHeight = window.innerHeight;
             const height = docHeight - winHeight;
-            const progress = pathLength - (scroll * pathLength) / height;
-            scrollPath.style.strokeDashoffset = progress;
+            if (height > 0) {
+                const progress = pathLength - (scroll * pathLength) / height;
+                scrollPath.style.strokeDashoffset = progress;
+            }
         };
         updateScroll();
         window.addEventListener("scroll", updateScroll);

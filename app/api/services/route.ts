@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { verifyAuth } from '@/lib/middleware'
+import { getServices } from '@/lib/content'
+import { revalidateTag } from 'next/cache'
 
 export async function GET(request: NextRequest) {
   try {
-    const services = await prisma.service.findMany({
-      orderBy: { order: 'asc' },
-    })
+    const services = await getServices()
     return NextResponse.json(services)
   } catch (error) {
     console.error('Error fetching services:', error)
@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
             order: body.order || 0,
           },
     })
+    revalidateTag('services')
     return NextResponse.json({ success: true, data: service }, { status: 201 })
   } catch (error) {
     console.error('Error creating service:', error)
@@ -65,4 +66,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

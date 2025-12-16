@@ -9,16 +9,109 @@
 @import url('/assets/css/meanmenu.min.css');
 @import url('/assets/sass/style.css');
 
+/* Page Loader Styles */
+.page-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+}
+
+.page-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  transition: transform 0.3s ease;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+@keyframes dots {
+  0%, 20% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Prevent horizontal overflow on all pages */
 html {
-  overflow-x: hidden;
-  max-width: 100%;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  overflow-y: auto !important; /* Allow vertical scroll only */
+  height: 100% !important;
 }
 
 body {
-  overflow-x: hidden;
-  max-width: 100%;
-  position: relative;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  position: relative !important;
+  overflow-y: auto !important; /* Allow vertical scroll only */
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide scrollbar but keep functionality - Modern browsers */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Hide scrollbar but keep functionality - Webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Container overflow fix */
@@ -35,6 +128,23 @@ body {
   margin-left: -15px;
   margin-right: -15px;
   max-width: 100%;
+}
+
+/* Swiper Global Overflow Fix */
+.swiper,
+.swiper-wrapper,
+.swiper-container {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+}
+
+.swiper-slide {
+  overflow: hidden !important;
+}
+
+.slider-area {
+  overflow: hidden !important;
+  width: 100%;
 }
 
 /* Fix for about page margins on mobile */
@@ -77,11 +187,22 @@ body {
 /* Products Slider Styles */
 .products-swiper {
   padding: 20px 0 60px 0 !important;
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+.products-swiper .swiper-wrapper,
+.products-swiper .swiper-container {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .products-swiper .swiper-slide {
   height: auto;
   display: flex;
+  overflow: hidden !important;
 }
 
 .product-card-slider {
@@ -229,6 +350,27 @@ body {
 .blog__two {
   background-color: #f8f9fa !important;
   position: relative;
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+/* Blog Swiper - Prevent Scrollbar */
+.blog__two .swiper,
+.blog__two .swiper-wrapper,
+.blog__two .swiper-container {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+.blog__two .swiper-slide {
+  overflow: hidden !important;
+}
+
+.blog__two .slider-area {
+  overflow: hidden !important;
+  width: 100%;
 }
 
 .blog__two::before {

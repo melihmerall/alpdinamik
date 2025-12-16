@@ -33,6 +33,9 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.development
+.env.*.local
 
 # vercel
 .vercel
@@ -147,6 +150,40 @@ temp/
 *.css.map
 *.sass.map
 *.scss.map
+
+# Database dumps and backups
+*.sql
+!prisma/migrations/**/*.sql
+*.dump
+dump.*
+*.backup
+*-dump-*.sql
+alpdinamik-dump-*.sql
+
+# Deployment files with sensitive data (optional - uncomment if you don't want to push these)
+# deploy.sh
+# deploy-multi-site.sh
+# import-database.sh
+# export-local-db.sh
+
+# SSH keys and certificates
+*.pem
+*.key
+*.crt
+*.cert
+id_rsa
+id_rsa.pub
+*.ppk
+
+# Server configuration files
+nginx/ssl/
+*.conf.local
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
 
 # Package manager lock files (optional - uncomment if you want to ignore)
 # package-lock.json

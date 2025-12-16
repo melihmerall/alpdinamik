@@ -12,22 +12,29 @@ const AboutFour = () => {
     useEffect(() => {
         async function fetchAboutData() {
             try {
-                // Önce home-about'u dene, yoksa hakkimizda'yı dene
-                let response = await fetch('/api/company-pages/home-about');
-                let data = null;
-                
+                // Tek API çağrısı - fallback parametresi ile
+                const response = await fetch('/api/company-pages/home-about?fallback=true');
                 if (response.ok) {
-                    data = await response.json();
-                } else {
-                    // home-about yoksa hakkimizda'yı dene
-                    response = await fetch('/api/company-pages/hakkimizda');
-                    if (response.ok) {
-                        data = await response.json();
-                    }
-                }
-                
-                if (data) {
+                    const data = await response.json();
                     setAboutData(data);
+                    
+                    // Preload about images (only local)
+                    if (data) {
+                        if (data.imageUrl && !data.imageUrl.startsWith('http')) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = data.imageUrl;
+                            document.head.appendChild(link);
+                        }
+                        if (data.image2Url && !data.image2Url.startsWith('http')) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = data.image2Url;
+                            document.head.appendChild(link);
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching about data:', error);
@@ -77,7 +84,7 @@ const AboutFour = () => {
     }
 
     return (
-        <div className="about__four section-padding" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
+        <div className="about__four section-padding" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
             <div className="container">
                 <div className="row al-center" style={{ marginBottom: '60px' }}>
                     <div className="col-lg-3 lg-mb-25">
@@ -88,7 +95,24 @@ const AboutFour = () => {
                     <div className="col-lg-9">
                         <div className="about__four-title">
                             <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">{displayData.subtitle}</span>
-                            <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">{displayData.title}</h2>
+                            <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">
+                                {(() => {
+                                    const title = displayData.title || '';
+                                    const words = title.split(' ');
+                                    if (words.length > 1) {
+                                        const firstWord = words[0];
+                                        const restWords = words.slice(1).join(' ');
+                                        return (
+                                            <>
+                                                {firstWord}
+                                                <br />
+                                                {restWords}
+                                            </>
+                                        );
+                                    }
+                                    return title;
+                                })()}
+                            </h2>
                             <p className="wow fadeInUp" data-wow-delay=".4s">{displayData.body}</p>
                             {displayData.ctaLabel && displayData.ctaUrl && (
                                 <div className="wow fadeInDown" data-wow-delay="1.2s">

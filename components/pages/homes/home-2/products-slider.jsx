@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Autoplay } from 'swiper/modules'
 import Link from "next/link"
+import Image from "next/image"
 import 'swiper/css'
 import 'swiper/css/navigation'
+import 'swiper/css/autoplay'
 
 const ProductsSlider = () => {
   const [products, setProducts] = useState([])
@@ -13,10 +15,24 @@ const ProductsSlider = () => {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/products/all?limit=15`)
+        const response = await fetch('/api/products/all?limit=15')
         if (response.ok) {
           const data = await response.json()
           setProducts(data)
+          
+          // Preload only first 3 images (above the fold)
+          if (data && data.length > 0) {
+            data.slice(0, 3).forEach((product) => {
+              if (product.imageUrl && !product.imageUrl.startsWith('http')) {
+                // Only preload local images
+                const link = document.createElement('link')
+                link.rel = 'preload'
+                link.as = 'image'
+                link.href = product.imageUrl
+                document.head.appendChild(link)
+              }
+            })
+          }
         }
       } catch (error) {
         console.error('Error fetching products:', error)
@@ -27,31 +43,44 @@ const ProductsSlider = () => {
     fetchProducts()
   }, [])
 
+  // Loop için yeterli slide kontrolü
+  const canLoop = products.length > 3;
+  
   const slideControl = {
-    spaceBetween: 25,
-    slidesPerView: 1,
-    speed: 500,
-    loop: products.length > 3,
-    autoplay: {
-      delay: 4000,
+    spaceBetween: 30,
+    slidesPerView: 3,
+    speed: 600,
+    loop: canLoop,
+    autoplay: canLoop ? {
+      delay: 5000,
       disableOnInteraction: false,
-    },
+      pauseOnMouseEnter: true,
+    } : false,
     navigation: {
       nextEl: '.products-slider-next',
       prevEl: '.products-slider-prev',
     },
+    grabCursor: true,
     breakpoints: {
       0: {
         slidesPerView: 1,
+        spaceBetween: 15,
+      },
+      576: {
+        slidesPerView: 1,
+        spaceBetween: 20,
       },
       768: {
         slidesPerView: 2,
+        spaceBetween: 25,
       },
-      1025: {
-        slidesPerView: 3,
+      992: {
+        slidesPerView: 2,
+        spaceBetween: 30,
       },
-      1600: {
+      1200: {
         slidesPerView: 3,
+        spaceBetween: 30,
       },
     },
   }
@@ -73,11 +102,53 @@ const ProductsSlider = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-xl-12 t-center">
-              <p>Yükleniyor...</p>
+            <div className="col-xl-12">
+              <div className="slider-area" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', gap: '25px', overflow: 'hidden' }}>
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} style={{
+                      flex: '0 0 calc(33.333% - 17px)',
+                      background: 'var(--bg-white)',
+                      border: '1px solid rgba(0, 0, 0, 0.08)',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      minHeight: '400px'
+                    }}>
+                      <div style={{
+                        width: '100%',
+                        height: '270px',
+                        background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                        backgroundSize: '200% 100%',
+                        animation: 'shimmer 1.5s infinite'
+                      }} />
+                      <div style={{ padding: '20px 25px' }}>
+                        <div style={{
+                          height: '12px',
+                          width: '60%',
+                          background: '#e0e0e0',
+                          borderRadius: '4px',
+                          marginBottom: '10px'
+                        }} />
+                        <div style={{
+                          height: '12px',
+                          width: '80%',
+                          background: '#e0e0e0',
+                          borderRadius: '4px'
+                        }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <style jsx>{`
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+        `}</style>
       </div>
     )
   }
@@ -104,11 +175,12 @@ const ProductsSlider = () => {
         
         <div className="row wow fadeInUp" data-wow-delay=".5s">
           <div className="col-xl-12">
-            <div className="slider-area">
+            <div className="slider-area" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
               <Swiper 
                 modules={[Navigation, Autoplay]} 
                 {...slideControl}
                 className="products-swiper"
+                style={{ width: '100%', overflow: 'hidden' }}
               >
                 {products.map((product, index) => (
                   <SwiperSlide key={product.id}>
@@ -121,7 +193,8 @@ const ProductsSlider = () => {
                       overflow: 'hidden',
                       height: '100%',
                       display: 'flex',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
+                      width: '100%'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.12)';
@@ -131,18 +204,37 @@ const ProductsSlider = () => {
                       e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}>
-                      <div className="blog__one-item-image" style={{ position: 'relative' }}>
-                        <Link href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`}>
-                          <img 
-                            src={product.imageUrl || '/assets/img/blog/blog-1.jpg'} 
-                            alt={product.name}
-                            style={{
-                              width: '100%',
-                              height: '270px',
-                              objectFit: 'cover',
-                              borderRadius: '12px 12px 0 0'
-                            }}
-                          />
+                      <div className="blog__one-item-image" style={{ position: 'relative', width: '100%', height: '270px' }}>
+                        <Link href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`} prefetch>
+                          {product.imageUrl && product.imageUrl.startsWith('http') ? (
+                            <img
+                              src={product.imageUrl}
+                              alt={product.name}
+                              style={{
+                                width: '100%',
+                                height: '270px',
+                                objectFit: 'cover',
+                                borderRadius: '12px 12px 0 0'
+                              }}
+                              loading={index < 3 ? 'eager' : 'lazy'}
+                            />
+                          ) : (
+                            <Image
+                              src={product.imageUrl || '/assets/img/blog/blog-1.jpg'}
+                              alt={product.name}
+                              width={400}
+                              height={270}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                minHeight: '270px',
+                                objectFit: 'cover',
+                                borderRadius: '12px 12px 0 0'
+                              }}
+                              loading={index < 3 ? 'eager' : 'lazy'}
+                              priority={index < 3}
+                            />
+                          )}
                         </Link>
                         {product.representative?.name && (
                           <div className="blog__one-item-image-date" style={{
@@ -222,19 +314,87 @@ const ProductsSlider = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-              <div className="slider-arrow">
-                <div className="slider-arrow-prev products-slider-prev">
+              <div className="slider-arrow products-slider-arrows">
+                <button 
+                  type="button"
+                  className="slider-arrow-prev products-slider-prev"
+                  aria-label="Önceki ürün"
+                >
                   <i className="fa-sharp fa-regular fa-arrow-left-long"></i>
-                </div>
-                <div className="slider-arrow-next products-slider-next">
+                </button>
+                <button 
+                  type="button"
+                  className="slider-arrow-next products-slider-next"
+                  aria-label="Sonraki ürün"
+                >
                   <i className="fa-sharp fa-regular fa-arrow-right-long"></i>
-                </div>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
       <style jsx global>{`
+        /* Products Slider - Prevent Scrollbar */
+        .products-swiper {
+          overflow: hidden !important;
+          width: 100% !important;
+          position: relative !important;
+          padding: 0 60px !important;
+        }
+        .products-swiper .swiper-container {
+          overflow: hidden !important;
+          width: 100% !important;
+          position: relative !important;
+        }
+        .products-swiper .swiper-wrapper {
+          overflow: visible !important;
+        }
+        .products-swiper .swiper-slide {
+          overflow: hidden !important;
+          height: auto !important;
+          display: flex !important;
+        }
+        .slider-area {
+          overflow: hidden !important;
+          width: 100% !important;
+          position: relative !important;
+        }
+        /* Slider Navigation Arrows - Theme Style */
+        .products-slider-arrows {
+          position: relative;
+        }
+        .products-slider-arrows button {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          outline: none;
+        }
+        .products-slider-arrows button i {
+          font-size: 24px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          color: var(--text-heading-color);
+          background: var(--bg-white);
+          transition: 0.4s;
+          border: 1px solid var(--border-color-1);
+          width: 60px;
+          height: 60px;
+          cursor: pointer;
+        }
+        .products-slider-arrows button i:hover {
+          color: var(--color-1);
+          background: var(--primary-color-1);
+          border-color: var(--primary-color-1);
+        }
+        @media (max-width: 991px) {
+          .products-swiper {
+            padding: 0 15px !important;
+          }
+        }
         /* Products Slider Responsive Styles */
         @media (max-width: 1199px) {
           .price__area {
@@ -243,6 +403,41 @@ const ProductsSlider = () => {
           }
           .price__area-title h2 {
             font-size: clamp(28px, 5vw, 40px) !important;
+          }
+        }
+        /* Slider Navigation Arrows - Theme Style */
+        .products-slider-arrows {
+          position: relative;
+        }
+        .products-slider-arrows button {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          outline: none;
+        }
+        .products-slider-arrows button i {
+          font-size: 24px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          color: var(--text-heading-color);
+          background: var(--bg-white);
+          transition: 0.4s;
+          border: 1px solid var(--border-color-1);
+          width: 60px;
+          height: 60px;
+          cursor: pointer;
+        }
+        .products-slider-arrows button i:hover {
+          color: var(--color-1);
+          background: var(--primary-color-1);
+          border-color: var(--primary-color-1);
+        }
+        @media (max-width: 991px) {
+          .products-slider-arrows {
+            display: none !important;
           }
         }
         @media (max-width: 767px) {
@@ -272,10 +467,8 @@ const ProductsSlider = () => {
           .blog__one-item-content h6 {
             font-size: 16px !important;
           }
-          .slider-arrow {
-            display: flex !important;
-            justify-content: center !important;
-            margin-top: 20px !important;
+          .products-slider-arrows {
+            display: none !important;
           }
         }
         @media (max-width: 575px) {

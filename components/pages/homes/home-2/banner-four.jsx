@@ -4,7 +4,6 @@ import Link from "next/link";
 
 const BannerFour = () => {
     const [banners, setBanners] = useState([]);
-    const [representatives, setRepresentatives] = useState([]);
     const [loading, setLoading] = useState(true);
     const [contentBlocks, setContentBlocks] = useState(null);
 
@@ -12,9 +11,8 @@ const BannerFour = () => {
         async function fetchData() {
             try {
                 // Paralel API çağrıları - çok daha hızlı
-                const [bannerResponse, representativesResponse, contentResponse] = await Promise.all([
+                const [bannerResponse, contentResponse] = await Promise.all([
                     fetch('/api/banners?active=true'),
-                    fetch('/api/representatives'),
                     fetch('/api/content-blocks')
                 ]);
 
@@ -22,22 +20,19 @@ const BannerFour = () => {
                 if (bannerResponse.ok) {
                     const bannerData = await bannerResponse.json();
                     setBanners(bannerData);
-                }
-
-                // Representatives
-                if (representativesResponse.ok) {
-                    const representativesData = await representativesResponse.json();
-                    // Filter active representatives and those with logos
-                    const activeReps = representativesData.filter(rep => rep.isActive && rep.logoUrl);
-                    // Remove duplicates by slug or name
-                    const uniqueReps = activeReps.reduce((acc, rep) => {
-                        const exists = acc.find(r => r.slug === rep.slug || r.name === rep.name);
-                        if (!exists) {
-                            acc.push(rep);
+                    
+                    // Preload first banner image (only local)
+                    if (bannerData && bannerData.length > 0) {
+                        const firstBanner = bannerData[0];
+                        if (firstBanner.imageUrl && !firstBanner.imageUrl.startsWith('http')) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = firstBanner.imageUrl;
+                            document.head.appendChild(link);
                         }
-                        return acc;
-                    }, []);
-                    setRepresentatives(uniqueReps);
+                        // Video preload is not recommended - browser handles it better
+                    }
                 }
 
                 // Content blocks
@@ -84,7 +79,15 @@ const BannerFour = () => {
     const finalVideoUrl = videoUrl ? getVideoUrl(videoUrl) : null;
 
     return (
-        <div className="banner__four">
+        <div className="banner__four" style={{ 
+            position: 'relative', 
+            padding: '0 !important',
+            paddingTop: '0 !important',
+            paddingBottom: '0 !important',
+            minHeight: '700px !important', 
+            height: '700px !important',
+            overflow: 'hidden'
+        }}>
             <div 
                 className="bg-video" 
                 style={{
@@ -92,7 +95,8 @@ const BannerFour = () => {
                     top: 0,
                     left: 0,
                     width: '100%',
-                    height: '100%',
+                    height: '700px',
+                    minHeight: '700px',
                     zIndex: -1,
                     backgroundImage: finalVideoUrl ? 'none' : (firstBanner?.imageUrl ? `url(${firstBanner.imageUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'),
                     backgroundSize: 'cover',
@@ -106,7 +110,8 @@ const BannerFour = () => {
                         top: 0,
                         left: 0,
                         width: '100%',
-                        height: '100%',
+                        height: '700px',
+                        minHeight: '700px',
                         overflow: 'hidden'
                     }}>
                         <video 
@@ -118,7 +123,8 @@ const BannerFour = () => {
                             src={finalVideoUrl}
                             style={{ 
                                 width: '100%', 
-                                height: '100%', 
+                                height: '700px',
+                                minHeight: '700px',
                                 objectFit: 'cover',
                                 position: 'absolute',
                                 top: 0,
@@ -162,365 +168,68 @@ const BannerFour = () => {
                     </div>
                 </div>
             </div>
-            {/* Brand slider - Representatives logos */}
-            <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-                <div className="row" style={{ margin: 0 }}>
-                    <div className="col-xl-12" style={{ padding: 0 }}>
-                        <div className="banner__four-brand" style={{ 
-                            marginTop: '150px',
-                            background: 'var(--color-2)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            overflow: 'hidden',
-                            height: '196px',
-                            flexDirection: 'row'
-                        }}>
-                            <div className="col-xl-3 col-lg-4 col-md-12 col-sm-12" style={{ 
-                                padding: '0 40px 0 60px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                height: '100%',
-                                flexShrink: 0,
-                                justifyContent: 'center'
-                            }}>
-                                <h5 style={{ 
-                                    margin: 0,
-                                    fontWeight: 600,
-                                    color: 'var(--text-heading-color)',
-                                    whiteSpace: 'nowrap',
-                                    fontSize: 'clamp(16px, 2.5vw, 20px)'
-                                }}>
-                                Güvenilir Ortaklarımız
-                                </h5>
-                            </div>
-                            <div className="col-xl-9 col-lg-8 col-md-12 col-sm-12" style={{ 
-                                padding: 0,
-                                flex: 1,
-                                overflow: 'hidden',
-                                height: '100%',
-                                display: 'flex',
-                                alignItems: 'center'
-                            }}>
-                                <div className="scroll__slider" style={{ 
-                                    padding: '0',
-                                    background: 'var(--color-2)',
-                                    borderLeft: '1px solid var(--border-color-2)',
-                                    marginRight: '-260px',
-                                    height: '100%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    width: '100%'
-                                }}>
-                                    <div className="text-slide" style={{ marginLeft: '40px', height: '100%', display: 'flex', alignItems: 'center', width: 'max-content' }}>
-                                    <div className="sliders text_scroll" style={{ flexShrink: 0, animation: 'scroll 12s linear infinite', animationDirection: 'reverse' }}>
-                                        <ul style={{ display: 'flex', padding: 0, margin: 0, listStyle: 'none' }}>
-                                            {representatives.length > 0 ? (
-                                                representatives.map((rep, index) => (
-                                                    <li key={rep.id || index} style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a 
-                                                            href={rep.websiteUrl || '#'} 
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                                        >
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img 
-                                                                    decoding="async"
-                                                                    src={rep.logoUrl || '/assets/img/brand/brand-1.png'} 
-                                                                    alt={rep.name || 'Temsilcilik'}
-                                                                    style={{ 
-                                                                        maxWidth: '120px',
-                                                                        height: 'auto',
-                                                                        maxHeight: '50px',
-                                                                        objectFit: 'contain',
-                                                                        filter: 'none'
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-1.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-2.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-3.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-4.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                </>
-                                            )}
-                                        </ul>
-                                    </div>
-                                    <div className="sliders text_scroll" style={{ flexShrink: 0, animation: 'scroll 12s linear infinite', animationDirection: 'reverse' }}>
-                                        <ul style={{ display: 'flex', padding: 0, margin: 0, listStyle: 'none' }}>
-                                            {representatives.length > 0 ? (
-                                                representatives.map((rep, index) => (
-                                                    <li key={`duplicate-${rep.id || index}`} style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a 
-                                                            href={rep.websiteUrl || '#'} 
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                                        >
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img 
-                                                                    decoding="async"
-                                                                    src={rep.logoUrl || '/assets/img/brand/brand-1.png'} 
-                                                                    alt={rep.name || 'Temsilcilik'}
-                                                                    style={{ 
-                                                                        maxWidth: '120px',
-                                                                        height: 'auto',
-                                                                        maxHeight: '50px',
-                                                                        objectFit: 'contain',
-                                                                        filter: 'none'
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-1.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-2.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-3.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                    <li style={{ display: 'inline-flex', margin: '0 50px' }}>
-                                                        <a href="#" style={{ textDecoration: 'none' }} onClick={(e) => e.preventDefault()}>
-                                                            <div style={{
-                                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                                padding: '15px 25px',
-                                                                borderRadius: '8px',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                                                                minHeight: '80px',
-                                                                minWidth: '150px'
-                                                            }}>
-                                                                <img decoding="async" src="/assets/img/brand/brand-4.png" alt="image" style={{ maxWidth: '120px', height: 'auto', maxHeight: '50px', objectFit: 'contain', filter: 'none' }} />
-                                                            </div>
-                                                            <h6 className="t-center" style={{ margin: 0, display: 'none' }}></h6>
-                                                        </a>
-                                                    </li>
-                                                </>
-                                            )}
-                                        </ul>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <style jsx global>{`
+                /* Banner Four Fixed Height - Override SCSS */
+                .banner__four {
+                    padding: 0 !important;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                    min-height: 700px !important;
+                    height: 700px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    overflow: hidden !important;
+                }
+                .banner__four .bg-video {
+                    min-height: 700px !important;
+                    height: 700px !important;
+                }
+                .banner__four .elementor-background-video-container {
+                    min-height: 700px !important;
+                    height: 700px !important;
+                }
+                .banner__four .elementor-background-video-hosted {
+                    min-height: 700px !important;
+                    height: 700px !important;
+                }
+                .banner__four-content {
+                    padding: 80px 0 !important;
+                }
                 /* Banner Four Responsive Styles */
-                @media (max-width: 1199px) {
-                    .banner__four-brand {
-                        margin-top: 100px !important;
-                        height: auto !important;
-                        min-height: 150px !important;
-                        flex-direction: column !important;
+                @media (max-width: 991px) {
+                    .banner__four {
+                        min-height: 600px !important;
+                        height: 600px !important;
                     }
-                    .banner__four-brand .col-xl-3,
-                    .banner__four-brand .col-lg-4 {
-                        padding: 20px !important;
-                        width: 100% !important;
-                        text-align: center !important;
-                        border-bottom: 1px solid var(--border-color-2) !important;
+                    .banner__four .bg-video {
+                        min-height: 600px !important;
+                        height: 600px !important;
                     }
-                    .banner__four-brand .col-xl-9,
-                    .banner__four-brand .col-lg-8 {
-                        width: 100% !important;
-                        padding: 20px 0 !important;
+                    .banner__four .elementor-background-video-container {
+                        min-height: 600px !important;
+                        height: 600px !important;
                     }
-                    .scroll__slider {
-                        margin-right: 0 !important;
-                        border-left: none !important;
-                    }
-                    .text-slide {
-                        margin-left: 20px !important;
-                    }
-                    .text-slide li {
-                        margin: 0 30px !important;
-                    }
-                    .text-slide li div {
-                        min-width: 120px !important;
-                        padding: 12px 20px !important;
-                        min-height: 70px !important;
-                    }
-                    .text-slide li img {
-                        max-width: 100px !important;
-                        max-height: 45px !important;
+                    .banner__four .elementor-background-video-hosted {
+                        min-height: 600px !important;
+                        height: 600px !important;
                     }
                 }
                 @media (max-width: 767px) {
-                    .banner__four-brand {
-                        margin-top: 80px !important;
-                        min-height: 120px !important;
+                    .banner__four {
+                        min-height: 500px !important;
+                        height: 500px !important;
                     }
-                    .banner__four-brand .col-xl-3,
-                    .banner__four-brand .col-lg-4 {
-                        padding: 15px !important;
+                    .banner__four .bg-video {
+                        min-height: 500px !important;
+                        height: 500px !important;
                     }
-                    .banner__four-brand h5 {
-                        font-size: 16px !important;
-                        white-space: normal !important;
+                    .banner__four .elementor-background-video-container {
+                        min-height: 500px !important;
+                        height: 500px !important;
                     }
-                    .text-slide {
-                        margin-left: 15px !important;
-                    }
-                    .text-slide li {
-                        margin: 0 20px !important;
-                    }
-                    .text-slide li div {
-                        min-width: 100px !important;
-                        padding: 10px 15px !important;
-                        min-height: 60px !important;
-                    }
-                    .text-slide li img {
-                        max-width: 80px !important;
-                        max-height: 40px !important;
+                    .banner__four .elementor-background-video-hosted {
+                        min-height: 500px !important;
+                        height: 500px !important;
                     }
                     .banner__four-content {
                         padding: 40px 20px !important;
@@ -539,31 +248,21 @@ const BannerFour = () => {
                     }
                 }
                 @media (max-width: 575px) {
-                    .banner__four-brand {
-                        margin-top: 60px !important;
-                        min-height: 100px !important;
+                    .banner__four {
+                        min-height: 450px !important;
+                        height: 450px !important;
                     }
-                    .banner__four-brand .col-xl-3,
-                    .banner__four-brand .col-lg-4 {
-                        padding: 12px !important;
+                    .banner__four .bg-video {
+                        min-height: 450px !important;
+                        height: 450px !important;
                     }
-                    .banner__four-brand h5 {
-                        font-size: 14px !important;
+                    .banner__four .elementor-background-video-container {
+                        min-height: 450px !important;
+                        height: 450px !important;
                     }
-                    .text-slide {
-                        margin-left: 10px !important;
-                    }
-                    .text-slide li {
-                        margin: 0 15px !important;
-                    }
-                    .text-slide li div {
-                        min-width: 90px !important;
-                        padding: 8px 12px !important;
-                        min-height: 55px !important;
-                    }
-                    .text-slide li img {
-                        max-width: 70px !important;
-                        max-height: 35px !important;
+                    .banner__four .elementor-background-video-hosted {
+                        min-height: 450px !important;
+                        height: 450px !important;
                     }
                 }
             `}</style>

@@ -1,13 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { verifyAuth } from '@/lib/middleware';
-
-const prisma = new PrismaClient();
 
 // GET - List all representatives
 export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lightweight = searchParams.get('lightweight') === 'true'; // For homepage - only logo data
+    const all = searchParams.get('all') === 'true'; // For admin panel - show all (active and inactive)
+
+    if (lightweight) {
+      // Lightweight version - only fetch what's needed for homepage logos
+      const representatives = await prisma.representative.findMany({
+        where: {
+          isActive: true,
+          logoUrl: { not: null },
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          logoUrl: true,
+          websiteUrl: true,
+          order: true,
+          isActive: true,
+        },
+        orderBy: { order: 'asc' },
+      });
+
+      // Cache for 10 minutes (600 seconds) - logos don't change frequently
+      return NextResponse.json(representatives, {
+        headers: {
+          'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200',
+        },
+      });
+    }
+
+    // Full version with all relations
+    // If 'all=true' parameter is provided (for admin panel), show all representatives
+    // Otherwise, show only active representatives (for public pages)
+    const whereClause = all ? {} : { isActive: true };
+    
     const representatives = await prisma.representative.findMany({
+      where: whereClause,
       include: {
         categories: {
           include: {

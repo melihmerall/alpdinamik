@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { verifyAuth } from '@/lib/middleware'
+import { getService } from '@/lib/content'
+import { revalidateTag } from 'next/cache'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
-    const service = await prisma.service.findUnique({
-      where: { slug: params.slug },
-    })
+    const service = await getService(params.slug)
 
     if (!service) {
       return NextResponse.json(
@@ -67,6 +67,7 @@ export async function PUT(
         order: body.order,
       },
     })
+    revalidateTag('services')
     return NextResponse.json(service)
   } catch (error) {
     console.error('Error updating service:', error)
@@ -99,6 +100,7 @@ export async function DELETE(
     await prisma.service.delete({
       where: { slug: params.slug },
     })
+    revalidateTag('services')
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting service:', error)
@@ -114,4 +116,3 @@ export async function DELETE(
     )
   }
 }
-
