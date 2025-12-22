@@ -1,26 +1,11 @@
 "use client"
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useAppContext } from "@/lib/app-context";
 import logo from "../../../public/assets/img/logo-2.png";
 import Social from "@/components/data/social";
 
 const FooterOne = () => {
-    const [siteSettings, setSiteSettings] = useState(null);
-
-    useEffect(() => {
-        async function fetchSettings() {
-            try {
-                const response = await fetch('/api/site-settings');
-                if (response.ok) {
-                    const data = await response.json();
-                    setSiteSettings(data);
-                }
-            } catch (error) {
-                console.error('Error fetching site settings:', error);
-            }
-        }
-        fetchSettings();
-    }, []);
+    const { siteSettings } = useAppContext();
 
     return (
         <>
@@ -467,7 +452,12 @@ const FooterOne = () => {
                                 <p style={{
                                     color: 'rgba(255, 255, 255, 0.7)',
                                     fontSize: '14px',
-                                    margin: 0
+                                    margin: 0,
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: '8px'
                                 }}>
                                     Copyright 2025 – ALPDİNAMİK  Tüm Hakları Saklıdır. <Link href="https://alpdinamik.com.tr/" target="_blank" style={{
                                         color: '#007bff',

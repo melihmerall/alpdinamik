@@ -231,6 +231,7 @@ model ProductCategory {
 
   representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
   series             ProductSeries[]
+  products           Product[]
 
   @@index([representativeId, isActive, order])
   @@unique([representativeId, slug])
@@ -305,6 +306,7 @@ model Representative {
 model Product {
   id                 String   @id @default(cuid())
   representativeId   String
+  categoryId         String?  // Optional: Product can be directly in a category
   seriesId           String?  // Optional: Product can be directly in a series
   variantId          String?  // Optional: Product can be in a variant (sub-series)
   slug               String   // e.g., "vkt5-vh-s", "vkt10-vh-s"
@@ -329,11 +331,13 @@ model Product {
   updatedAt          DateTime @updatedAt
 
   representative     Representative @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+  category           ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   series             ProductSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
   variant            ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   images              ProductImage[]
 
   @@index([representativeId, isActive, order])
+  @@index([categoryId, isActive, order])
   @@index([seriesId, isActive, order])
   @@index([variantId, isActive, order])
   @@unique([representativeId, slug])

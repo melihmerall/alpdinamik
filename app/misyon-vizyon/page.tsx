@@ -1,8 +1,8 @@
 import MissionVision from "@/components/pages/mission-vision";
 
 export const metadata = {
-    title: 'Misyon ve Vizyon - Alp Dinamik',
-    description: 'Alp Dinamik misyon ve vizyon'
+    title: 'Misyon ve Vizyon - Alpdinamik',
+    description: 'Alpdinamik misyon ve vizyon'
 };
 
 const MissionVisionPage = () => {

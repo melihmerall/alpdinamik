@@ -59,6 +59,7 @@ export async function POST(
         slug: seriesSlug,
         name: body.name,
         description: body.description,
+        imageUrl: body.imageUrl || null,
         order: body.order || 0,
         isActive: body.isActive !== undefined ? body.isActive : true,
       },
@@ -73,4 +74,3 @@ export async function POST(
     );
   }
 }
-

@@ -1,274 +1,1029 @@
 "use client";
 
+
+
+
+
+
+
 import { useState, useEffect } from 'react';
+
+
+
 import { useRouter, useParams } from 'next/navigation';
+
+
+
 import Link from 'next/link';
 
+
+
+
+
+
+
 export default function NewProductPage() {
+
+
+
   const router = useRouter();
+
+
+
   const params = useParams();
+
+
+
   const repSlug = params.slug as string;
+
+
+
   const [loading, setLoading] = useState(false);
+
+
+
   const [uploading, setUploading] = useState(false);
+
+
+
   const [uploadingImages, setUploadingImages] = useState(false);
+
+
+
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
+
+
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+
+
   const [categories, setCategories] = useState<any[]>([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+
+
+
   const [availableSeries, setAvailableSeries] = useState<any[]>([]);
+
+
+
   const [availableVariants, setAvailableVariants] = useState<any[]>([]);
+
+
+
   const [formData, setFormData] = useState({
+
+
+
     name: '',
+
+
+
     slug: '',
+
+
+
     description: '',
+
+
+
     body: '',
+
+
+
     imageUrl: '',
+
+
+
     infoImageUrl: '',
+
+
+
     breadcrumbImageUrl: '',
+
+
+
+    categoryId: '',
+
+
+
     seriesId: '',
+
+
+
     variantId: '',
+
+
+
     maxCapacity: '',
+
+
+
     technicalPdfUrl: '',
+
+
+
     file2dUrl: '',
+
+
+
     file3dUrl: '',
+
+
+
     externalProductUrl: '',
+
+
+
     order: 0,
+
+
+
     isActive: true,
+
+
+
   });
 
+
+
+  const selectedCategory = categories.find((c) => c.id === formData.categoryId);
+
+
+
+
+
+
+
   useEffect(() => {
+
+
+
     fetchCategories();
+
+
+
   }, [repSlug]);
 
-  useEffect(() => {
-    if (selectedCategoryId) {
-      const category = categories.find((c) => c.id === selectedCategoryId);
-      setAvailableSeries(category?.series || []);
-      setFormData((prev) => ({ ...prev, seriesId: '', variantId: '' }));
-      setAvailableVariants([]);
-    } else {
-      setAvailableSeries([]);
-      setAvailableVariants([]);
-    }
-  }, [selectedCategoryId, categories]);
+
+
+
+
+
 
   useEffect(() => {
-    if (formData.seriesId) {
-      fetchVariants(formData.seriesId);
-    } else {
+
+
+
+    if (formData.categoryId) {
+
+
+
+      const category = categories.find((c) => c.id === formData.categoryId);
+
+
+
+      setAvailableSeries(category?.series || []);
+
+
+
+      setFormData((prev) => ({ ...prev, seriesId: '', variantId: '' }));
+
+
+
       setAvailableVariants([]);
-      setFormData((prev) => ({ ...prev, variantId: '' }));
+
+
+
+    } else {
+
+
+
+      setAvailableSeries([]);
+
+
+
+      setAvailableVariants([]);
+
+
+
     }
+
+
+
+  }, [formData.categoryId, categories]);
+
+
+
+
+
+
+
+  useEffect(() => {
+
+
+
+    if (formData.seriesId) {
+
+
+
+      fetchVariants(formData.seriesId);
+
+
+
+    } else {
+
+
+
+      setAvailableVariants([]);
+
+
+
+      setFormData((prev) => ({ ...prev, variantId: '' }));
+
+
+
+    }
+
+
+
   }, [formData.seriesId]);
 
+
+
+
+
+
+
   const fetchVariants = async (seriesId: string) => {
+
+
+
     try {
+
+
+
       const res = await fetch(`/api/series/${seriesId}/variants`);
+
+
+
       if (res.ok) {
+
+
+
         const data = await res.json();
+
+
+
         setAvailableVariants(data);
+
+
+
       }
+
+
+
     } catch (error) {
+
+
+
       console.error('Error fetching variants:', error);
+
+
+
       setAvailableVariants([]);
+
+
+
     }
+
+
+
   };
+
+
+
+
+
+
 
   const fetchCategories = async () => {
+
+
+
     try {
+
+
+
       const res = await fetch(`/api/representatives/${repSlug}/categories`);
+
+
+
       if (res.ok) {
+
+
+
         const data = await res.json();
+
+
+
         setCategories(data);
+
+
+
       }
+
+
+
     } catch (error) {
+
+
+
       console.error('Error fetching categories:', error);
+
+
+
     }
+
+
+
   };
+
+
+
+
+
+
 
   const generateSlug = (name: string) => {
+
+
+
     return name
+
+
+
       .toLowerCase()
+
+
+
       .replace(/ğ/g, 'g')
+
+
+
       .replace(/ü/g, 'u')
+
+
+
       .replace(/ş/g, 's')
+
+
+
       .replace(/ı/g, 'i')
+
+
+
       .replace(/ö/g, 'o')
+
+
+
       .replace(/ç/g, 'c')
+
+
+
       .replace(/[^a-z0-9]+/g, '-')
+
+
+
       .replace(/^-+|-+$/g, '');
+
+
+
   };
+
+
+
+
+
+
 
   const handleNameChange = (value: string) => {
+
+
+
     setFormData({
+
+
+
       ...formData,
+
+
+
       name: value,
+
+
+
       slug: generateSlug(value),
+
+
+
     });
+
+
+
   };
 
+
+
+
+
+
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+
+
+
     const file = e.target.files?.[0];
+
+
+
     if (!file) return;
+
+
+
+
+
+
 
     setUploading(true);
 
+
+
+
+
+
+
     try {
+
+
+
       const uploadFormData = new FormData();
+
+
+
       uploadFormData.append('file', file);
+
+
+
       uploadFormData.append('folder', 'products');
 
+
+
+
+
+
+
       const response = await fetch('/api/upload', {
+
+
+
         method: 'POST',
+
+
+
         body: uploadFormData,
+
+
+
       });
+
+
+
+
+
+
 
       const data = await response.json();
 
+
+
+
+
+
+
       if (response.ok) {
+
+
+
         setFormData((prev) => ({
+
+
+
           ...prev,
+
+
+
           [fieldName]: data.url,
+
+
+
         }));
+
+
+
       } else {
-        alert(data.error || 'Dosya yüklenirken hata oluştu');
+
+
+
+        alert(data.error || 'Dosya y�klenirken hata olu?tu');
+
+
+
       }
+
+
+
     } catch (error) {
+
+
+
       console.error('Upload error:', error);
-      alert('Dosya yüklenirken hata oluştu');
+
+
+
+      alert('Dosya y+-klenirken hata olu+�tu');
+
+
+
     } finally {
+
+
+
       setUploading(false);
+
+
+
     }
+
+
+
   };
 
+
+
+
+
+
+
   const handleSubmit = async (e: React.FormEvent) => {
+
+
+
     e.preventDefault();
+
+
+
     setLoading(true);
 
+
+
+
+
+
+
     try {
+
+
+
       const res = await fetch(`/api/representatives/${repSlug}/products`, {
+
+
+
         method: 'POST',
+
+
+
         headers: { 'Content-Type': 'application/json' },
+
+
+
         body: JSON.stringify({
+
+
+
           ...formData,
+
+
+
+          categoryId: formData.categoryId,
+
+
+
           seriesId: formData.seriesId || null,
+
+
+
           variantId: formData.variantId || null,
+
+
+
         }),
+
+
+
       });
 
+
+
+
+
+
+
       if (res.ok) {
+
+
+
         const product = await res.json();
-        
+
+
+
+
+
+
+
         // Upload selected images
+
+
+
         if (selectedImages.length > 0) {
+
+
+
           setUploadingImages(true);
+
+
+
           try {
+
+
+
             for (let i = 0; i < selectedImages.length; i++) {
+
+
+
               const file = selectedImages[i];
+
+
+
               const uploadFormData = new FormData();
+
+
+
               uploadFormData.append('file', file);
+
+
+
               uploadFormData.append('folder', 'products');
 
+
+
+
+
+
+
               const uploadRes = await fetch('/api/upload', {
+
+
+
                 method: 'POST',
+
+
+
                 body: uploadFormData,
+
+
+
               });
+
+
+
+
+
+
 
               const uploadData = await uploadRes.json();
 
+
+
+
+
+
+
               if (uploadRes.ok) {
+
+
+
                 await fetch(`/api/representatives/${repSlug}/products/${product.slug}/images`, {
+
+
+
                   method: 'POST',
+
+
+
                   headers: { 'Content-Type': 'application/json' },
+
+
+
                   body: JSON.stringify({
+
+
+
                     imageUrl: uploadData.url,
+
+
+
                     alt: formData.name,
+
+
+
                     order: i,
+
+
+
                   }),
+
+
+
                 });
+
+
+
               }
+
+
+
             }
+
+
+
           } catch (error) {
+
+
+
             console.error('Error uploading images:', error);
+
+
+
           } finally {
+
+
+
             setUploadingImages(false);
+
+
+
           }
+
+
+
         }
 
+
+
+
+
+
+
         router.push(`/admin/representatives/${repSlug}/products`);
+
+
+
       } else {
-        alert('Ürün eklenemedi');
+
+
+
+        alert('+�r+-n eklenemedi');
+
+
+
       }
+
+
+
     } catch (error) {
+
+
+
       console.error('Error creating product:', error);
-      alert('Bir hata oluştu');
+
+
+
+      alert('Bir hata olu+�tu');
+
+
+
     } finally {
+
+
+
       setLoading(false);
+
+
+
     }
+
+
+
   };
 
+
+
+
+
+
+
   return (
+
+
+
     <div className="admin-content">
+
+
+
       <div className="admin-header">
+
+
+
         <div>
-          <h1 className="admin-title">Yeni Ürün Ekle</h1>
-          <p className="admin-subtitle">{repSlug} - Yeni Ürün</p>
+
+
+
+          <h1 className="admin-title">Yeni +�r+-n Ekle</h1>
+
+
+
+          <p className="admin-subtitle">{repSlug} - Yeni +�r+-n</p>
+
+
+
         </div>
+
+
+
         <Link href={`/admin/representatives/${repSlug}/products`} className="admin-btn-secondary">
-          ← Geri Dön
+
+
+
+          ��� Geri D+�n
+
+
+
         </Link>
+
+
+
       </div>
 
+
+
+
+
+
+
       <div className="admin-card">
+
+
+
         <form onSubmit={handleSubmit}>
+
+
+
           <div className="admin-form-grid">
-            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="admin-label">
-                Ürün Adı <span style={{ color: '#dc3545' }}>*</span>
-              </label>
-              <input
-                type="text"
-                className="admin-input"
-                placeholder="Örn: VKT5-VH-S Vidalı Kriko"
-                value={formData.name}
-                onChange={(e) => handleNameChange(e.target.value)}
-                required
-              />
-            </div>
+
+
 
             <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="admin-label">Slug (URL)</label>
+
+
+
+              <label className="admin-label">
+
+
+
+                +�r+-n Ad�- <span style={{ color: '#dc3545' }}>*</span>
+
+
+
+              </label>
+
+
+
               <input
+
+
+
                 type="text"
+
+
+
                 className="admin-input"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+
+
+
+                placeholder="+�rn: VKT5-VH-S Vidal�- Kriko"
+
+
+
+                value={formData.name}
+
+
+
+                onChange={(e) => handleNameChange(e.target.value)}
+
+
+
+                required
+
+
+
               />
-              <small className="admin-help-text">Otomatik oluşturulur</small>
+
+
+
             </div>
+
+
+
+
+
+
+
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+
+
+
+              <label className="admin-label">Slug (URL)</label>
+
+
+
+              <input
+
+
+
+                type="text"
+
+
+
+                className="admin-input"
+
+
+
+                value={formData.slug}
+
+
+
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+
+
+
+              />
+
+
+
+              <small className="admin-help-text">Otomatik olu+�turulur</small>
+
+
+
+            </div>
+
+
+
+
+
+
 
             {categories.length === 0 ? (
-              <div className="admin-card" style={{ 
-                gridColumn: '1 / -1', 
-                background: '#fff3cd', 
+              <div className="admin-card" style={{
+                gridColumn: '1 / -1',
+                background: '#fff3cd',
                 border: '1px solid #ffc107',
                 padding: '1.5rem',
                 borderRadius: '8px',
                 marginBottom: '1rem'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>⚠️</span>
-                  <strong>Kategori/Seri Bulunamadı</strong>
+                  <span style={{ fontSize: '1.5rem' }}>!</span>
+                  <strong>Kategori/Seri Bulunamad�</strong>
                 </div>
                 <p style={{ margin: '0.5rem 0', color: '#856404' }}>
-                  Ürün eklemek için önce kategori ve seri oluşturmanız gerekiyor.
+                  �r�n eklemek i�in �nce kategori ve seri olu�turman�z gerekiyor.
                 </p>
                 <Link
                   href={`/admin/representatives/${repSlug}/categories`}
                   className="admin-btn-primary"
                   style={{ marginTop: '1rem', display: 'inline-block' }}
                 >
-                  📁 Kategorileri Yönet
+                  + Kategorileri Y�net
                 </Link>
               </div>
             ) : (
@@ -277,10 +1032,18 @@ export default function NewProductPage() {
                   <label className="admin-label">Kategori</label>
                   <select
                     className="admin-select"
-                    value={selectedCategoryId}
-                    onChange={(e) => setSelectedCategoryId(e.target.value)}
+                    value={formData.categoryId}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFormData((prev) => ({
+                        ...prev,
+                        categoryId: value,
+                        seriesId: '',
+                        variantId: '',
+                      }));
+                    }}
                   >
-                    <option value="">Kategori Seçiniz (Opsiyonel)</option>
+                    <option value="">Kategori Se�iniz</option>
                     {categories.map((cat) => (
                       <option key={cat.id} value={cat.id}>
                         {cat.name}
@@ -288,7 +1051,7 @@ export default function NewProductPage() {
                     ))}
                   </select>
                   <small className="admin-help-text">
-                    Kategori seçtiğinizde seriler yüklenecektir
+                    Kategori se�ti�inizde seriler y�klenecektir
                   </small>
                 </div>
 
@@ -298,14 +1061,14 @@ export default function NewProductPage() {
                     className="admin-select"
                     value={formData.seriesId}
                     onChange={(e) => setFormData({ ...formData, seriesId: e.target.value, variantId: '' })}
-                    disabled={!selectedCategoryId || availableSeries.length === 0}
+                    disabled={!formData.categoryId || availableSeries.length === 0}
                   >
                     <option value="">
-                      {!selectedCategoryId
-                        ? 'Önce kategori seçiniz'
+                      {!formData.categoryId
+                        ? '�nce kategori se�iniz'
                         : availableSeries.length === 0
-                        ? 'Bu kategoride seri yok'
-                        : 'Seri Seçiniz (Opsiyonel)'}
+                          ? 'Bu kategoride seri yok'
+                          : 'Seri Se�iniz (Opsiyonel)'}
                     </option>
                     {availableSeries.map((s) => (
                       <option key={s.id} value={s.id}>
@@ -313,7 +1076,7 @@ export default function NewProductPage() {
                       </option>
                     ))}
                   </select>
-                  {selectedCategoryId && availableSeries.length === 0 && (
+                  {formData.categoryId && availableSeries.length === 0 && (
                     <small className="admin-help-text" style={{ color: '#dc3545' }}>
                       Bu kategoride seri yok. <Link href={`/admin/representatives/${repSlug}/categories`} style={{ textDecoration: 'underline' }}>Seri ekleyin</Link>
                     </small>
@@ -330,10 +1093,10 @@ export default function NewProductPage() {
                   >
                     <option value="">
                       {!formData.seriesId
-                        ? 'Önce seri seçiniz'
+                        ? '�nce seri se�iniz'
                         : availableVariants.length === 0
-                        ? 'Bu seride varyant yok'
-                        : 'Varyant Seçiniz (Opsiyonel)'}
+                          ? 'Bu seride varyant yok'
+                          : 'Varyant Se�iniz (Opsiyonel)'}
                     </option>
                     {availableVariants.map((v) => (
                       <option key={v.id} value={v.id}>
@@ -343,312 +1106,1220 @@ export default function NewProductPage() {
                   </select>
                   {formData.seriesId && availableVariants.length === 0 && (
                     <small className="admin-help-text" style={{ color: '#6c757d' }}>
-                      Bu seride varyant yok. Varyant eklemek için <Link href={`/admin/representatives/${repSlug}/categories/${selectedCategoryId}/series/${formData.seriesId}/variants`} style={{ textDecoration: 'underline' }}>tıklayın</Link>
+                      Bu seride varyant yok. Varyant eklemek i�in{' '}
+                      {selectedCategory?.slug ? (
+                        <Link
+                          href={`/admin/representatives/${repSlug}/categories/${selectedCategory.slug}/series/${formData.seriesId}/variants`}
+                          style={{ textDecoration: 'underline' }}
+                        >
+                          t�klay�n
+                        </Link>
+                      ) : (
+                        'ilgili kategori sayfas�na gidin'
+                      )}
                     </small>
                   )}
                   <small className="admin-help-text">
-                    Ürünü doğrudan seriye veya bir varyanta ekleyebilirsiniz
+                    �r�n� do�rudan seriye veya bir varyanta ekleyebilirsiniz
                   </small>
                 </div>
               </>
             )}
 
             <div className="admin-form-group">
+
+
+
               <label className="admin-label">Maksimum Kapasite</label>
+
+
+
               <input
+
+
+
                 type="text"
+
+
+
                 className="admin-input"
-                placeholder="Örn: 5 kN"
+
+
+
+                placeholder="+�rn: 5 kN"
+
+
+
                 value={formData.maxCapacity}
+
+
+
                 onChange={(e) => setFormData({ ...formData, maxCapacity: e.target.value })}
+
+
+
               />
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
+
+
+
               <label className="admin-label">Teknik PDF URL</label>
+
+
+
               <input
+
+
+
                 type="url"
+
+
+
                 className="admin-input"
+
+
+
                 placeholder="https://..."
+
+
+
                 value={formData.technicalPdfUrl}
+
+
+
                 onChange={(e) => setFormData({ ...formData, technicalPdfUrl: e.target.value })}
+
+
+
               />
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">2D Dosya/Fotoğraf</label>
+
+
+
+              <label className="admin-label">2D Dosya/Foto��raf</label>
+
+
+
               <input
+
+
+
                 type="file"
+
+
+
                 className="admin-input"
+
+
+
                 onChange={(e) => handleFileUpload(e, 'file2dUrl')}
+
+
+
                 accept=".pdf,.zip,.rar,.7z,.dwg,.dxf,.x_t,image/*"
+
+
+
                 disabled={uploading}
+
+
+
               />
+
+
+
               <small className="admin-help-text">
-                PDF, ZIP, RAR, DWG, DXF, X_T veya görsel dosyası yükleyebilirsiniz
+
+
+
+                PDF, ZIP, RAR, DWG, DXF, X_T veya g+�rsel dosyas�- y+-kleyebilirsiniz
+
+
+
               </small>
+
+
+
               {formData.file2dUrl && (
+
+
+
                 <div style={{ marginTop: '0.5rem' }}>
+
+
+
                   <a href={formData.file2dUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+
+
+
                     Mevcut dosya: {formData.file2dUrl.split('/').pop()}
+
+
+
                   </a>
+
+
+
                   <input
+
+
+
                     type="text"
+
+
+
                     className="admin-input"
+
+
+
                     style={{ marginTop: '0.5rem' }}
+
+
+
                     placeholder="Veya URL girin"
+
+
+
                     value={formData.file2dUrl}
+
+
+
                     onChange={(e) => setFormData({ ...formData, file2dUrl: e.target.value })}
+
+
+
                   />
+
+
+
                 </div>
+
+
+
               )}
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">3D Dosya/Fotoğraf</label>
+
+
+
+              <label className="admin-label">3D Dosya/Foto��raf</label>
+
+
+
               <input
+
+
+
                 type="file"
+
+
+
                 className="admin-input"
+
+
+
                 onChange={(e) => handleFileUpload(e, 'file3dUrl')}
+
+
+
                 accept=".pdf,.zip,.rar,.7z,.dwg,.dxf,.x_t,image/*"
+
+
+
                 disabled={uploading}
+
+
+
               />
+
+
+
               <small className="admin-help-text">
-                PDF, ZIP, RAR, DWG, DXF, X_T veya görsel dosyası yükleyebilirsiniz
+
+
+
+                PDF, ZIP, RAR, DWG, DXF, X_T veya g+�rsel dosyas�- y+-kleyebilirsiniz
+
+
+
               </small>
+
+
+
               {formData.file3dUrl && (
+
+
+
                 <div style={{ marginTop: '0.5rem' }}>
+
+
+
                   <a href={formData.file3dUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+
+
+
                     Mevcut dosya: {formData.file3dUrl.split('/').pop()}
+
+
+
                   </a>
+
+
+
                   <input
+
+
+
                     type="text"
+
+
+
                     className="admin-input"
+
+
+
                     style={{ marginTop: '0.5rem' }}
+
+
+
                     placeholder="Veya URL girin"
+
+
+
                     value={formData.file3dUrl}
+
+
+
                     onChange={(e) => setFormData({ ...formData, file3dUrl: e.target.value })}
+
+
+
                   />
+
+
+
                 </div>
+
+
+
               )}
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">Üretici Sitesi URL</label>
+
+
+
+              <label className="admin-label">+�retici Sitesi URL</label>
+
+
+
               <input
+
+
+
                 type="url"
+
+
+
                 className="admin-input"
+
+
+
                 value={formData.externalProductUrl}
+
+
+
                 onChange={(e) => setFormData({ ...formData, externalProductUrl: e.target.value })}
+
+
+
                 placeholder="https://www.manufacturer.com/product/..."
+
+
+
               />
+
+
+
               <small className="admin-help-text">
-                Üretici firmanın resmi sitesindeki ürün sayfası URL'i. Doluysa "Üretici Sitesinde Gör" butonu görünecektir.
+
+
+
+                +�retici firman�-n resmi sitesindeki +-r+-n sayfas�- URL'i. Doluysa "+�retici Sitesinde G+�r" butonu g+�r+-necektir.
+
+
+
               </small>
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="admin-label">Kısa Açıklama</label>
+
+
+
+              <label className="admin-label">K�-sa A+�-klama</label>
+
+
+
               <textarea
+
+
+
                 className="admin-textarea"
+
+
+
                 rows={3}
+
+
+
                 value={formData.description}
+
+
+
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+
+
+
               />
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="admin-label">Detaylı Açıklama (Body)</label>
+
+
+
+              <label className="admin-label">Detayl�- A+�-klama (Body)</label>
+
+
+
               <textarea
+
+
+
                 className="admin-textarea"
+
+
+
                 rows={6}
+
+
+
                 value={formData.body}
+
+
+
                 onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+
+
+
               />
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">Ana Ürün Görseli</label>
+
+
+
+              <label className="admin-label">Ana +�r+-n G+�rseli</label>
+
+
+
               <input
+
+
+
                 type="file"
+
+
+
                 className="admin-input"
+
+
+
                 onChange={(e) => handleFileUpload(e, 'imageUrl')}
+
+
+
                 accept="image/*"
+
+
+
                 disabled={uploading}
+
+
+
               />
+
+
+
               {formData.imageUrl && (
+
+
+
                 <div style={{ marginTop: '0.5rem' }}>
+
+
+
                   <img src={formData.imageUrl} alt="Preview" style={{ maxWidth: '200px', borderRadius: '8px' }} />
+
+
+
                 </div>
+
+
+
               )}
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">Ürün Bilgisi Fotoğrafı</label>
+
+
+
+              <label className="admin-label">+�r+-n Bilgisi Foto��raf�-</label>
+
+
+
               <input
+
+
+
                 type="file"
+
+
+
                 className="admin-input"
+
+
+
                 onChange={(e) => handleFileUpload(e, 'infoImageUrl')}
+
+
+
                 accept="image/*"
+
+
+
                 disabled={uploading}
+
+
+
               />
+
+
+
               <small className="admin-help-text">
-                "ÜRÜN BİLGİSİ" başlığı altında gösterilecek fotoğraf
+
+
+
+                "+�R+�N B�-LG�-S�-" ba+�l�-���- alt�-nda g+�sterilecek foto��raf
+
+
+
               </small>
+
+
+
               {formData.infoImageUrl && (
+
+
+
                 <div style={{ marginTop: '0.5rem' }}>
+
+
+
                   <img src={formData.infoImageUrl} alt="Preview" style={{ maxWidth: '200px', borderRadius: '8px' }} />
+
+
+
                 </div>
+
+
+
               )}
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">Breadcrumb Arka Plan Görseli</label>
+
+
+
+              <label className="admin-label">Breadcrumb Arka Plan G+�rseli</label>
+
+
+
               <input
+
+
+
                 type="file"
+
+
+
                 className="admin-input"
+
+
+
                 onChange={(e) => handleFileUpload(e, 'breadcrumbImageUrl')}
+
+
+
                 accept="image/*"
+
+
+
                 disabled={uploading}
+
+
+
               />
+
+
+
               <small className="admin-help-text">
-                Breadcrumb bölümünde arka plan olarak gösterilecek görsel
+
+
+
+                Breadcrumb b+�l+-m+-nde arka plan olarak g+�sterilecek g+�rsel
+
+
+
               </small>
+
+
+
               {formData.breadcrumbImageUrl && (
+
+
+
                 <div style={{ marginTop: '0.5rem' }}>
+
+
+
                   <img src={formData.breadcrumbImageUrl} alt="Preview" style={{ maxWidth: '200px', borderRadius: '8px' }} />
+
+
+
                 </div>
+
+
+
               )}
+
+
+
             </div>
+
+
+
+
+
+
 
             <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="admin-label">Ürün Fotoğrafları (Galeri)</label>
-              <div style={{ 
-                border: '2px dashed #d1d5db', 
-                borderRadius: '8px', 
+
+
+
+              <label className="admin-label">+�r+-n Foto��raflar�- (Galeri)</label>
+
+
+
+              <div style={{
+
+
+
+                border: '2px dashed #d1d5db',
+
+
+
+                borderRadius: '8px',
+
+
+
                 padding: '1.5rem',
+
+
+
                 background: '#f9fafb'
+
+
+
               }}>
+
+
+
                 <input
+
+
+
                   type="file"
+
+
+
                   accept="image/*"
+
+
+
                   multiple
+
+
+
                   onChange={(e) => {
+
+
+
                     const files = Array.from(e.target.files || [])
+
+
+
                     setSelectedImages(files)
+
+
+
                     const previews = files.map(file => URL.createObjectURL(file))
+
+
+
                     setImagePreviews(previews)
+
+
+
                   }}
+
+
+
                   disabled={uploadingImages}
+
+
+
                   style={{ display: 'none' }}
+
+
+
                   id="product-images-upload-new"
+
+
+
                 />
+
+
+
                 <label
+
+
+
                   htmlFor="product-images-upload-new"
+
+
+
                   style={{
+
+
+
                     display: 'inline-block',
+
+
+
                     padding: '0.75rem 1.5rem',
+
+
+
                     background: uploadingImages ? '#ccc' : '#007bff',
+
+
+
                     color: '#fff',
+
+
+
                     borderRadius: '8px',
+
+
+
                     cursor: uploadingImages ? 'not-allowed' : 'pointer',
+
+
+
                     fontWeight: '500',
+
+
+
                     marginBottom: '1rem'
+
+
+
                   }}
+
+
+
                 >
-                  {uploadingImages ? 'Yükleniyor...' : '+ Fotoğraf Seç'}
+
+
+
+                  {uploadingImages ? 'Y+-kleniyor...' : '+ Foto��raf Se+�'}
+
+
+
                 </label>
+
+
+
                 <small style={{ display: 'block', marginTop: '0.5rem', color: '#6c757d', fontSize: '0.875rem' }}>
-                  Birden fazla fotoğraf seçebilirsiniz. Ürün kaydedildikten sonra otomatik yüklenecektir.
+
+
+
+                  Birden fazla foto��raf se+�ebilirsiniz. +�r+-n kaydedildikten sonra otomatik y+-klenecektir.
+
+
+
                 </small>
 
+
+
+
+
+
+
                 {imagePreviews.length > 0 && (
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', 
+
+
+
+                  <div style={{
+
+
+
+                    display: 'grid',
+
+
+
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+
+
+
                     gap: '1rem',
+
+
+
                     marginTop: '1.5rem'
+
+
+
                   }}>
+
+
+
                     {imagePreviews.map((preview, index) => (
+
+
+
                       <div key={index} style={{ position: 'relative' }}>
+
+
+
                         <img
+
+
+
                           src={preview}
+
+
+
                           alt={`Preview ${index + 1}`}
+
+
+
                           style={{
+
+
+
                             width: '100%',
+
+
+
                             height: '120px',
+
+
+
                             objectFit: 'cover',
+
+
+
                             borderRadius: '8px',
+
+
+
                             border: '1px solid #e5e7eb'
+
+
+
                           }}
+
+
+
                         />
+
+
+
                         <button
+
+
+
                           type="button"
+
+
+
                           onClick={() => {
+
+
+
                             const newImages = selectedImages.filter((_, i) => i !== index)
+
+
+
                             const newPreviews = imagePreviews.filter((_, i) => i !== index)
+
+
+
                             setSelectedImages(newImages)
+
+
+
                             setImagePreviews(newPreviews)
+
+
+
                           }}
+
+
+
                           style={{
+
+
+
                             position: 'absolute',
+
+
+
                             top: '0.25rem',
+
+
+
                             right: '0.25rem',
+
+
+
                             background: '#dc3545',
+
+
+
                             color: '#fff',
+
+
+
                             border: 'none',
+
+
+
                             borderRadius: '50%',
+
+
+
                             width: '24px',
+
+
+
                             height: '24px',
+
+
+
                             cursor: 'pointer',
+
+
+
                             fontSize: '1rem',
+
+
+
                             display: 'flex',
+
+
+
                             alignItems: 'center',
+
+
+
                             justifyContent: 'center'
+
+
+
                           }}
+
+
+
                         >
-                          ×
+
+
+
+                          ×�
+
+
+
                         </button>
+
+
+
                       </div>
+
+
+
                     ))}
+
+
+
                   </div>
+
+
+
                 )}
+
+
+
               </div>
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
-              <label className="admin-label">Sıra</label>
+
+
+
+              <label className="admin-label">S�-ra</label>
+
+
+
               <input
+
+
+
                 type="number"
+
+
+
                 className="admin-input"
+
+
+
                 value={formData.order}
+
+
+
                 onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+
+
+
               />
+
+
+
             </div>
 
+
+
+
+
+
+
             <div className="admin-form-group">
+
+
+
               <label className="admin-label">Durum</label>
+
+
+
               <select
+
+
+
                 className="admin-select"
+
+
+
                 value={formData.isActive ? 'true' : 'false'}
+
+
+
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'true' })}
+
+
+
               >
+
+
+
                 <option value="true">Aktif</option>
+
+
+
                 <option value="false">Pasif</option>
+
+
+
               </select>
+
+
+
             </div>
+
+
+
           </div>
+
+
+
+
+
+
 
           <div className="admin-form-actions">
+
+
+
             <Link href={`/admin/representatives/${repSlug}/products`} className="admin-btn-secondary">
-              İptal
+
+
+
+              �-ptal
+
+
+
             </Link>
+
+
+
             <button type="submit" className="admin-btn-primary" disabled={loading || uploading}>
-              {loading ? 'Kaydediliyor...' : 'Ürün Ekle'}
+
+
+
+              {loading ? 'Kaydediliyor...' : '+�r+-n Ekle'}
+
+
+
             </button>
+
+
+
           </div>
+
+
+
         </form>
+
+
+
       </div>
+
+
+
     </div>
+
+
+
   );
+
+
+
 }
+
+
+
+

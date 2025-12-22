@@ -4,12 +4,12 @@ const MissionVisionMain = ({ missionVisionData }) => {
     // Use admin data if available, otherwise use default content
     const missionSubtitle = missionVisionData?.missionSubtitle || "Misyonumuz";
     const missionTitle = missionVisionData?.missionTitle || "Doğru Ürün + Doğru Mühendislik + Sürdürülebilir Hizmet";
-    const missionBody = missionVisionData?.missionBody || "Alp Dinamik olarak, lineer hareket sistemleri alanında müşterilerimize en doğru ürünü, en uygun mühendislik çözümü ile sunmayı ve bu hizmeti sürdürülebilir bir şekilde devam ettirmeyi misyon edinmiş bulunmaktayız. Projeci yaklaşımımız ve mühendislik odaklı hizmet anlayışımızla, endüstriyel uygulamalarda güvenilir çözüm ortağı olmayı hedefliyoruz.";
+    const missionBody = missionVisionData?.missionBody || "Alpdinamik olarak, lineer hareket sistemleri alanında müşterilerimize en doğru ürünü, en uygun mühendislik çözümü ile sunmayı ve bu hizmeti sürdürülebilir bir şekilde devam ettirmeyi misyon edinmiş bulunmaktayız. Projeci yaklaşımımız ve mühendislik odaklı hizmet anlayışımızla, endüstriyel uygulamalarda güvenilir çözüm ortağı olmayı hedefliyoruz.";
     const missionImageUrl = missionVisionData?.missionImageUrl || '/assets/img/about/about-4.jpg';
 
     const visionSubtitle = missionVisionData?.visionSubtitle || "Vizyonumuz";
     const visionTitle = missionVisionData?.visionTitle || "Lineer Hareket Sistemlerinde Lider Çözüm Ortağı";
-    const visionBody = missionVisionData?.visionBody || "Alp Dinamik, lineer hareket sistemleri alanında Türkiye'nin önde gelen mühendislik ve proje çözüm ortağı olmayı hedeflemektedir. Teknolojik gelişmeleri yakından takip ederek, müşterilerimize en güncel ve verimli çözümleri sunmak, sektörde referans firma konumuna gelmek vizyonumuzdur.";
+    const visionBody = missionVisionData?.visionBody || "Alpdinamik, lineer hareket sistemleri alanında Türkiye'nin önde gelen mühendislik ve proje çözüm ortağı olmayı hedeflemektedir. Teknolojik gelişmeleri yakından takip ederek, müşterilerimize en güncel ve verimli çözümleri sunmak, sektörde referans firma konumuna gelmek vizyonumuzdur.";
     const visionImageUrl = missionVisionData?.visionImageUrl || '/assets/img/about/about-4.jpg';
 
     return (

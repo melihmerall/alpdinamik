@@ -22,7 +22,7 @@ const ChooseUs = () => {
                     <div className="col-xl-6">
                         <div className="choose__us-right ml-30 xl-ml-0">
                             <div className="choose__us-right-title mb-40">
-                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Neden Alp Dinamik</span>
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Neden Alpdinamik</span>
                                 <h2 className="mb-30 wow fadeInRight" data-wow-delay=".6s">Lineer Hareket Sistemlerinde Doğru Çözüm Ortağı</h2>
                                 <p className="wow fadeInUp" data-wow-delay=".4s">Sadece ürün tedarikçisi değil, uçtan uca mühendislik çözümü sunan bir firma olarak, projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.</p>
                             </div>

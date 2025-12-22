@@ -1,9 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAppContext } from "@/lib/app-context";
 import KvkkModal from './kvkk-modal';
 
 const ContactSection = () => {
+	const { siteSettings } = useAppContext();
 	const [loading, setLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
@@ -11,24 +13,13 @@ const ContactSection = () => {
 	const [kvkkAccepted, setKvkkAccepted] = useState(false);
 	const [kvkkText, setKvkkText] = useState('');
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [siteSettings, setSiteSettings] = useState(null);
 	const formRef = React.useRef(null);
 
 	useEffect(() => {
-		async function fetchSiteSettings() {
-			try {
-				const response = await fetch('/api/site-settings');
-				if (response.ok) {
-					const data = await response.json();
-					setKvkkText(data.kvkkText || '');
-					setSiteSettings(data);
-				}
-			} catch (error) {
-				// Error fetching site settings
-			}
+		if (siteSettings?.kvkkText) {
+			setKvkkText(siteSettings.kvkkText);
 		}
-		fetchSiteSettings();
-	}, []);
+	}, [siteSettings]);
 
 	const handleFileChange = (e) => {
 		const file = e.target.files?.[0];

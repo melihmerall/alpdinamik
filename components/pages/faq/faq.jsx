@@ -24,7 +24,7 @@ const FaqArea = () => {
                             <div className="faq-item">
                                 <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">CAD verileri ve teknik çizimler nasıl temin edilir?</h5>
                                 <div id="collapseTwo" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                    <p>Alp Dinamik olarak müşterilerimize kapsamlı CAD desteği sağlıyoruz:</p>
+                                    <p>Alpdinamik olarak müşterilerimize kapsamlı CAD desteği sağlıyoruz:</p>
                                     <ul>
                                         <li><strong>2D Teknik Çizimler:</strong> Ürünlerin teknik ölçüleri ve montaj detayları.</li>
                                         <li><strong>3D CAD Modelleri:</strong> SolidWorks, AutoCAD, Inventor gibi programlarda kullanılabilir 3D modeller.</li>
@@ -63,7 +63,7 @@ const FaqArea = () => {
                             <div className="faq-item">
                                 <h5 className="icon collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive">Hangi sektörlerde hizmet veriyorsunuz?</h5>
                                 <div id="collapseFive" className="faq-item-body collapse" data-bs-parent="#accordionExample">
-                                    <p>Alp Dinamik olarak aşağıdaki sektörlerde lineer hareket çözümleri sunuyoruz:</p>
+                                    <p>Alpdinamik olarak aşağıdaki sektörlerde lineer hareket çözümleri sunuyoruz:</p>
                                     <ul>
                                         <li><strong>Çelik Endüstrisi:</strong> Levha taşıma, konumlandırma ve seviye ayarlama sistemleri.</li>
                                         <li><strong>Güneş Enerjisi:</strong> Güneş takip mekanizmaları ve panel konumlandırma sistemleri.</li>

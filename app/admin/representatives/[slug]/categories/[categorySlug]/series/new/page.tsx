@@ -14,10 +14,12 @@ export default function NewSeriesPage() {
     name: '',
     slug: '',
     description: '',
+    imageUrl: '',
     order: 0,
     isActive: true,
   });
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     fetchCategory();
@@ -70,6 +72,32 @@ export default function NewSeriesPage() {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, ''),
     });
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'series');
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      });
+
+      const result = await res.json();
+      if (res.ok && result.url) {
+        setFormData((prev) => ({ ...prev, imageUrl: result.url }));
+      } else {
+        alert(result.error || 'Görsel yüklenemedi');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Görsel yüklenemedi');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   return (
@@ -126,13 +154,66 @@ export default function NewSeriesPage() {
               />
             </div>
 
+            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="admin-label">Seri Görseli</label>
+              {formData.imageUrl && (
+                <div style={{ marginBottom: '0.75rem' }}>
+                  <img
+                    src={formData.imageUrl}
+                    alt={formData.name || 'Seri görseli'}
+                    style={{
+                      width: '240px',
+                      height: 'auto',
+                      borderRadius: '12px',
+                      border: '1px solid rgba(0,0,0,0.1)',
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="admin-btn-secondary admin-btn-sm"
+                    style={{ marginLeft: '1rem' }}
+                    onClick={() => setFormData({ ...formData, imageUrl: '' })}
+                  >
+                    Görseli Kaldır
+                  </button>
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <label className="admin-upload-input">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleImageUpload(file);
+                      }
+                    }}
+                    disabled={uploadingImage}
+                  />
+                  {uploadingImage ? 'Yükleniyor…' : 'Görsel Yükle'}
+                </label>
+                <input
+                  type="text"
+                  className="admin-input"
+                  placeholder="Veya doğrudan görsel URL girin"
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  style={{ flex: '1 1 260px' }}
+                />
+              </div>
+              <small className="admin-help-text">
+                Bu görsel kategori detayında seri kartında gösterilir. 540x400 px önerilir.
+              </small>
+            </div>
+
             <div className="admin-form-group">
               <label className="admin-label">Sıra</label>
               <input
                 type="number"
                 className="admin-input"
                 value={formData.order}
-                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
               />
             </div>
 
@@ -162,4 +243,3 @@ export default function NewSeriesPage() {
     </div>
   );
 }
-

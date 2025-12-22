@@ -8,7 +8,7 @@ const historyData = [
     {
         date: "2000",
         title: "Kuruluş",
-        description: "Alp Dinamik, lineer hareket sistemleri alanında projeci ve mühendislik odaklı hizmet vermek üzere kuruldu. İlk yıllarımızda temsil ettiğimiz markaların ürünlerini endüstriyel uygulamalara entegre etmeye başladık.",
+        description: "Alpdinamik, lineer hareket sistemleri alanında projeci ve mühendislik odaklı hizmet vermek üzere kuruldu. İlk yıllarımızda temsil ettiğimiz markaların ürünlerini endüstriyel uygulamalara entegre etmeye başladık.",
         image: image1,
     },
     {

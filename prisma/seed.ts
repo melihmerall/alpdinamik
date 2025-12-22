@@ -22,7 +22,7 @@ async function main() {
   // Create content blocks
   const contentBlocks = [
     { key: 'home_hero_title', title: 'Ana Başlık', body: 'Lineer Hareket Sistemlerinde Mühendislik Ortağınız' },
-    { key: 'home_hero_subtitle', title: 'Alt Başlık', body: 'Alp Dinamik olarak, lineer hareket çözümleri, proje tasarımı, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.' },
+    { key: 'home_hero_subtitle', title: 'Alt Başlık', body: 'Alpdinamik olarak, lineer hareket çözümleri, proje tasarımı, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle projelerinizin güvenli ve verimli çalışmasını sağlıyoruz.' },
     { key: 'home_hero_cta_primary', title: 'Birincil CTA', body: 'Projenizi Paylaşın' },
     { key: 'home_hero_cta_secondary', title: 'İkincil CTA', body: 'Ürün Portföyünü İnceleyin' },
     { key: 'footer_about', title: 'Footer Açıklama', body: 'Lineer hareket sistemlerinde doğru ürün ve mühendislik çözümleri sunuyoruz. Mecmot markasının Türkiye temsilciliği ile projelerinize değer katıyoruz.' },
@@ -44,7 +44,7 @@ async function main() {
       slug: 'home-about',
       title: 'Lineer Hareket Sistemlerinde Güvenilir Çözüm Ortağınız',
       subtitle: 'Hakkımızda',
-      body: 'Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
+      body: 'Alpdinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
       imageUrl: '/assets/img/page/who-we-are.jpg',
       stat1Number: 25,
       stat1Label: 'Yıl Sektör Tecrübesi',
@@ -70,43 +70,88 @@ async function main() {
     },
   })
 
-  // Create Mecmot products
-  const mecmotProducts = [
+  // Create Mecmot product categories
+  const mecmotCategories = [
     {
-      slug: 'vidali-kriko',
+      slug: 'vidali-krikolar',
       name: 'Vidalı Krikolar',
-      description: 'Yüksek hassasiyet ve yük kapasitesi sunan vidalı kriko çözümleri',
+      description: 'Yüksek hassasiyet ve yük kapasitesi sunan vidalı kriko çözümleri. Endüstriyel uygulamalarda güvenilir ve hassas lineer hareket sağlar.',
       order: 1,
     },
     {
-      slug: 'yon-degistirici',
+      slug: 'yon-degistiriciler',
       name: 'Yön Değiştiriciler',
-      description: 'Güç aktarımında esneklik ve verimlilik sağlayan yön değiştirici ürünleri',
+      description: 'Güç aktarımında esneklik ve verimlilik sağlayan yön değiştirici ürünleri. Dikey ve yatay hareket aktarımı için ideal çözümler.',
       order: 2,
     },
     {
-      slug: 'lineer-aktuator',
+      slug: 'lineer-aktuatorler',
       name: 'Lineer Aktuatörler',
-      description: 'Otomatik ve hassas hareket kontrolü için ideal lineer aktüatör sistemleri',
+      description: 'Otomatik ve hassas hareket kontrolü için ideal lineer aktüatör sistemleri. Otomasyon uygulamalarında yüksek performans.',
       order: 3,
     },
   ]
 
-  for (const product of mecmotProducts) {
-    await prisma.product.upsert({
+  const categoryMap = new Map<string, string>()
+  for (const category of mecmotCategories) {
+    const created = await prisma.productCategory.upsert({
       where: {
         representativeId_slug: {
           representativeId: mecmot.id,
-          slug: product.slug,
+          slug: category.slug,
         },
       },
       update: {},
       create: {
-        ...product,
+        ...category,
         representativeId: mecmot.id,
         isActive: true,
       },
     })
+    categoryMap.set(category.slug, created.id)
+  }
+
+  // Create product series for Vidalı Krikolar
+  const vidaliKrikoSeries = [
+    {
+      slug: 'vkt-serisi',
+      name: 'VKT Serisi',
+      description: 'VKT serisi vidalı krikolar - yüksek kapasiteli ve hassas hareket',
+      categorySlug: 'vidali-krikolar',
+      order: 1,
+    },
+    {
+      slug: 'vkm-serisi',
+      name: 'VKM Serisi',
+      description: 'VKM serisi vidalı krikolar - orta kapasiteli uygulamalar için',
+      categorySlug: 'vidali-krikolar',
+      order: 2,
+    },
+  ]
+
+  const seriesMap = new Map<string, string>()
+  for (const series of vidaliKrikoSeries) {
+    const categoryId = categoryMap.get(series.categorySlug)
+    if (categoryId) {
+      const created = await prisma.productSeries.upsert({
+        where: {
+          categoryId_slug: {
+            categoryId,
+            slug: series.slug,
+          },
+        },
+        update: {},
+        create: {
+          slug: series.slug,
+          name: series.name,
+          description: series.description,
+          categoryId,
+          order: series.order,
+          isActive: true,
+        },
+      })
+      seriesMap.set(series.slug, created.id)
+    }
   }
 
   // Create services
@@ -462,7 +507,7 @@ async function main() {
     {
       name: 'Mehmet Yılmaz',
       role: 'Makine İmalat Müdürü',
-      message: 'Alp Dinamik ile çalışmak, projelerimizde doğru ürün seçimi ve mühendislik desteği açısından büyük fark yarattı. CAD verileri ve teknik destekleri sayesinde entegrasyon süreçlerimiz çok hızlandı.',
+      message: 'Alpdinamik ile çalışmak, projelerimizde doğru ürün seçimi ve mühendislik desteği açısından büyük fark yarattı. CAD verileri ve teknik destekleri sayesinde entegrasyon süreçlerimiz çok hızlandı.',
       imageUrl: '/assets/img/team/team-1.jpg',
       rating: 5,
       order: 1,
@@ -470,7 +515,7 @@ async function main() {
     {
       name: 'Ayşe Demir',
       role: 'Proje Müdürü',
-      message: 'Çelik endüstrisi projemizde Alp Dinamik\'in vidalı kriko ve yön değiştirici çözümleri mükemmel çalıştı. Devreye alma sürecinde sağladıkları teknik destek projenin başarısında kritik rol oynadı.',
+      message: 'Çelik endüstrisi projemizde Alpdinamik\'in vidalı kriko ve yön değiştirici çözümleri mükemmel çalıştı. Devreye alma sürecinde sağladıkları teknik destek projenin başarısında kritik rol oynadı.',
       imageUrl: '/assets/img/team/team-2.jpg',
       rating: 5,
       order: 2,
@@ -478,7 +523,7 @@ async function main() {
     {
       name: 'Can Özkan',
       role: 'Güneş Enerjisi Sistemleri Mühendisi',
-      message: 'Güneş takip mekanizmamız için Alp Dinamik\'in önerdiği vidalı kriko çözümü, yüksek hassasiyet ve dayanıklılık gereksinimlerimizi karşıladı. Satış sonrası hizmetleri de çok profesyonel.',
+      message: 'Güneş takip mekanizmamız için Alpdinamik\'in önerdiği vidalı kriko çözümü, yüksek hassasiyet ve dayanıklılık gereksinimlerimizi karşıladı. Satış sonrası hizmetleri de çok profesyonel.',
       imageUrl: '/assets/img/team/team-3.jpg',
       rating: 5,
       order: 3,
@@ -486,7 +531,7 @@ async function main() {
     {
       name: 'Zeynep Kaya',
       role: 'Savunma Sanayi Proje Lideri',
-      message: 'Hareketli platform sistemimizde Alp Dinamik\'in lineer aktüatör seçimi ve mühendislik danışmanlığı projenin güvenli çalışmasını sağladı. Uçtan uca çözüm yaklaşımları takdire şayan.',
+      message: 'Hareketli platform sistemimizde Alpdinamik\'in lineer aktüatör seçimi ve mühendislik danışmanlığı projenin güvenli çalışmasını sağladı. Uçtan uca çözüm yaklaşımları takdire şayan.',
       imageUrl: '/assets/img/team/team-4.jpg',
       rating: 5,
       order: 4,
@@ -494,7 +539,7 @@ async function main() {
     {
       name: 'Ali Çelik',
       role: 'Endüstriyel Tesis Müdürü',
-      message: 'Alp Dinamik, sadece ürün tedarikçisi değil, gerçek bir mühendislik ortağı. Proje analizinden devreye almaya kadar her aşamada yanımızdaydılar. Kesinlikle tavsiye ederim.',
+      message: 'Alpdinamik, sadece ürün tedarikçisi değil, gerçek bir mühendislik ortağı. Proje analizinden devreye almaya kadar her aşamada yanımızdaydılar. Kesinlikle tavsiye ederim.',
       imageUrl: '/assets/img/team/member-1.jpg',
       rating: 5,
       order: 5,

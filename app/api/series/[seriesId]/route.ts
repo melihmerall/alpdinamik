@@ -58,6 +58,7 @@ export async function PUT(
         name: body.name,
         slug: body.slug,
         description: body.description,
+        imageUrl: body.imageUrl ?? null,
         order: body.order,
         isActive: body.isActive,
       },
@@ -94,4 +95,3 @@ export async function DELETE(
     );
   }
 }
-

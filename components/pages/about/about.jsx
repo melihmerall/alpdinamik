@@ -34,7 +34,7 @@ const AboutMain = ({ aboutData }) => {
     // Use admin data if available, otherwise use default content
     const subtitle = aboutData?.subtitle || "Hakkımızda";
     const title = aboutData?.title || "Lineer Hareket Sistemlerinde Mühendislik Ortağınız";
-    const body = aboutData?.body || "Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz markaların ürünlerini sadece satış olarak değil, uygulama analizi, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle birlikte sunuyoruz. Makine imalatçıları, çelik endüstrisi, güneş enerjisi ve savunma sanayi gibi sektörlerde güvenilir çözüm ortağıyız.";
+    const body = aboutData?.body || "Alpdinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz markaların ürünlerini sadece satış olarak değil, uygulama analizi, ürün seçimi, CAD desteği ve devreye alma hizmetleriyle birlikte sunuyoruz. Makine imalatçıları, çelik endüstrisi, güneş enerjisi ve savunma sanayi gibi sektörlerde güvenilir çözüm ortağıyız.";
     const imageUrl = aboutData?.imageUrl || image.src;
     const ctaLabel = aboutData?.ctaLabel || "Projelerimizi İnceleyin";
     const ctaUrl = aboutData?.ctaUrl || "/portfolio/3-columns";

@@ -6,50 +6,11 @@ import Count from '../../common/count';
 import Link from "next/link";
 
 const AboutFour = () => {
-    const [aboutData, setAboutData] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchAboutData() {
-            try {
-                // Tek API çağrısı - fallback parametresi ile
-                const response = await fetch('/api/company-pages/home-about?fallback=true');
-                if (response.ok) {
-                    const data = await response.json();
-                    setAboutData(data);
-                    
-                    // Preload about images (only local)
-                    if (data) {
-                        if (data.imageUrl && !data.imageUrl.startsWith('http')) {
-                            const link = document.createElement('link');
-                            link.rel = 'preload';
-                            link.as = 'image';
-                            link.href = data.imageUrl;
-                            document.head.appendChild(link);
-                        }
-                        if (data.image2Url && !data.image2Url.startsWith('http')) {
-                            const link = document.createElement('link');
-                            link.rel = 'preload';
-                            link.as = 'image';
-                            link.href = data.image2Url;
-                            document.head.appendChild(link);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching about data:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchAboutData();
-    }, []);
-
     // Fallback data
     const fallbackData = {
         subtitle: 'Hakkımızda',
         title: 'Lineer Hareket Sistemlerinde Güvenilir Çözüm Ortağınız',
-        body: 'Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
+        body: 'Alpdinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
         imageUrl: image1.src,
         image2Url: image2.src,
         stat1Number: 25,
@@ -62,26 +23,60 @@ const AboutFour = () => {
         ctaUrl: '/hakkimizda'
     };
 
-    // Veritabanından gelen veriyi kullan, eksik alanlar için fallback kullan
-    const displayData = aboutData ? {
-        subtitle: aboutData.subtitle || fallbackData.subtitle,
-        title: aboutData.title || fallbackData.title,
-        body: aboutData.body || fallbackData.body,
-        imageUrl: aboutData.imageUrl || fallbackData.imageUrl,
-        image2Url: aboutData.image2Url || fallbackData.image2Url,
-        stat1Number: aboutData.stat1Number !== null && aboutData.stat1Number !== undefined ? aboutData.stat1Number : fallbackData.stat1Number,
-        stat1Label: aboutData.stat1Label || fallbackData.stat1Label,
-        stat2Number: aboutData.stat2Number !== null && aboutData.stat2Number !== undefined ? aboutData.stat2Number : fallbackData.stat2Number,
-        stat2Label: aboutData.stat2Label || fallbackData.stat2Label,
-        stat3Number: aboutData.stat3Number !== null && aboutData.stat3Number !== undefined ? aboutData.stat3Number : fallbackData.stat3Number,
-        stat3Label: aboutData.stat3Label || fallbackData.stat3Label,
-        ctaLabel: aboutData.ctaLabel || fallbackData.ctaLabel,
-        ctaUrl: aboutData.ctaUrl || fallbackData.ctaUrl,
-    } : fallbackData;
+    const [displayData, setDisplayData] = useState(fallbackData);
 
-    if (loading) {
-        return null;
-    }
+    useEffect(() => {
+        let isMounted = true;
+
+        async function fetchAboutData() {
+            try {
+                const response = await fetch('/api/company-pages?slug=home-about&fallback=true');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (isMounted && data) {
+                        const computedData = {
+                            subtitle: data.subtitle || fallbackData.subtitle,
+                            title: data.title || fallbackData.title,
+                            body: data.body || fallbackData.body,
+                            imageUrl: data.imageUrl || fallbackData.imageUrl,
+                            image2Url: data.image2Url || fallbackData.image2Url,
+                            stat1Number: data.stat1Number ?? fallbackData.stat1Number,
+                            stat1Label: data.stat1Label || fallbackData.stat1Label,
+                            stat2Number: data.stat2Number ?? fallbackData.stat2Number,
+                            stat2Label: data.stat2Label || fallbackData.stat2Label,
+                            stat3Number: data.stat3Number ?? fallbackData.stat3Number,
+                            stat3Label: data.stat3Label || fallbackData.stat3Label,
+                            ctaLabel: data.ctaLabel || fallbackData.ctaLabel,
+                            ctaUrl: data.ctaUrl || fallbackData.ctaUrl,
+                        };
+                        setDisplayData(computedData);
+
+                        if (computedData.imageUrl && !computedData.imageUrl.startsWith('http')) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = computedData.imageUrl;
+                            document.head.appendChild(link);
+                        }
+                        if (computedData.image2Url && !computedData.image2Url.startsWith('http')) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = computedData.image2Url;
+                            document.head.appendChild(link);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching about data:', error);
+            }
+        }
+        fetchAboutData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     return (
         <div className="about__four section-padding" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
@@ -216,4 +211,3 @@ const AboutFour = () => {
 };
 
 export default AboutFour;
-

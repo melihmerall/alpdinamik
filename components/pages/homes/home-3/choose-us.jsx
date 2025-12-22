@@ -18,7 +18,7 @@ const ChooseUs = () => {
                                 <div className="choose__three-right-title mb-40">
                                     <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Neden Bizi Seçmelisiniz?</span>
                                     <h2 className="title_split_anim mb-20">Lineer Hareket Sistemlerinde Çözüm Odaklı Yaklaşım</h2>
-                                    <p className="wow fadeInUp" data-wow-delay=".4s">Alp Dinamik olarak, endüstriyel projelerinizin karmaşık lineer hareket ihtiyaçlarına özel, güvenilir ve verimli çözümler sunuyoruz. Mühendislik tecrübemizle her aşamada yanınızdayız.</p>
+                                    <p className="wow fadeInUp" data-wow-delay=".4s">Alpdinamik olarak, endüstriyel projelerinizin karmaşık lineer hareket ihtiyaçlarına özel, güvenilir ve verimli çözümler sunuyoruz. Mühendislik tecrübemizle her aşamada yanınızdayız.</p>
                                 </div>
                                 <div className="wow fadeInDown" data-wow-delay="1.2s">
                                     <Link className="build_button" href="/request-quote">Hemen Başlayın<i className="flaticon-right-up"></i></Link>

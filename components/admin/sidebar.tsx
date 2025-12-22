@@ -53,7 +53,7 @@ export default function AdminSidebar() {
         <div className="admin-sidebar-logo">
           <div className="admin-sidebar-logo-icon">AD</div>
           <div>
-            <div style={{ fontSize: '1.125rem', lineHeight: '1.2' }}>Alp Dinamik</div>
+            <div style={{ fontSize: '1.125rem', lineHeight: '1.2' }}>Alpdinamik</div>
             <div className="admin-sidebar-subtitle">Admin Panel</div>
           </div>
         </div>

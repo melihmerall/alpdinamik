@@ -57,7 +57,7 @@ export default function MissionVisionPage() {
     fetchPage()
   }, [])
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -65,7 +65,7 @@ export default function MissionVisionPage() {
     }))
   }
 
-  const handleFileUpload = async (fieldName, file) => {
+  const handleFileUpload = async (fieldName: string, file: File) => {
     if (!file) return
 
     setUploading(true)
@@ -97,13 +97,13 @@ export default function MissionVisionPage() {
       // Auto-save after upload
       await handleSubmit(null, { [fieldName]: fileUrl })
     } catch (err) {
-      setError(err.message || 'Dosya yüklenirken bir hata oluştu')
+      setError((err instanceof Error ? err.message : 'Dosya yüklenirken bir hata oluştu'))
     } finally {
       setUploading(false)
     }
   }
 
-  const handleSubmit = async (e, additionalData = {}) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | null, additionalData: Record<string, any> = {}) => {
     if (e) e.preventDefault()
 
     setSaving(true)
@@ -111,10 +111,10 @@ export default function MissionVisionPage() {
     setSuccess('')
 
     try {
-      const submitData = {
+      const submitData: Record<string, any> = {
         slug: 'misyon-vizyon',
-        title: formData.title.trim() || 'Misyon ve Vizyon',
         ...formData,
+        title: formData.title.trim() || 'Misyon ve Vizyon',
         ...additionalData,
       }
 
@@ -148,7 +148,7 @@ export default function MissionVisionPage() {
       setSuccess('Sayfa başarıyla kaydedildi!')
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err.message || 'Sayfa kaydedilirken bir hata oluştu')
+      setError((err instanceof Error ? err.message : 'Sayfa kaydedilirken bir hata oluştu'))
     } finally {
       setSaving(false)
     }

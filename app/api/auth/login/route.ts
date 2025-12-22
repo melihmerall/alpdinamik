@@ -55,9 +55,11 @@ export async function POST(request: NextRequest) {
     })
 
     // Set cookie
+    // secure: false for HTTP, true for HTTPS
+    const isSecure = process.env.NEXTAUTH_URL?.startsWith('https://') || false
     response.cookies.set('admin-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24, // 24 hours
       path: '/',

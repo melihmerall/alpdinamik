@@ -8,6 +8,42 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/autoplay'
 
+const FALLBACK_CATEGORY_IMAGE = '/assets/img/blog/blog-1.jpg'
+
+const renderCategoryImage = ({ imageUrl, alt, shouldPrioritize }) => {
+  const resolvedUrl = imageUrl || FALLBACK_CATEGORY_IMAGE
+  const sharedImageStyles = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
+    objectPosition: 'center',
+    display: 'block'
+  }
+
+  if (resolvedUrl.startsWith('http')) {
+    return (
+      <img
+        src={resolvedUrl}
+        alt={alt}
+        loading={shouldPrioritize ? 'eager' : 'lazy'}
+        style={sharedImageStyles}
+      />
+    )
+  }
+
+  return (
+    <Image
+      src={resolvedUrl}
+      alt={alt}
+      width={900}
+      height={600}
+      sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
+      priority={shouldPrioritize}
+      style={sharedImageStyles}
+    />
+  )
+}
+
 const ProductsSlider = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -154,8 +190,35 @@ const ProductsSlider = () => {
     )
   }
 
-  if (categories.length === 0) {
-    return null
+  // Always render the section, even if empty
+  // This ensures the component is visible on first page load
+  if (categories.length === 0 && !loading) {
+    // If no categories after loading, show empty state
+    return (
+      <div className="price__area section-padding" style={{ 
+        background: 'transparent !important',
+        paddingTop: '80px',
+        paddingBottom: '80px'
+      }}>
+        <div className="container">
+          <div className="row mb-50">
+            <div className="col-xl-12">
+              <div className="price__area-title t-center">
+                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Kategorilerimiz</span>
+                <h2 className="wow fadeInRight" data-wow-delay=".6s">Ürün Kategorileri</h2>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="t-center" style={{ padding: '40px 0' }}>
+                <p style={{ color: 'var(--body-color)' }}>Henüz kategori bulunmamaktadır.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -180,7 +243,7 @@ const ProductsSlider = () => {
               <div className="products-slider-floating">
                 <button 
                   type="button"
-                  className="products-floating-btn products-slider-prev"
+                  className="floating-nav-btn products-floating-btn products-slider-prev"
                   aria-label="Önceki kategori"
                 >
                   <span className="nav-btn-icon" aria-hidden="true">
@@ -191,7 +254,7 @@ const ProductsSlider = () => {
                 </button>
                 <button 
                   type="button"
-                  className="products-floating-btn products-slider-next"
+                  className="floating-nav-btn products-floating-btn products-slider-next"
                   aria-label="Sonraki kategori"
                 >
                   <span className="nav-btn-icon" aria-hidden="true">
@@ -207,159 +270,263 @@ const ProductsSlider = () => {
                 className="products-swiper"
                 style={{ width: '100%', overflow: 'hidden' }}
               >
-                {categories.map((category, index) => (
-                  <SwiperSlide key={category.id}>
-                    <div className="blog__one-item wow fadeInUp" data-wow-delay={`${0.4 + (index * 0.1)}s`} style={{
-                      background: 'var(--bg-white)',
-                      border: '1px solid rgba(0, 0, 0, 0.08)',
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                      transition: 'all 0.3s ease',
-                      overflow: 'hidden',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: '100%'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.12)';
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}>
-                      <div className="blog__one-item-image" style={{ position: 'relative', width: '100%', height: '270px' }}>
-                        <Link href={`/temsilcilikler/${category.representative?.slug}/kategoriler/${category.slug}`} prefetch>
-                          {(() => {
-                            const imageUrl = category.breadcrumbImageUrl || category.imageUrl
-                            return imageUrl && imageUrl.startsWith('http') ? (
-                              <img
-                                src={imageUrl}
-                                alt={category.name}
-                                style={{
-                                  width: '100%',
-                                  height: '270px',
-                                  objectFit: 'cover',
-                                  borderRadius: '12px 12px 0 0'
-                                }}
-                                loading={index < 3 ? 'eager' : 'lazy'}
-                              />
-                            ) : (
-                              <Image
-                                src={imageUrl || '/assets/img/blog/blog-1.jpg'}
-                                alt={category.name}
-                                width={400}
-                                height={270}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  minHeight: '270px',
-                                  objectFit: 'cover',
-                                  borderRadius: '12px 12px 0 0'
-                                }}
-                                loading={index < 3 ? 'eager' : 'lazy'}
-                                priority={index < 3}
-                              />
-                            )
-                          })()}
-                        </Link>
-                        {category.representative?.name && (
-                          <div className="blog__one-item-image-date" style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            background: 'var(--bg-white)',
-                            padding: '8px 20px',
-                            borderRadius: '0 8px 0 0',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start'
-                          }}>
-                            <span style={{ 
-                              fontSize: '12px', 
-                              color: 'var(--body-color)',
-                              textTransform: 'uppercase',
-                              marginBottom: '2px',
-                              fontWeight: '600'
-                            }}>{category.representative.name}</span>
+                {categories.map((category, index) => {
+                  const categoryName = category.name || 'Ürün Kategorisi'
+                  const representativeName = category.representative?.name
+                  const badgeLabel = category.categoryGroup || category.sector || 'Öne Çıkan'
+                  const eyebrowLabel = category.industry || category.focusArea || 'Lineer Hareket Çözümü'
+                  const categoryUrl = category.representative?.slug && category.slug
+                    ? `/temsilcilikler/${category.representative.slug}/kategoriler/${category.slug}`
+                    : '/temsilcilikler'
+                  const imageUrl = category.breadcrumbImageUrl || category.imageUrl
+                  const productCountLabel = category.productCount ? `${category.productCount}+ ürün` : 'Hazır çözümler'
+                  const seriesCountLabel = category.seriesCount ? `${category.seriesCount}+ seri` : 'Esnek konfigürasyon'
+                  const tagline = category.tagline || 'Projelerinize özel mühendislik desteği ve uygulama danışmanlığı.'
+                  const shouldPrioritize = index < 3
+
+                  return (
+                    <SwiperSlide key={`${category.id || category.slug}-${index}`}>
+                      <article
+                        className="products-card wow fadeInUp"
+                        data-wow-delay={`${0.4 + (index * 0.1)}s`}
+                      >
+                        <div className="products-card__image">
+                          <div className="products-card__image-wrapper">
+                            {renderCategoryImage({ imageUrl, alt: categoryName, shouldPrioritize })}
                           </div>
-                        )}
-                      </div>
-                      <div className="blog__one-item-content" style={{ 
-                        padding: '20px 25px 25px 25px',
-                        flex: '1',
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}>
-                        <h6 style={{ 
-                          margin: 0,
-                          marginBottom: 'auto',
-                          fontSize: '18px',
-                          lineHeight: '1.5',
-                          fontWeight: '600'
-                        }}>
-                          <Link 
-                            href={`/temsilcilikler/${category.representative?.slug}/kategoriler/${category.slug}`} 
-                            style={{ 
-                              color: 'var(--text-heading-color)',
-                              textDecoration: 'none',
-                              transition: 'color 0.3s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                              e.target.style.color = 'var(--primary-color-1)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.color = 'var(--text-heading-color)';
-                            }}
-                          >
-                            {category.name}
-                          </Link>
-                        </h6>
-                        {category.description && (
-                          <p style={{
-                            margin: '10px 0 0 0',
-                            fontSize: '14px',
-                            color: 'var(--body-color)',
-                            lineHeight: '1.6',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}>
-                            {category.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
+                          <span className="products-card__badge">
+                            {badgeLabel}
+                          </span>
+                          {representativeName && (
+                            <div className="products-card__rep">
+                              <i className="fas fa-building" aria-hidden="true"></i>
+                              <span>{representativeName}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="products-card__body">
+                          <span className="products-card__eyebrow">{eyebrowLabel}</span>
+                          <h3>
+                            <Link
+                              href={categoryUrl}
+                              prefetch
+                              aria-label={`${categoryName} kategorisini incele`}
+                              style={{
+                                color: 'var(--text-heading-color)',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s ease'
+                              }}
+                            >
+                              {categoryName}
+                            </Link>
+                          </h3>
+                          <div className="products-card__chips">
+                            <span className="products-card__chip">
+                              <i className="fas fa-layer-group" aria-hidden="true"></i>
+                              {seriesCountLabel}
+                            </span>
+                            <span className="products-card__chip">
+                              <i className="fas fa-cubes" aria-hidden="true"></i>
+                              {productCountLabel}
+                            </span>
+                          </div>
+                          <div className="products-card__footer">
+                            <div className="products-card__tagline">
+                              {tagline}
+                            </div>
+                            <Link
+                              href={categoryUrl}
+                              prefetch
+                              className="products-card__cta"
+                              aria-label={`${categoryName} kategorisine git`}
+                            >
+                              Detayları İncele
+                              <span aria-hidden="true">
+                                <i className="fas fa-arrow-right"></i>
+                              </span>
+                            </Link>
+                          </div>
+                        </div>
+                      </article>
+                    </SwiperSlide>
+                  )
+                })}
               </Swiper>
             </div>
           </div>
         </div>
       </div>
       <style jsx global>{`
-        /* Products Slider - Prevent Scrollbar */
         .products-swiper {
           overflow: hidden !important;
           width: 100% !important;
           position: relative !important;
           padding: 0 60px !important;
         }
-        .products-swiper .swiper-container {
-          overflow: hidden !important;
-          width: 100% !important;
-          position: relative !important;
-        }
         .products-swiper .swiper-wrapper {
           overflow: visible !important;
         }
         .products-swiper .swiper-slide {
-          overflow: hidden !important;
           height: auto !important;
           display: flex !important;
+        }
+        .products-card {
+          background: var(--bg-white);
+          border-radius: 18px;
+          border: 1px solid rgba(15, 23, 42, 0.06);
+          box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          overflow: hidden;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .products-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+        }
+        .products-card__image {
+          position: relative;
+          padding: 20px 20px 0 20px;
+        }
+        .products-card__image-wrapper {
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          min-height: 240px;
+          border-radius: 14px;
+          background: linear-gradient(145deg, rgba(6, 17, 48, 0.04), rgba(6, 17, 48, 0.09));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 18px;
+          position: relative;
+        }
+        .products-card__image-wrapper img {
+          max-height: 100%;
+          max-width: 100%;
+        }
+        .products-card__image-wrapper span {
+          width: 100% !important;
+          height: 100% !important;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          position: relative !important;
+        }
+        .products-card__badge {
+          position: absolute;
+          top: 32px;
+          left: 34px;
+          padding: 6px 14px;
+          border-radius: 999px;
+          background: rgba(6, 17, 48, 0.8);
+          color: #fff;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+        .products-card__rep {
+          position: absolute;
+          bottom: 18px;
+          left: 32px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 14px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.92);
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          font-weight: 600;
+          color: var(--text-heading-color);
+          font-size: 12px;
+          letter-spacing: 0.02em;
+        }
+        .products-card__rep i {
+          color: var(--primary-color-1);
+        }
+        .products-card__body {
+          padding: 22px 24px 26px 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          flex: 1;
+        }
+        .products-card__eyebrow {
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          color: rgba(15, 23, 42, 0.55);
+        }
+        .products-card__body h3 {
+          margin: 0;
+          font-size: 22px;
+          line-height: 1.4;
+        }
+        .products-card__body h3 a:hover {
+          color: var(--primary-color-1) !important;
+        }
+        .products-card__body p {
+          margin: 0;
+          color: var(--body-color);
+          line-height: 1.7;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .products-card__chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 4px;
+        }
+        .products-card__chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          border-radius: 10px;
+          background: rgba(15, 23, 42, 0.05);
+          color: var(--text-heading-color);
+          font-size: 13px;
+          font-weight: 600;
+        }
+        .products-card__chip i {
+          color: var(--primary-color-1);
+        }
+        .products-card__footer {
+          margin-top: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+        .products-card__tagline {
+          font-size: 14px;
+          color: var(--body-color);
+          line-height: 1.6;
+          background: rgba(15, 23, 42, 0.04);
+          border-radius: 10px;
+          padding: 10px 14px;
+        }
+        .products-card__cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px 22px;
+          border-radius: 999px;
+          background: transparent;
+          color: var(--primary-color-1);
+          border: 1px solid rgba(0, 123, 255, 0.3);
+          font-weight: 600;
+          text-decoration: none;
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .products-card__cta:hover {
+          box-shadow: none;
+          transform: translateY(-2px);
+          border-color: var(--primary-color-1);
         }
         .slider-area {
           overflow: hidden !important;
@@ -379,47 +546,32 @@ const ProductsSlider = () => {
           z-index: 2;
           transform: translateY(-50%);
         }
-        .products-floating-btn {
-          pointer-events: auto;
-          width: 58px;
-          height: 58px;
-          border-radius: 50%;
-          border: 1px solid rgba(15, 27, 54, 0.2);
-          background: rgba(255,255,255,0.9);
-          backdrop-filter: blur(6px);
-          color: var(--text-heading-color);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          box-shadow: 0 12px 25px rgba(15, 27, 54, 0.15);
+        .products-slider-floating .floating-nav-btn {
+          pointer-events: all;
         }
-        .products-floating-btn:hover,
-        .products-floating-btn:focus-visible {
-          color: #fff;
-          border-color: transparent;
-          background: linear-gradient(135deg, #1d62f0, #6d9dff);
-          outline: none;
-        }
-        .products-floating-btn .nav-btn-icon {
-          display: inline-flex;
-        }
-        @media (max-width: 991px) {
-          .products-swiper {
-            padding: 0 15px !important;
-          }
-          .products-slider-floating {
-            display: none;
-          }
-        }
-        /* Products Slider Responsive Styles */
         @media (max-width: 1199px) {
+          .products-swiper {
+            padding: 0 20px !important;
+          }
           .price__area {
             padding-top: 60px !important;
             padding-bottom: 60px !important;
           }
-          .price__area-title h2 {
-            font-size: clamp(28px, 5vw, 40px) !important;
+        }
+        @media (max-width: 991px) {
+          .products-slider-floating {
+            display: none;
+          }
+          .products-card__image {
+            padding: 18px 18px 0 18px;
+          }
+          .products-card__badge {
+            top: 28px;
+            left: 32px;
+          }
+          .products-card__rep {
+            left: 32px;
+            bottom: 18px;
           }
         }
         @media (max-width: 767px) {
@@ -430,37 +582,33 @@ const ProductsSlider = () => {
           .price__area-title {
             margin-bottom: 30px !important;
           }
-          .price__area-title .subtitle {
-            font-size: 14px !important;
+          .products-card__body {
+            padding: 20px 22px 24px 22px;
           }
-          .price__area-title h2 {
-            font-size: clamp(24px, 7vw, 32px) !important;
-            line-height: 1.3 !important;
+          .products-card__body h3 {
+            font-size: 20px;
           }
-          .blog__one-item {
-            margin-bottom: 20px;
-          }
-          .blog-card-image {
-            height: 200px !important;
-          }
-          .blog__one-item-content {
-            padding: 15px 20px 20px 20px !important;
-          }
-          .blog__one-item-content h6 {
-            font-size: 16px !important;
+          .products-card__chip {
+            font-size: 12px;
           }
         }
         @media (max-width: 575px) {
-          .price__area-title h2 {
-            font-size: 22px !important;
+          .products-card__badge {
+            font-size: 10px;
           }
-          .blog-card-image {
-            height: 180px !important;
+          .products-card__rep {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+          }
+          .products-card__cta {
+            width: 100%;
+            text-align: center;
           }
         }
       `}</style>
-    </div>
-  )
-}
+      </div>
+    )
+  }
 
 export default ProductsSlider

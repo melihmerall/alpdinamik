@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import FooterTwo from "@/components/layout/footers/footer-two";
-import ScrollToTop from "@/components/layout/scroll-to-top";
+import ScrollToTop from "@/components/pages/common/scroll/scroll-to-top";
 
 async function getProduct(repSlug: string, productSlug: string) {
   const res = await fetch(

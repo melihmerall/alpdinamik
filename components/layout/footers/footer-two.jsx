@@ -3,29 +3,29 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useAppContext } from "@/lib/app-context";
 import logo from "../../../public/assets/img/logo-2.png";
 import Social from "@/components/data/social";
 import ContactSection from "@/components/pages/common/contact-section";
 
 const FooterTwo = () => {
     const pathname = usePathname();
+    const { siteSettings } = useAppContext();
     const [recentBlogs, setRecentBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [siteSettings, setSiteSettings] = useState(null);
     const [mecmotLogo, setMecmotLogo] = useState(null);
     
     // Sadece anasayfada ContactSection göster
     const isHomePage = pathname === '/';
+    const policyLinks = [
+        { href: "/cerez-politikasi", label: "Çerez Politikası" },
+        { href: "/kvkk", label: "KVKK Aydınlatma Metni" },
+        { href: "/gizlilik-politikasi", label: "Gizlilik Politikası" }
+    ];
 
     useEffect(() => {
         async function fetchData() {
             try {
-                // Fetch site settings
-                const settingsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`);
-                if (settingsResponse.ok) {
-                    const settingsData = await settingsResponse.json();
-                    setSiteSettings(settingsData);
-                }
 
                 // Fetch recent blogs
                 const blogResponse = await fetch('/api/blog?published=true&limit=3');
@@ -451,21 +451,52 @@ const FooterTwo = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="copyright__area-content t-center">
+                            <div className="copyright__area-content t-center" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                 <p style={{
-                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    color: 'rgba(255, 255, 255, 0.75)',
                                     fontSize: '14px',
                                     margin: 0
                                 }}>
-                                    Copyright 2025 – ALPDİNAMİK  Tüm Hakları Saklıdır. <Link href="https://alpdinamik.com.tr/" target="_blank" style={{
+                                    Copyright 2025 – ALPDİNAMİK Tüm Hakları Saklıdır.{' '}
+                                    <Link href="https://alpdinamik.com.tr/" target="_blank" style={{
                                         color: '#007bff',
                                         textDecoration: 'none',
                                         transition: 'color 0.3s ease'
                                     }}
                                     onMouseEnter={(e) => e.currentTarget.style.color = '#0056b3'}
                                     onMouseLeave={(e) => e.currentTarget.style.color = '#007bff'}
-                                    >ALPDİNAMİK</Link>
+                                    >
+                                        ALPDİNAMİK Resmi Site
+                                    </Link>
                                 </p>
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: '10px'
+                                }}>
+                                    {policyLinks.map((link, index) => (
+                                        <div key={link.href} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <Link
+                                                href={link.href}
+                                                style={{
+                                                    color: '#ffffff',
+                                                    textDecoration: 'none',
+                                                    fontSize: '13px',
+                                                    transition: 'color 0.3s ease'
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.color = '#007bff'}
+                                                onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
+                                            >
+                                                {link.label}
+                                            </Link>
+                                            {index < policyLinks.length - 1 && (
+                                                <span style={{ color: 'rgba(255,255,255,0.4)' }}>•</span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>

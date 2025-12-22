@@ -356,7 +356,6 @@ export default function SiteSettingsPage() {
                       padding: '0.75rem',
                       border: '1px solid var(--admin-gray-300)',
                       borderRadius: '8px',
-                      fontSize: '1rem',
                       marginTop: '0.5rem',
                       fontFamily: 'monospace',
                       fontSize: '0.875rem'
@@ -435,7 +434,6 @@ export default function SiteSettingsPage() {
                       padding: '0.75rem',
                       border: '1px solid var(--admin-gray-300)',
                       borderRadius: '8px',
-                      fontSize: '1rem',
                       marginTop: '0.5rem',
                       fontFamily: 'monospace',
                       fontSize: '0.875rem'
@@ -740,7 +738,7 @@ export default function SiteSettingsPage() {
                     color: 'var(--admin-gray-600)', 
                     marginTop: '0.5rem' 
                   }}>
-                    Google Maps'ten "Haritayı paylaş" > "Haritayı yerleştir" seçeneğinden embed URL'ini kopyalayın.<br/>
+                    Google Maps'ten "Haritayı paylaş" &gt; "Haritayı yerleştir" seçeneğinden embed URL'ini kopyalayın.<br/>
                     <strong>Not:</strong> Eğer iframe kodunun tamamını yapıştırdıysanız, sadece src="..." içindeki URL'yi kullanın.
                   </p>
                 </div>
@@ -774,7 +772,7 @@ export default function SiteSettingsPage() {
                     name="siteName"
                     value={formData.siteName}
                     onChange={handleChange}
-                    placeholder="Alp Dinamik"
+                    placeholder="Alpdinamik"
                     style={{
                       width: '100%',
                       padding: '0.75rem',

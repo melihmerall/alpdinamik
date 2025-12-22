@@ -1,5 +1,5 @@
 # Next.js Projesinden Backend & DB Çıkarma Yol Haritası
-## Alp Dinamik - Lineer Hareket Sistemleri
+## Alpdinamik - Lineer Hareket Sistemleri
 
 ---
 

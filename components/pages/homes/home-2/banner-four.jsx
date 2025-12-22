@@ -85,8 +85,8 @@ const BannerFour = () => {
             padding: '0 !important',
             paddingTop: '0 !important',
             paddingBottom: '0 !important',
-            minHeight: '120vh !important', 
-            height: '120vh !important',
+            minHeight: '130vh !important', 
+            height: '130vh !important',
             overflow: 'hidden'
         }}>
             <div 
@@ -96,24 +96,37 @@ const BannerFour = () => {
                     top: 0,
                     left: 0,
                     width: '100%',
-                    height: '100vh',
-                    minHeight: '100vh',
+                    height: '110vh',
+                    minHeight: '110vh',
                     zIndex: -1,
                     backgroundImage: finalVideoUrl ? 'none' : (firstBanner?.imageUrl ? `url(${firstBanner.imageUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'),
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
+                    filter: 'brightness(0.75)'
                 }}
             >
+                {!finalVideoUrl && (
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                        zIndex: 1
+                    }}></div>
+                )}
                 {finalVideoUrl && (
                     <div className="elementor-background-video-container" aria-hidden="true" style={{
                         position: 'absolute',
                         top: 0,
                         left: 0,
                         width: '100%',
-                        height: '100vh',
-                        minHeight: '100vh',
-                        overflow: 'hidden'
+                        height: '110vh',
+                        minHeight: '110vh',
+                        overflow: 'hidden',
+                        zIndex: 0
                     }}>
                         <video 
                             className="elementor-background-video-hosted"
@@ -124,18 +137,27 @@ const BannerFour = () => {
                             src={finalVideoUrl}
                             style={{ 
                                 width: '100%', 
-                                height: '100vh',
-                                minHeight: '100vh',
+                                height: '110vh',
+                                minHeight: '110vh',
                                 objectFit: 'cover',
                                 position: 'absolute',
                                 top: 0,
                                 left: 0
                             }}
                         />
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                            zIndex: 2
+                        }}></div>
                     </div>
                 )}
             </div>
-            <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="container" style={{ position: 'relative', zIndex: 10 }}>
                 <div className="row">
                     <div className="col-xl-12">
                         <div className="banner__four-content">
@@ -175,62 +197,72 @@ const BannerFour = () => {
                     padding: 0 !important;
                     padding-top: 0 !important;
                     padding-bottom: 0 !important;
-                    min-height: 100vh !important;
-                    height: 100vh !important;
+                    min-height: 130vh !important;
+                    height: 130vh !important;
                     display: flex !important;
                     align-items: center !important;
                     overflow: hidden !important;
                 }
                 .banner__four .bg-video {
-                    min-height: 100vh !important;
-                    height: 100vh !important;
+                    min-height: 110vh !important;
+                    height: 110vh !important;
                 }
                 .banner__four .elementor-background-video-container {
-                    min-height: 100vh !important;
-                    height: 100vh !important;
+                    min-height: 110vh !important;
+                    height: 110vh !important;
                 }
                 .banner__four .elementor-background-video-hosted {
-                    min-height: 100vh !important;
-                    height: 100vh !important;
+                    min-height: 110vh !important;
+                    height: 110vh !important;
                 }
                 .banner__four-content {
                     padding: 80px 0 !important;
                 }
+                .banner__four-content h1 {
+                    font-size: clamp(48px, 6vw, 86px);
+                    line-height: 1.1;
+                    margin-bottom: 10px;
+                }
+                .banner__four-content h2 {
+                    font-size: clamp(32px, 4.5vw, 56px);
+                    line-height: 1.15;
+                    font-weight: 500;
+                }
                 /* Banner Four Responsive Styles */
                 @media (max-width: 991px) {
                     .banner__four {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 120vh !important;
+                        height: 120vh !important;
                     }
                     .banner__four .bg-video {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 110vh !important;
+                        height: 110vh !important;
                     }
                     .banner__four .elementor-background-video-container {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 110vh !important;
+                        height: 110vh !important;
                     }
                     .banner__four .elementor-background-video-hosted {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 110vh !important;
+                        height: 110vh !important;
                     }
                 }
                 @media (max-width: 767px) {
                     .banner__four {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 110vh !important;
+                        height: 110vh !important;
                     }
                     .banner__four .bg-video {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 105vh !important;
+                        height: 105vh !important;
                     }
                     .banner__four .elementor-background-video-container {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 105vh !important;
+                        height: 105vh !important;
                     }
                     .banner__four .elementor-background-video-hosted {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: 105vh !important;
+                        height: 105vh !important;
                     }
                     .banner__four-content {
                         padding: 40px 20px !important;

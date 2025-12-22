@@ -1,4 +1,4 @@
-# Alp Dinamik - Implementation Guide
+# Alpdinamik - Implementation Guide
 ## Adım Adım Uygulama Kılavuzu
 
 Bu doküman, `BACKEND-DB-ROADMAP.md`'deki planı adım adım uygulamak için pratik kılavuzdur.

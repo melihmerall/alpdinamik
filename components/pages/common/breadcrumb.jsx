@@ -1,21 +1,10 @@
 "use client"
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useAppContext } from '@/lib/app-context';
 
 const BreadCrumb = ({title, innerTitle, backgroundImage}) => {
-    const [defaultBreadcrumb, setDefaultBreadcrumb] = useState(null);
-
-    useEffect(() => {
-        // Fetch default breadcrumb from site settings
-        fetch('/api/site-settings')
-            .then(res => res.json())
-            .then(data => {
-                if (data.defaultBreadcrumbImageUrl) {
-                    setDefaultBreadcrumb(data.defaultBreadcrumbImageUrl);
-                }
-            })
-            .catch(err => console.error('Error fetching default breadcrumb:', err));
-    }, []);
+    const { siteSettings } = useAppContext();
+    const defaultBreadcrumb = siteSettings?.defaultBreadcrumbImageUrl || null;
 
     // Priority: provided backgroundImage > default from settings > gradient fallback
     const bgImage = backgroundImage || defaultBreadcrumb || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';

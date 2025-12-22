@@ -75,11 +75,11 @@ const KvkkModal = ({ isOpen, onClose, onAccept, kvkkText }) => {
 						<div>
 							<h4 style={{ color: 'var(--text-heading-color)', marginBottom: '1rem' }}>Kişisel Verilerin Korunması Kanunu Aydınlatma Metni</h4>
 							<p>
-								Alp Dinamik olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, kişisel verilerinizin işlenmesi hakkında sizleri bilgilendirmek isteriz.
+								Alpdinamik olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, kişisel verilerinizin işlenmesi hakkında sizleri bilgilendirmek isteriz.
 							</p>
 							<h5 style={{ color: 'var(--text-heading-color)', marginTop: '1.5rem', marginBottom: '0.75rem' }}>1. Veri Sorumlusu</h5>
 							<p>
-								Kişisel verileriniz, Alp Dinamik tarafından veri sorumlusu sıfatıyla işlenmektedir.
+								Kişisel verileriniz, Alpdinamik tarafından veri sorumlusu sıfatıyla işlenmektedir.
 							</p>
 							<h5 style={{ color: 'var(--text-heading-color)', marginTop: '1.5rem', marginBottom: '0.75rem' }}>2. İşlenen Kişisel Veriler</h5>
 							<p>

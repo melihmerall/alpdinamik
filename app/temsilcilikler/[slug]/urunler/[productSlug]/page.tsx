@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import React from "react";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import FooterTwo from "@/components/layout/footers/footer-two";
@@ -65,23 +65,59 @@ interface Product {
   }>;
 }
 
+interface ProductSummary {
+  id: string;
+  slug: string;
+  name?: string;
+  maxCapacity?: string;
+}
+
+interface VariantNode {
+  id: string;
+  name: string;
+  slug: string;
+  products?: ProductSummary[];
+}
+
+interface SeriesNode {
+  id: string;
+  name: string;
+  slug: string;
+  variants?: VariantNode[];
+  products?: ProductSummary[];
+}
+
 interface Category {
   id: string;
   name: string;
   slug: string;
-  series: Array<{
-    id: string;
-    name: string;
-    slug: string;
-    variants: Array<{
-      id: string;
-      name: string;
-      slug: string;
-      products: Array<{ id: string; slug: string }>;
-    }>;
-    products: Array<{ id: string; slug: string }>;
-  }>;
+  series?: SeriesNode[];
 }
+
+const getSeriesProductCount = (series: SeriesNode) => {
+  // Sadece aktif ve gerçekten var olan ürünleri say
+  const variantProductCount =
+    series.variants?.reduce((acc, variant) => {
+      const products = variant.products?.filter(p => p && p.id && p.slug) || [];
+      return acc + products.length;
+    }, 0) ?? 0;
+
+  const directProducts = series.products?.filter(p => p && p.id && p.slug) || [];
+  return variantProductCount + directProducts.length;
+};
+
+const getCategoryStats = (category: Category) => {
+  // Sadece aktif serileri say
+  const activeSeries = category.series?.filter(s => s && s.id) || [];
+  const totalSeries = activeSeries.length;
+  
+  // Her seri için ürün sayısını hesapla
+  const totalProducts = activeSeries.reduce((count, series) => {
+    return count + getSeriesProductCount(series);
+  }, 0);
+
+  return { totalSeries, totalProducts };
+};
 
 export default function ProductPage() {
   const params = useParams();
@@ -97,82 +133,112 @@ export default function ProductPage() {
   const [expandedVariants, setExpandedVariants] = useState<Set<string>>(new Set());
   const [defaultBreadcrumb, setDefaultBreadcrumb] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        // Fetch default breadcrumb from site settings
-        const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/site-settings`);
-        if (settingsRes.ok) {
-          const settingsData = await settingsRes.json();
-          setDefaultBreadcrumb(settingsData.defaultBreadcrumbImageUrl || null);
-        }
+  const syncExpandedState = useCallback((productData?: Product | null, categoryList?: Category[]) => {
+    if (!productData || !categoryList || categoryList.length === 0) {
+      setExpandedCategories(new Set());
+      setExpandedSeries(new Set());
+      setExpandedVariants(new Set());
+      return;
+    }
 
-        const [productRes, categoriesRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/products/${productSlug}`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/categories`),
+    const categorySet = new Set<string>();
+    const seriesSet = new Set<string>();
+    const variantSet = new Set<string>();
+
+    if (productData.series?.category?.id) {
+      categorySet.add(productData.series.category.id);
+    }
+    if (productData.series?.id) {
+      seriesSet.add(productData.series.id);
+    }
+    if (productData.variant?.id) {
+      variantSet.add(productData.variant.id);
+    }
+
+    setExpandedCategories(categorySet);
+    setExpandedSeries(seriesSet);
+    setExpandedVariants(variantSet);
+  }, []);
+
+  useEffect(() => {
+    if (!repSlug || !productSlug) return;
+
+    const controller = new AbortController();
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const [settingsData, productData, categoriesData] = await Promise.all([
+          (async () => {
+            try {
+              const res = await fetch(`${baseUrl}/api/site-settings`, { signal: controller.signal });
+              if (!res.ok) return null;
+              return res.json();
+            } catch {
+              return null;
+            }
+          })(),
+          (async () => {
+            const res = await fetch(
+              `${baseUrl}/api/representatives/${repSlug}/products/${productSlug}`,
+              { signal: controller.signal }
+            );
+            if (!res.ok) return null;
+            return res.json();
+          })(),
+          (async () => {
+            const res = await fetch(
+              `${baseUrl}/api/representatives/${repSlug}/categories`,
+              { signal: controller.signal }
+            );
+            if (!res.ok) return [];
+            return res.json();
+          })(),
         ]);
 
-        if (productRes.ok) {
-          const productData = await productRes.json();
-          setProduct(productData);
-          
-          // Auto-expand current category, series and variant
-          if (productData.series?.category) {
-            setExpandedCategories(new Set([productData.series.category.id]));
-            if (productData.series) {
-              setExpandedSeries(new Set([productData.series.id]));
-            }
-            if (productData.variantId) {
-              setExpandedVariants(new Set([productData.variantId]));
-            }
-          }
-        } else {
+        if (controller.signal.aborted) return;
+
+        setDefaultBreadcrumb(settingsData?.defaultBreadcrumbImageUrl || null);
+
+        if (!productData) {
           setError("Ürün bulunamadı");
+          setProduct(null);
+          setCategories([]);
+          syncExpandedState(null, []);
+          setLoading(false);
+          return;
         }
 
-        if (categoriesRes.ok) {
-          const categoriesData = await categoriesRes.json();
-          // Fetch full category data with series and variants
-          const fullCategories = await Promise.all(
-            categoriesData.map(async (cat: any) => {
-              const catRes = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/categories/${cat.slug}`
-              );
-              if (catRes.ok) {
-                const categoryData = await catRes.json();
-                // Debug: Check if products are included
-                    if (categoryData.series && categoryData.series.length > 0) {
-                      categoryData.series.forEach((series: any) => {
-                        if (series.variants && series.variants.length > 0) {
-                          series.variants.forEach((variant: any) => {
-                            // Variant products are available in variant.products
-                          });
-                        }
-                      });
-                    }
-                return categoryData;
-              }
-              return cat;
-            })
-          );
-          setCategories(fullCategories);
-        }
+        setProduct(productData);
+        const normalizedCategories = Array.isArray(categoriesData) ? categoriesData : [];
+        setCategories(normalizedCategories);
+        syncExpandedState(productData, normalizedCategories);
       } catch (error) {
+        if (controller.signal.aborted) return;
         console.error("Error fetching data:", error);
         setError("Veri yüklenirken bir hata oluştu");
+        setProduct(null);
+        setCategories([]);
+        syncExpandedState(null, []);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
+
     fetchData();
-  }, [repSlug, productSlug]);
+
+    return () => controller.abort();
+  }, [repSlug, productSlug, syncExpandedState]);
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(categoryId)) {
-        newSet.delete(categoryId);
-      } else {
+      const newSet = new Set<string>();
+      if (!prev.has(categoryId)) {
         newSet.add(categoryId);
       }
       return newSet;
@@ -181,10 +247,8 @@ export default function ProductPage() {
 
   const toggleSeries = (seriesId: string) => {
     setExpandedSeries((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(seriesId)) {
-        newSet.delete(seriesId);
-      } else {
+      const newSet = new Set<string>();
+      if (!prev.has(seriesId)) {
         newSet.add(seriesId);
       }
       return newSet;
@@ -193,10 +257,8 @@ export default function ProductPage() {
 
   const toggleVariant = (variantId: string) => {
     setExpandedVariants((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(variantId)) {
-        newSet.delete(variantId);
-      } else {
+      const newSet = new Set<string>();
+      if (!prev.has(variantId)) {
         newSet.add(variantId);
       }
       return newSet;
@@ -325,103 +387,131 @@ export default function ProductPage() {
         <div className="section-padding">
           <div className="container">
             <div className="row">
-              {/* Left Sidebar - Accordion Menu */}
+              {/* Left Sidebar - Modern Product Hierarchy */}
               <div className="col-lg-3 columns_sticky">
-                <div className="all__sidebar modern-sidebar">
-                  <div className="all__sidebar-item">
-                    <h4 className="modern-sidebar-title">Ürünler</h4>
-                    <div className="product-accordion-menu modern-accordion-menu">
-                      {categories.map((category) => {
+                <aside className="product-hierarchy-card">
+                  <div className="product-hierarchy-card__header">
+                    <p className="product-hierarchy-card__eyebrow">Ürün ağı</p>
+                    <h4 className="product-hierarchy-card__title">Temsil edilen ürünler</h4>
+                    <p className="product-hierarchy-card__meta">
+                      {product.representative?.name} markasına ait tüm kategori, seri ve varyantlara buradan ulaşabilirsiniz.
+                    </p>
+                  </div>
+                  <div className="product-hierarchy">
+                    {categories.length === 0 ? (
+                      <div className="product-hierarchy__empty">
+                        <p>Bu temsilci için henüz kategori eklenmemiş.</p>
+                      </div>
+                    ) : (
+                      categories.map((category) => {
                         const isCategoryExpanded = expandedCategories.has(category.id);
                         const hasSeries = category.series && category.series.length > 0;
+                        const stats = getCategoryStats(category);
 
                         return (
-                          <div key={category.id} className="accordion-item">
-                            <div
-                              className={`accordion-header ${isCategoryExpanded ? "expanded" : ""}`}
-                              onClick={() => hasSeries && toggleCategory(category.id)}
-                            >
+                          <div
+                            key={category.id}
+                            className={`product-hierarchy__category ${isCategoryExpanded ? "is-open" : ""}`}
+                          >
+                            <div className="product-hierarchy__category-head">
+                              <button
+                                type="button"
+                                className="product-hierarchy__category-toggle"
+                                onClick={() => hasSeries && toggleCategory(category.id)}
+                                aria-expanded={isCategoryExpanded}
+                                disabled={!hasSeries}
+                              >
+                                <div className="product-hierarchy__category-info">
+                                  <span className="product-hierarchy__category-name">{category.name}</span>
+                                  <span className="product-hierarchy__meta">
+                                    {stats.totalSeries} seri
+                                    {stats.totalProducts ? ` · ${stats.totalProducts} ürün` : ""}
+                                  </span>
+                                </div>
+                                {hasSeries && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                              </button>
                               <Link
                                 href={`/temsilcilikler/${repSlug}/kategoriler/${category.slug}`}
-                                onClick={(e) => {
-                                  if (hasSeries) {
-                                    e.preventDefault();
-                                    toggleCategory(category.id);
-                                  }
-                                }}
-                                className="accordion-link"
+                                className="product-hierarchy__pill"
                               >
-                                {category.name}
+                                Kategori Detayı
                               </Link>
-                              {hasSeries && (
-                                <span className={`accordion-arrow ${isCategoryExpanded ? "expanded" : ""}`}>
-                                  ▶
-                                </span>
-                              )}
                             </div>
 
                             {isCategoryExpanded && hasSeries && (
-                              <div className="accordion-content">
-                                {category.series.map((series) => {
+                              <div className="product-hierarchy__category-body">
+                                {category.series?.map((series) => {
                                   const isSeriesExpanded = expandedSeries.has(series.id);
                                   const hasVariants = series.variants && series.variants.length > 0;
-                                  const hasProducts = series.products && series.products.length > 0;
-                                  const hasChildren = hasVariants || hasProducts;
+                                  const directProducts = series.products || [];
+                                  const hasDirectProducts = directProducts.length > 0;
+                                  const hasChildren = hasVariants || hasDirectProducts;
+                                  const seriesProductCount = getSeriesProductCount(series);
 
                                   return (
-                                    <div key={series.id} className="accordion-item accordion-item-nested">
-                                      <div
-                                        className={`accordion-header accordion-header-nested ${isSeriesExpanded ? "expanded" : ""}`}
+                                    <div
+                                      key={series.id}
+                                      className={`product-hierarchy__series ${isSeriesExpanded ? "is-open" : ""}`}
+                                    >
+                                      <button
+                                        type="button"
+                                        className="product-hierarchy__series-toggle"
                                         onClick={() => hasChildren && toggleSeries(series.id)}
+                                        aria-expanded={isSeriesExpanded}
+                                        disabled={!hasChildren}
                                       >
-                                        <span className="accordion-text">{series.name}</span>
-                                        {hasChildren && (
-                                          <span className={`accordion-arrow accordion-arrow-small ${isSeriesExpanded ? "expanded" : ""}`}>
-                                            ▶
-                                          </span>
-                                        )}
-                                      </div>
+                                        <div>
+                                          <span className="product-hierarchy__series-name">{series.name}</span>
+                                          {hasChildren && (
+                                            <span className="product-hierarchy__meta">{seriesProductCount} ürün</span>
+                                          )}
+                                        </div>
+                                        {hasChildren && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                                      </button>
 
                                       {isSeriesExpanded && hasChildren && (
-                                        <div className="accordion-content">
-                                          {/* Variants */}
+                                        <div className="product-hierarchy__series-body">
                                           {hasVariants &&
-                                            series.variants.map((variant) => {
+                                            series.variants?.map((variant) => {
                                               const variantProducts = variant.products || [];
                                               const isVariantExpanded = expandedVariants.has(variant.id);
-                                              const hasProducts = variantProducts.length > 0;
-                                              
+                                              const hasVariantProducts = variantProducts.length > 0;
+
                                               return (
                                                 <div
                                                   key={variant.id}
-                                                  className="accordion-item accordion-item-variant"
+                                                  className={`product-hierarchy__variant ${isVariantExpanded ? "is-open" : ""}`}
                                                 >
-                                                  <div 
-                                                    className={`accordion-variant-header ${isVariantExpanded ? "expanded" : ""}`}
-                                                    onClick={() => hasProducts && toggleVariant(variant.id)}
-                                                    style={{ cursor: hasProducts ? "pointer" : "default" }}
+                                                  <button
+                                                    type="button"
+                                                    className="product-hierarchy__variant-toggle"
+                                                    onClick={() => hasVariantProducts && toggleVariant(variant.id)}
+                                                    aria-expanded={isVariantExpanded}
+                                                    disabled={!hasVariantProducts}
                                                   >
-                                                    <span className="accordion-variant-text">{variant.name}</span>
-                                                    {hasProducts && (
-                                                      <span className={`accordion-arrow accordion-arrow-variant ${isVariantExpanded ? "expanded" : ""}`}>
-                                                        ▶
-                                                      </span>
+                                                    <span>{variant.name}</span>
+                                                    {hasVariantProducts && (
+                                                      <span className="product-hierarchy__chevron" aria-hidden="true" />
                                                     )}
-                                                  </div>
-                                                  {isVariantExpanded && hasProducts && (
-                                                    <div className="accordion-products-list">
-                                                      {variantProducts.map((prod: any) => (
+                                                  </button>
+
+                                                  {isVariantExpanded && hasVariantProducts && (
+                                                    <div className="product-hierarchy__products">
+                                                      {variantProducts.map((prod) => (
                                                         <Link
                                                           key={prod.id}
                                                           href={`/temsilcilikler/${repSlug}/urunler/${prod.slug}`}
-                                                          className={`accordion-product-link ${prod.slug === productSlug ? "active-product" : ""}`}
+                                                          className={`product-hierarchy__product ${
+                                                            prod.slug === productSlug ? "is-active" : ""
+                                                          }`}
+                                                          aria-current={prod.slug === productSlug ? "true" : undefined}
                                                         >
-                                                          <span className="accordion-product-name">
+                                                          <span className="product-hierarchy__product-name">
                                                             {prod.name || prod.slug}
                                                           </span>
                                                           {prod.maxCapacity && (
-                                                            <span className="accordion-product-capacity">
-                                                              (Max. {prod.maxCapacity})
+                                                            <span className="product-hierarchy__product-meta">
+                                                              Max. {prod.maxCapacity}
                                                             </span>
                                                           )}
                                                         </Link>
@@ -432,25 +522,29 @@ export default function ProductPage() {
                                               );
                                             })}
 
-                                          {/* Direct Products under Series */}
-                                          {hasProducts &&
-                                            !hasVariants &&
-                                            series.products.map((prod: any) => (
-                                              <Link
-                                                key={prod.id}
-                                                href={`/temsilcilikler/${repSlug}/urunler/${prod.slug}`}
-                                                className={`accordion-product-link accordion-product-link-direct ${prod.slug === productSlug ? "active-product" : ""}`}
-                                              >
-                                                <span className="accordion-product-name">
-                                                  {prod.name || prod.slug}
-                                                </span>
-                                                {prod.maxCapacity && (
-                                                  <span className="accordion-product-capacity">
-                                                    (Max. {prod.maxCapacity})
+                                          {hasDirectProducts && !hasVariants && (
+                                            <div className="product-hierarchy__products is-direct">
+                                              {directProducts.map((prod) => (
+                                                <Link
+                                                  key={prod.id}
+                                                  href={`/temsilcilikler/${repSlug}/urunler/${prod.slug}`}
+                                                  className={`product-hierarchy__product ${
+                                                    prod.slug === productSlug ? "is-active" : ""
+                                                  }`}
+                                                  aria-current={prod.slug === productSlug ? "true" : undefined}
+                                                >
+                                                  <span className="product-hierarchy__product-name">
+                                                    {prod.name || prod.slug}
                                                   </span>
-                                                )}
-                                              </Link>
-                                            ))}
+                                                  {prod.maxCapacity && (
+                                                    <span className="product-hierarchy__product-meta">
+                                                      Max. {prod.maxCapacity}
+                                                    </span>
+                                                  )}
+                                                </Link>
+                                              ))}
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                     </div>
@@ -460,10 +554,10 @@ export default function ProductPage() {
                             )}
                           </div>
                         );
-                      })}
-                    </div>
+                      })
+                    )}
                   </div>
-                </div>
+                </aside>
               </div>
 
               {/* Right Content - Product Details */}
@@ -504,16 +598,7 @@ export default function ProductPage() {
                       ) : (
                         <button className="view-btn view-btn-3d active" disabled>3D</button>
                       )}
-                      {product.externalProductUrl && (
-                        <a
-                          href={product.externalProductUrl}
-                          className="view-btn view-btn-config"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Üretici Sitesinde Gör
-                        </a>
-                      )}
+
                     </div>
                   </div>
 

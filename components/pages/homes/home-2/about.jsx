@@ -44,7 +44,7 @@ const AboutTwo = () => {
     const fallbackData = {
         subtitle: 'Hakkımızda',
         title: 'Lineer Hareket Sistemlerinde Güvenilir Çözüm Ortağınız',
-        body: 'Alp Dinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
+        body: 'Alpdinamik, lineer hareket sistemleri konusunda projeci ve mühendislik odaklı bir firmadır. Temsil ettiğimiz Mecmot markasının ürünlerini sadece satış olarak değil; uygulama analizi, ürün seçimi ve boyutlandırma, CAD desteği, devreye alma ve satış sonrası hizmetlerle birlikte sunar.',
         imageUrl: image.src,
         stat1Number: 25,
         stat1Label: 'Yıl Sektör Tecrübesi',

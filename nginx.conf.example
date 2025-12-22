@@ -1,4 +1,4 @@
-# Nginx Configuration for Alp Dinamik
+# Nginx Configuration for Alpdinamik
 # Bu dosyayı /etc/nginx/sites-available/alpdinamik olarak kaydedin
 
 server {

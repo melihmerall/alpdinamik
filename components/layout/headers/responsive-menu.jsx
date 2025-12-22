@@ -1,30 +1,13 @@
 "use client"
 import Link from "next/link";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useAppContext } from '@/lib/app-context';
 
 const ResponsiveMenu = () => {
-    const [representatives, setRepresentatives] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { menu: representatives, loading } = useAppContext();
     const [activeMenu, setActiveMenu] = useState(null);
     const [activeMenus, setActiveMenus] = useState(null);
     const [activeCategoryMenus, setActiveCategoryMenus] = useState({});
-
-    useEffect(() => {
-        async function loadMenu() {
-            try {
-                const response = await fetch('/api/menu');
-                if (response.ok) {
-                    const reps = await response.json();
-                    setRepresentatives(reps);
-                }
-            } catch (error) {
-                console.error('Error loading menu:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        loadMenu();
-    }, []);
 
     const active = (value) => setActiveMenu(value === activeMenu ? null : value);
     const activeIcon = (value) => (activeMenu == value ? "mean-clicked" : "");
@@ -50,21 +33,14 @@ const ResponsiveMenu = () => {
         return activeCategoryMenus[key] == catId ? { display: "block" } : { display: "none" };
     };
 
-    // Get first product URL from category
-    const getFirstProductFromCategory = (category, repSlug) => {
-        if (category.series && category.series.length > 0) {
-            const firstSeries = category.series[0];
-            // Try variants first
-            for (const variant of firstSeries.variants || []) {
-                if (variant.products && variant.products.length > 0) {
-                    return `/temsilcilikler/${repSlug}/urunler/${variant.products[0].slug}`;
-                }
-            }
-            // Then try direct products
-            if (firstSeries.products && firstSeries.products.length > 0) {
-                return `/temsilcilikler/${repSlug}/urunler/${firstSeries.products[0].slug}`;
-            }
+    // Get category URL - only category page, no fallback to product
+    const getCategoryUrl = (category, repSlug) => {
+        // Only use category page URL if slug exists
+        if (category.slug) {
+            return `/temsilcilikler/${repSlug}/kategoriler/${category.slug}`;
         }
+        
+        // No fallback - return null if no category slug
         return null;
     };
 
@@ -82,7 +58,7 @@ const ResponsiveMenu = () => {
                     <a className={`mean-expand ${activeIcon("kurumsal")}`} onClick={() => active("kurumsal")}></a>
                 </li>
 
-                {!loading && representatives.length > 0 && (
+                {!loading && representatives && representatives.length > 0 && (
                     <li className='menu-item-has-children'>
                         <Link href='/temsilcilikler'>TEMSİLCİLİKLER</Link>
                         <ul className='sub-menu' style={activeSubMenu("temsilcilikler")}>
@@ -99,11 +75,11 @@ const ResponsiveMenu = () => {
                                                         <Link href='#'>Ürünler</Link>
                                                         <ul className='sub-menu' style={activeCategorySubMenu(rep.id, 'urunler')}>
                                                             {rep.categories.map((category) => {
-                                                                const firstProductUrl = getFirstProductFromCategory(category, rep.slug);
+                                                                const categoryUrl = getCategoryUrl(category, rep.slug);
                                                                 return (
                                                                     <li key={category.id}>
-                                                                        {firstProductUrl ? (
-                                                                            <Link href={firstProductUrl}>
+                                                                        {categoryUrl ? (
+                                                                            <Link href={categoryUrl}>
                                                                                 {category.name}
                                                                             </Link>
                                                                         ) : (

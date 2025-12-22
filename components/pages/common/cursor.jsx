@@ -15,12 +15,16 @@ const CustomCursor = () => {
         let ballX = 0,
             ballY = 0;
         const speed = 0.1;
+        const offsetX = -6;
+        const offsetY = -8;
         const updateCursor = () => {
             ballX += (mouseX - ballX) * speed;
             ballY += (mouseY - ballY) * speed;
             if (ball && cursorText) {
-                ball.style.transform = `translate3d(${ballX}px, ${ballY}px, 0)`;
-                cursorText.style.transform = `translate3d(${ballX}px, ${ballY}px, 0)`;  
+                const targetX = ballX + offsetX;
+                const targetY = ballY + offsetY;
+                ball.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+                cursorText.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;  
             }
             requestAnimationFrame(updateCursor);
         };

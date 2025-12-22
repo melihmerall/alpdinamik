@@ -1,6 +1,8 @@
 import { prisma } from './db'
 import { LeadSource } from '@prisma/client'
 
+export { LeadSource }
+
 export interface CreateLeadData {
   fullName: string
   email?: string

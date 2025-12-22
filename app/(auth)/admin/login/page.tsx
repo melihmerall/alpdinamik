@@ -24,10 +24,12 @@ export default function AdminLogin() {
 
       const data = await response.json()
 
-      if (response.ok) {
-        // Use window.location for full page reload to ensure cookie is set
-        // This ensures the server can read the cookie on the next request
-        window.location.href = '/admin'
+      if (response.ok && data.success) {
+        // Small delay to ensure cookie is set
+        setTimeout(() => {
+          // Use window.location for full page reload to ensure cookie is set
+          window.location.href = '/admin'
+        }, 100)
       } else {
         setError(data.error || 'Giriş başarısız')
         setLoading(false)

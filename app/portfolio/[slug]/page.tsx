@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alpdinamik.com.tr'
-  const defaultTitle = `${project.title} - Alp Dinamik Referans Projeleri`
+  const defaultTitle = `${project.title} - Alpdinamik Referans Projeleri`
   const defaultDescription = project.summary || project.title
 
   return {

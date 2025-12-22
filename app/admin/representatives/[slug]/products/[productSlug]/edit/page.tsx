@@ -520,7 +520,6 @@ export default function EditProductPage() {
                     padding: '0.75rem',
                     border: '1px solid var(--admin-gray-300)',
                     borderRadius: '8px',
-                    fontSize: '1rem',
                     marginTop: '0.5rem',
                     fontFamily: 'monospace',
                     fontSize: '0.875rem'
@@ -579,7 +578,6 @@ export default function EditProductPage() {
                     padding: '0.75rem',
                     border: '1px solid var(--admin-gray-300)',
                     borderRadius: '8px',
-                    fontSize: '1rem',
                     marginTop: '0.5rem',
                     fontFamily: 'monospace',
                     fontSize: '0.875rem'
@@ -638,7 +636,6 @@ export default function EditProductPage() {
                     padding: '0.75rem',
                     border: '1px solid var(--admin-gray-300)',
                     borderRadius: '8px',
-                    fontSize: '1rem',
                     marginTop: '0.5rem',
                     fontFamily: 'monospace',
                     fontSize: '0.875rem'

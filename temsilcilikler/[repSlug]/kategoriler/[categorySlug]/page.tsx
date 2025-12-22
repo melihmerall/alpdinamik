@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import FooterTwo from "@/components/layout/footers/footer-two";
-import ScrollToTop from "@/components/layout/scroll-to-top";
+import ScrollToTop from "@/components/pages/common/scroll/scroll-to-top";
 
 async function getCategory(repSlug: string, categorySlug: string) {
   const res = await fetch(

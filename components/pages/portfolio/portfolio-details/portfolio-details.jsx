@@ -50,7 +50,7 @@ const PortfolioDetailsMain = ({singleData}) => {
                                 </div>
                             </div>
                             <h4 className="mb-20">Proje Sonuçları</h4>
-                            <p>Proje başarıyla tamamlandı ve sistem müşterinin beklentilerini karşılayacak şekilde çalışmaktadır. Alp Dinamik olarak, her projede olduğu gibi bu projede de uçtan uca mühendislik çözümü sunarak müşteri memnuniyetini sağladık. Kalite ve güvenilirlik odaklı yaklaşımımız sayesinde sistemin uzun yıllar sorunsuz çalışması hedeflenmektedir.</p>
+                            <p>Proje başarıyla tamamlandı ve sistem müşterinin beklentilerini karşılayacak şekilde çalışmaktadır. Alpdinamik olarak, her projede olduğu gibi bu projede de uçtan uca mühendislik çözümü sunarak müşteri memnuniyetini sağladık. Kalite ve güvenilirlik odaklı yaklaşımımız sayesinde sistemin uzun yıllar sorunsuz çalışması hedeflenmektedir.</p>
                             <div className="row mt-40 mb-40 portfolio__details-area-image">
                                 <div className="col-sm-6 sm-mb-25">
                                     <img src={image1.src} alt="image" />
@@ -59,7 +59,7 @@ const PortfolioDetailsMain = ({singleData}) => {
                                     <img src={image2.src} alt="image" />
                                 </div>
                             </div>
-                            <p>Lineer hareket sistemlerinde doğru ürün seçimi ve mühendislik desteği, projelerin başarısında kritik rol oynar. Alp Dinamik olarak, her uygulamanın kendine özgü gereksinimlerini analiz ederek en uygun çözümü sunuyoruz. Proje bazlı yaklaşımımız sayesinde müşterilerimizin ihtiyaçlarına tam uyum sağlıyor ve sistemlerin güvenli, verimli çalışmasını garanti ediyoruz.</p>
+                            <p>Lineer hareket sistemlerinde doğru ürün seçimi ve mühendislik desteği, projelerin başarısında kritik rol oynar. Alpdinamik olarak, her uygulamanın kendine özgü gereksinimlerini analiz ederek en uygun çözümü sunuyoruz. Proje bazlı yaklaşımımız sayesinde müşterilerimizin ihtiyaçlarına tam uyum sağlıyor ve sistemlerin güvenli, verimli çalışmasını garanti ediyoruz.</p>
                         </div>
                     </div>
                 </div>

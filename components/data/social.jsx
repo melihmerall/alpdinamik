@@ -1,33 +1,19 @@
 "use client"
 import Link from "next/link";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useAppContext } from "@/lib/app-context";
 
 const Social = () => {
-    const [socialLinks, setSocialLinks] = useState({
-        facebookUrl: '',
-        twitterUrl: '',
-        instagramUrl: '',
-        linkedinUrl: '',
-        youtubeUrl: '',
-        behanceUrl: '',
-    });
-
-    useEffect(() => {
-        // Fetch social media links from site settings
-        fetch('/api/site-settings')
-            .then(res => res.json())
-            .then(data => {
-                setSocialLinks({
-                    facebookUrl: data.facebookUrl || '',
-                    twitterUrl: data.twitterUrl || '',
-                    instagramUrl: data.instagramUrl || '',
-                    linkedinUrl: data.linkedinUrl || '',
-                    youtubeUrl: data.youtubeUrl || '',
-                    behanceUrl: data.behanceUrl || '',
-                });
-            })
-            .catch(err => console.error('Error fetching social links:', err));
-    }, []);
+    const { siteSettings } = useAppContext();
+    
+    const socialLinks = {
+        facebookUrl: siteSettings?.facebookUrl || '',
+        twitterUrl: siteSettings?.twitterUrl || '',
+        instagramUrl: siteSettings?.instagramUrl || '',
+        linkedinUrl: siteSettings?.linkedinUrl || '',
+        youtubeUrl: siteSettings?.youtubeUrl || '',
+        behanceUrl: siteSettings?.behanceUrl || '',
+    };
 
     return (
         <>

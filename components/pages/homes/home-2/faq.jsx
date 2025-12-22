@@ -22,7 +22,7 @@ const FaqArea = () => {
                                     <div className="faq-item">
                                         <h5 className="icon" data-bs-toggle="collapse" data-bs-target="#collapseOne">1. Hangi ürünleri temsil ediyorsunuz?</h5>
                                         <div id="collapseOne" className="faq-item-body collapse show" data-bs-parent="#accordionExample">
-                                            <p>Alp Dinamik olarak Mecmot markasının Türkiye temsilciliğini yapıyoruz. Mecmot Vidalı Krikolar, Yön Değiştiriciler ve Lineer Aktuatörler ürün portföyümüzü oluşturmaktadır.</p>
+                                            <p>Alpdinamik olarak Mecmot markasının Türkiye temsilciliğini yapıyoruz. Mecmot Vidalı Krikolar, Yön Değiştiriciler ve Lineer Aktuatörler ürün portföyümüzü oluşturmaktadır.</p>
                                         </div>
                                     </div>
                                     <div className="faq-item">

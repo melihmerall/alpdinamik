@@ -1,74 +1,68 @@
 #!/bin/bash
-
-# Sunucu Kurulum Script'i
-# Bu script, sunucuya ilk kurulum yapar ve mevcut durumu kontrol eder
+# Alpdinamik Sunucu Kurulum Script'i
 
 set -e
 
-echo "🚀 Sunucu Kurulum Başlatılıyor..."
+echo "🚀 Alpdinamik Sunucu Kurulumu Başlıyor..."
 echo ""
 
-# Sistem güncellemeleri
-echo "📦 Sistem güncellemeleri yapılıyor..."
-sudo apt update
-sudo apt upgrade -y
-
-# Docker kurulumu kontrolü
-if ! command -v docker &> /dev/null; then
-    echo "🐳 Docker kuruluyor..."
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-    sudo usermod -aG docker $USER
-    echo "✅ Docker kuruldu!"
-else
-    echo "✅ Docker zaten kurulu: $(docker --version)"
-fi
-
-# Docker Compose kurulumu kontrolü
-if ! command -v docker-compose &> /dev/null; then
-    echo "🐳 Docker Compose kuruluyor..."
-    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    echo "✅ Docker Compose kuruldu!"
-else
-    echo "✅ Docker Compose zaten kurulu: $(docker-compose --version)"
-fi
-
-# Gerekli dizinler
-echo "📁 Gerekli dizinler oluşturuluyor..."
-mkdir -p nginx/ssl
-mkdir -p nginx/logs
-mkdir -p nginx/conf.d
-mkdir -p public/uploads
-mkdir -p backups
-chmod 755 public/uploads
-
-# Mevcut container'ları kontrol et
+# 1. Sistem güncellemesi
+echo "📦 Sistem güncelleniyor..."
+apt update && apt upgrade -y
+echo "✅ Sistem güncellendi"
 echo ""
-echo "🔍 Mevcut Docker durumu kontrol ediliyor..."
-./scripts/check-existing-containers.sh
 
-# .env.production kontrolü
-if [ ! -f ".env.production" ]; then
-    echo ""
-    echo "⚠️  .env.production dosyası bulunamadı!"
-    if [ -f ".env.production.template" ]; then
-        echo "📝 Template'den oluşturuluyor..."
-        cp .env.production.template .env.production
-        echo "✅ .env.production oluşturuldu. Lütfen değerleri doldurun!"
-    else
-        echo "❌ .env.production.template de bulunamadı!"
-    fi
-else
-    echo "✅ .env.production mevcut"
-fi
+# 2. Docker kurulumu
+echo "🐳 Docker kuruluyor..."
+apt install -y docker.io docker-compose git curl wget nano ufw
+systemctl enable docker
+systemctl start docker
+echo "✅ Docker kuruldu"
+docker --version
+echo ""
 
+# 3. Docker Compose kontrolü
+echo "📦 Docker Compose kontrolü..."
+docker-compose --version || echo "Docker Compose kurulacak"
 echo ""
-echo "✅ Sunucu kurulumu tamamlandı!"
+
+# 4. Docker test
+echo "🧪 Docker test ediliyor..."
+docker run --rm hello-world
+echo "✅ Docker çalışıyor!"
 echo ""
-echo "📋 Sonraki adımlar:"
-echo "1. .env.production dosyasını düzenleyin"
-echo "2. Mevcut verileri kontrol edin: ./scripts/check-existing-containers.sh"
-echo "3. Deployment yapın: ./scripts/deploy.sh"
-echo "4. Mevcut verileri taşıyın: ./scripts/migrate-existing-data.sh"
+
+# 5. Proje klasörü oluştur
+echo "📁 Proje klasörü oluşturuluyor..."
+mkdir -p /var/www/alpdinamik
+cd /var/www/alpdinamik
+pwd
+echo "✅ Klasör oluşturuldu"
+echo ""
+
+# 6. Firewall ayarları
+echo "🔥 Firewall ayarlanıyor..."
+ufw allow 22/tcp
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 3001/tcp
+ufw --force enable
+ufw status numbered
+echo "✅ Firewall ayarlandı"
+echo ""
+
+# 7. Sistem bilgileri
+echo "📊 Sistem Bilgileri:"
+cat /etc/os-release | grep PRETTY_NAME
+free -h | grep Mem
+df -h / | tail -1
+echo ""
+
+echo "✅ Sunucu hazırlığı tamamlandı!"
+echo ""
+echo "📝 Sonraki adımlar:"
+echo "   1. Projeyi /var/www/alpdinamik klasörüne aktarın"
+echo "   2. .env.production dosyasını oluşturun"
+echo "   3. Database dump'ını import edin"
+echo ""
 

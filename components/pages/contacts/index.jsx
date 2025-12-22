@@ -32,7 +32,7 @@ const ContactUs = () => {
         };
     }, []);
 
-    // Default map for İstanbul, Türkiye (Alp Dinamik)
+    // Default map for İstanbul, Türkiye (Alpdinamik)
     const defaultMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.424314489!2d28.9784!3d41.0082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab9e7a7777c43%3A0x4c76ed36d4b1c5a1!2sIstanbul%2C%20Turkey!5e0!3m2!1sen!2str!4v1234567890123!5m2!1sen!2str";
     
     // Memoize map URL calculation to prevent unnecessary re-renders
@@ -48,7 +48,7 @@ const ContactUs = () => {
     }, [siteSettings?.mapEmbedUrl, defaultMapUrl]);
     
     const mapTitle = useMemo(() => {
-        return siteSettings?.address || "Alp Dinamik - İstanbul, Türkiye";
+        return siteSettings?.address || "Alpdinamik - İstanbul, Türkiye";
     }, [siteSettings?.address]);
 
     return (

@@ -1,26 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useAppContext } from "@/lib/app-context";
 import Social from '../../data/social';
 import logo2 from "../../../public/assets/img/logo-2.png";
 
 const SideBar = ({ isOpen, setIsOpen }) => {
-    const [siteSettings, setSiteSettings] = useState(null);
-
-    useEffect(() => {
-        async function fetchSettings() {
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setSiteSettings(data);
-                }
-            } catch (error) {
-                // Error fetching site settings
-            }
-        }
-        fetchSettings();
-    }, []);
+    const { siteSettings } = useAppContext();
 
     const phone = siteSettings?.phone || '+90 262 643 41 26';
     const email = siteSettings?.email || 'alpdinamik@alpdinamik.com.tr';

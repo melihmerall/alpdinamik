@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/db'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BannersPage() {
   const banners = await prisma.banner.findMany({
     orderBy: { order: 'asc' },

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alpdinamik.com.tr'
-  const defaultTitle = `${service.title} - Alp Dinamik | Lineer Hareket Sistemleri`
+  const defaultTitle = `${service.title} - Alpdinamik | Lineer Hareket Sistemleri`
   const defaultDescription = service.summary || service.title
 
   return {

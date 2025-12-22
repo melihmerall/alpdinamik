@@ -1,0 +1,35 @@
+WinSCP Bağlantı Ayarları
+========================
+
+Yeni Site Ekle:
+--------------
+1. WinSCP'yi açın
+2. "Yeni Site" butonuna tıklayın
+3. Aşağıdaki bilgileri girin:
+
+Dosya Protokolü: SFTP
+Ana Makine Adı: 178.157.14.211
+Port Numarası: 23422
+Kullanıcı Adı: root
+Şifre: 9JVEWtGp8QzNFrK
+
+Gelişmiş Ayarlar:
+-----------------
+1. "Gelişmiş" butonuna tıklayın
+2. "Bağlantı" > "SSH" > "Kimlik Doğrulama" bölümünde:
+   - "Kimlik doğrulama yöntemi" olarak "Normal parola" seçin
+3. "Oturum" > "Kaydet" ile kaydedin
+
+Bağlan ve Dosya Aktar:
+----------------------
+1. "Oturum" > "Bağlan" ile bağlanın
+2. Sol tarafta: Yerel bilgisayarınız (C:\Users\Administrator\Desktop\AlpDinamik-Çalışması\alpdinamik)
+3. Sağ tarafta: Sunucu (/var/www/alpdinamik)
+4. Dosyaları sürükle-bırak ile aktarın
+
+Önemli:
+-------
+- Tüm proje klasörünü aktarın
+- alpdinamik-dump-20251216-120033.sql dosyasını da aktarın
+- node_modules ve .next klasörlerini aktarmaya gerek yok (otomatik hariç tutulur)
+

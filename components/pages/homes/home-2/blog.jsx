@@ -85,6 +85,8 @@ const BlogTwo = () => {
             },
         },
     };
+    // Always render the component structure, even during loading
+    // This ensures the component is visible on first page load
     if (loading) {
         return (
             <div className="blog__two section-padding-two">
@@ -163,6 +165,30 @@ const BlogTwo = () => {
                 <div className="row wow fadeInUp" data-wow-delay=".5s">
                     <div className="col-xl-12">
                         <div className="slider-area" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+                            <div className="blog-slider-floating">
+                                <button 
+                                    type="button"
+                                    className="floating-nav-btn blog-floating-btn blog_prev"
+                                    aria-label="Önceki haber"
+                                >
+                                    <span className="nav-btn-icon" aria-hidden="true">
+                                        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 6H17M1 6L6 1M1 6L6 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <button 
+                                    type="button"
+                                    className="floating-nav-btn blog-floating-btn blog_next"
+                                    aria-label="Sonraki haber"
+                                >
+                                    <span className="nav-btn-icon" aria-hidden="true">
+                                        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17 6L1 6M17 6L12 1M17 6L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
                             <Swiper 
                                 modules={[Autoplay, Navigation]} 
                                 {...slideControl}
@@ -173,6 +199,27 @@ const BlogTwo = () => {
                                     const publishedDate = data.publishedAt ? new Date(data.publishedAt) : null;
                                     const day = publishedDate ? publishedDate.getDate() : '';
                                     const month = publishedDate ? publishedDate.toLocaleDateString('tr-TR', { month: 'short' }) : '';
+                                    const formattedDate = publishedDate
+                                        ? publishedDate.toLocaleDateString('tr-TR', {
+                                            day: '2-digit',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        })
+                                        : '';
+                                    const excerptSource =
+                                        data.excerpt ||
+                                        data.description ||
+                                        data.metaDescription ||
+                                        data.content ||
+                                        '';
+                                    const plainExcerpt =
+                                        typeof excerptSource === 'string'
+                                            ? excerptSource.replace(/<[^>]+>/g, '')
+                                            : '';
+                                    const previewText = plainExcerpt
+                                        ? `${plainExcerpt.slice(0, 120)}${plainExcerpt.length > 120 ? '...' : ''}`
+                                        : '';
+                                    const categoryLabel = data.category?.name || 'Haber';
                                     
                                     return (
                                     <SwiperSlide key={id}>
@@ -214,33 +261,32 @@ const BlogTwo = () => {
                                                     )}
                                                 </div>
                                                 <div className="blog__one-item-content">
+                                                    <div className="blog-card-meta">
+                                                        <span>{categoryLabel}</span>
+                                                        {formattedDate && <span>{formattedDate}</span>}
+                                                    </div>
                                                     <h6>
                                                         <Link href={`/blog/${data.slug}`} className="blog-card-title">
                                                             {data.title}
                                                         </Link>
                                                     </h6>
+                                                    {previewText && (
+                                                        <p className="blog-card-excerpt">
+                                                            {previewText}
+                                                        </p>
+                                                    )}
+                                                    <div className="blog-card-footer">
+                                                        <Link href={`/blog/${data.slug}`} className="blog-card-cta">
+                                                            Haberi oku
+                                                            <i className="flaticon-right-up" aria-hidden="true"></i>
+                                                        </Link>
+                                                    </div>
                                             </div>
                                         </div>
                                     </SwiperSlide>
                                     );
                                 })}
                             </Swiper>
-                            <div className="slider-arrow blog-slider-arrows">
-                                <button 
-                                    type="button"
-                                    className="slider-arrow-prev blog_prev"
-                                    aria-label="Önceki blog"
-                                >
-                                    <i className="fa-sharp fa-regular fa-arrow-left-long"></i>
-                                </button>
-                                <button 
-                                    type="button"
-                                    className="slider-arrow-next blog_next"
-                                    aria-label="Sonraki blog"
-                                >
-                                    <i className="fa-sharp fa-regular fa-arrow-right-long"></i>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -283,10 +329,10 @@ const BlogTwo = () => {
                     overflow: hidden !important;
                 }
                 .blog-card-modern {
-                    background: var(--bg-white);
-                    border: 1px solid rgba(0, 0, 0, 0.08);
-                    border-radius: 12px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                    background: linear-gradient(155deg, rgba(255,255,255,0.98) 0%, #f6f8fc 100%);
+                    border: 1px solid rgba(15, 27, 54, 0.08);
+                    border-radius: 18px;
+                    box-shadow: 0 20px 50px rgba(4, 12, 34, 0.08);
                     transition: all 0.3s ease;
                     overflow: hidden;
                     height: 100%;
@@ -302,45 +348,45 @@ const BlogTwo = () => {
                 }
                 .blog-card-image {
                     width: 100%;
-                    height: 270px;
+                    height: 280px;
                     object-fit: cover;
-                    border-radius: 12px 12px 0 0;
+                    border-radius: 18px 18px 0 0;
                 }
                 .blog__one-item-image-date {
                     position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    background: var(--bg-white);
-                    padding: 8px 20px;
-                    border-radius: 0 8px 0 0;
+                    bottom: 18px;
+                    left: 18px;
+                    background: rgba(255,255,255,0.9);
+                    padding: 8px 18px;
+                    border-radius: 999px;
                     display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 10px 25px rgba(6, 17, 48, 0.15);
                 }
                 .blog__one-item-image-date h6 {
                     margin: 0;
-                    font-size: 18px;
+                    font-size: 16px;
                     font-weight: 600;
                     color: var(--text-heading-color);
                     line-height: 1.2;
                 }
                 .blog__one-item-image-date span {
-                    font-size: 12px;
+                    font-size: 13px;
                     color: var(--body-color);
-                    text-transform: uppercase;
-                    margin-top: 2px;
+                    text-transform: capitalize;
                 }
                 .blog__one-item-content {
-                    padding: 20px 25px 25px 25px;
+                    padding: 24px 26px 28px 26px;
                     flex: 1;
                     display: flex;
                     flex-direction: column;
+                    gap: 12px;
                 }
                 .blog__one-item-content h6 {
                     margin: 0;
-                    margin-bottom: auto;
-                    font-size: 18px;
-                    line-height: 1.5;
+                    font-size: 20px;
+                    line-height: 1.4;
                     font-weight: 600;
                 }
                 .blog-card-title {
@@ -350,6 +396,46 @@ const BlogTwo = () => {
                 }
                 .blog-card-title:hover {
                     color: var(--primary-color-1);
+                }
+                .blog-card-meta {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2em;
+                    color: rgba(9, 18, 39, 0.55);
+                }
+                .blog-card-excerpt {
+                    margin: 0;
+                    color: rgba(9, 18, 39, 0.7);
+                    line-height: 1.6;
+                    font-size: 0.95rem;
+                }
+                .blog-card-footer {
+                    margin-top: auto;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+                .blog-card-cta {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 20px;
+                    border-radius: 999px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    color: #0e1b36;
+                    border: 1px solid rgba(9, 18, 39, 0.15);
+                    transition: all 0.3s ease;
+                }
+                .blog-card-cta i {
+                    font-size: 0.85rem;
+                }
+                .blog-card-cta:hover {
+                    color: #fff;
+                    background: linear-gradient(135deg, #1d62f0, #6d9dff);
+                    border-color: transparent;
                 }
                 /* Blog Two Responsive Styles */
                 @media (max-width: 1199px) {
@@ -361,39 +447,22 @@ const BlogTwo = () => {
                         font-size: clamp(28px, 5vw, 40px) !important;
                     }
                 }
-                /* Slider Navigation Arrows - Theme Style */
-                .blog-slider-arrows {
-                    position: relative;
-                }
-                .blog-slider-arrows button {
-                    background: none;
-                    border: none;
-                    padding: 0;
-                    margin: 0;
-                    outline: none;
-                }
-                .blog-slider-arrows button i {
-                    font-size: 24px;
-                    display: inline-flex;
+                .blog-slider-floating {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    display: flex;
+                    justify-content: space-between;
                     align-items: center;
-                    justify-content: center;
-                    border-radius: 50%;
-                    color: var(--text-heading-color);
-                    background: var(--bg-white);
-                    transition: 0.4s;
-                    border: 1px solid var(--border-color-1);
-                    width: 60px;
-                    height: 60px;
-                    cursor: pointer;
-                }
-                .blog-slider-arrows button i:hover {
-                    color: var(--color-1);
-                    background: var(--primary-color-1);
-                    border-color: var(--primary-color-1);
+                    pointer-events: none;
+                    padding: 0 15px;
+                    z-index: 2;
+                    transform: translateY(-50%);
                 }
                 @media (max-width: 991px) {
-                    .blog-slider-arrows {
-                        display: none !important;
+                    .blog-slider-floating {
+                        display: none;
                     }
                 }
                 @media (max-width: 767px) {
@@ -415,10 +484,10 @@ const BlogTwo = () => {
                         height: 200px !important;
                     }
                     .blog__one-item-content {
-                        padding: 15px 20px 20px 20px !important;
+                        padding: 18px 18px 24px 18px !important;
                     }
                     .blog__one-item-content h6 {
-                        font-size: 16px !important;
+                        font-size: 17px !important;
                     }
                     .blog-slider-arrows {
                         display: none !important;

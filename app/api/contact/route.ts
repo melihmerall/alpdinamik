@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
                     <tr>
                         <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px 40px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">Yeni İletişim Formu</h1>
-                            <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">Alp Dinamik Web Sitesi</p>
+                            <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">Alpdinamik Web Sitesi</p>
                         </td>
                     </tr>
                     
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
                     <!-- Footer -->
                     <tr>
                         <td style="background-color: #f8f9fa; padding: 20px 40px; text-align: center; border-top: 1px solid #e9ecef;">
-                            <p style="margin: 0; color: #999; font-size: 12px;">Bu e-posta Alp Dinamik web sitesi iletişim formundan otomatik olarak gönderilmiştir.</p>
+                            <p style="margin: 0; color: #999; font-size: 12px;">Bu e-posta Alpdinamik web sitesi iletişim formundan otomatik olarak gönderilmiştir.</p>
                         </td>
                     </tr>
                 </table>
@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
         `.trim();
 
         const mailOptions = {
-          from: `"Alp Dinamik Web Sitesi" <${settings.smtpUser}>`,
+          from: `"Alpdinamik Web Sitesi" <${settings.smtpUser}>`,
           to: settings.contactEmail,
           subject: `Yeni İletişim Formu: ${subject}`,
           html: htmlEmail,
