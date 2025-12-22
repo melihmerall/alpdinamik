@@ -62,9 +62,10 @@ const BannerFour = () => {
     const ctaLabel = firstBanner?.ctaLabel || contentBlocks?.home_hero_cta_primary?.body || 'Projenizi Paylaşın';
     const ctaUrl = firstBanner?.ctaUrl || '/#iletisim';
 
-    if (loading) {
-        return null;
-    }
+    // Show fallback content even while loading
+    // if (loading) {
+    //     return null;
+    // }
 
     // Video URL'ini hazırla (zaman aralığı ekle)
     const getVideoUrl = (url) => {
@@ -84,8 +85,8 @@ const BannerFour = () => {
             padding: '0 !important',
             paddingTop: '0 !important',
             paddingBottom: '0 !important',
-            minHeight: '700px !important', 
-            height: '700px !important',
+            minHeight: '120vh !important', 
+            height: '120vh !important',
             overflow: 'hidden'
         }}>
             <div 
@@ -95,8 +96,8 @@ const BannerFour = () => {
                     top: 0,
                     left: 0,
                     width: '100%',
-                    height: '700px',
-                    minHeight: '700px',
+                    height: '100vh',
+                    minHeight: '100vh',
                     zIndex: -1,
                     backgroundImage: finalVideoUrl ? 'none' : (firstBanner?.imageUrl ? `url(${firstBanner.imageUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'),
                     backgroundSize: 'cover',
@@ -110,8 +111,8 @@ const BannerFour = () => {
                         top: 0,
                         left: 0,
                         width: '100%',
-                        height: '700px',
-                        minHeight: '700px',
+                        height: '100vh',
+                        minHeight: '100vh',
                         overflow: 'hidden'
                     }}>
                         <video 
@@ -123,8 +124,8 @@ const BannerFour = () => {
                             src={finalVideoUrl}
                             style={{ 
                                 width: '100%', 
-                                height: '700px',
-                                minHeight: '700px',
+                                height: '100vh',
+                                minHeight: '100vh',
                                 objectFit: 'cover',
                                 position: 'absolute',
                                 top: 0,
@@ -169,28 +170,28 @@ const BannerFour = () => {
                 </div>
             </div>
             <style jsx global>{`
-                /* Banner Four Fixed Height - Override SCSS */
+                /* Banner Four Full Viewport Height - Override SCSS */
                 .banner__four {
                     padding: 0 !important;
                     padding-top: 0 !important;
                     padding-bottom: 0 !important;
-                    min-height: 700px !important;
-                    height: 700px !important;
+                    min-height: 100vh !important;
+                    height: 100vh !important;
                     display: flex !important;
                     align-items: center !important;
                     overflow: hidden !important;
                 }
                 .banner__four .bg-video {
-                    min-height: 700px !important;
-                    height: 700px !important;
+                    min-height: 100vh !important;
+                    height: 100vh !important;
                 }
                 .banner__four .elementor-background-video-container {
-                    min-height: 700px !important;
-                    height: 700px !important;
+                    min-height: 100vh !important;
+                    height: 100vh !important;
                 }
                 .banner__four .elementor-background-video-hosted {
-                    min-height: 700px !important;
-                    height: 700px !important;
+                    min-height: 100vh !important;
+                    height: 100vh !important;
                 }
                 .banner__four-content {
                     padding: 80px 0 !important;
@@ -198,38 +199,38 @@ const BannerFour = () => {
                 /* Banner Four Responsive Styles */
                 @media (max-width: 991px) {
                     .banner__four {
-                        min-height: 600px !important;
-                        height: 600px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .bg-video {
-                        min-height: 600px !important;
-                        height: 600px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-container {
-                        min-height: 600px !important;
-                        height: 600px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-hosted {
-                        min-height: 600px !important;
-                        height: 600px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                 }
                 @media (max-width: 767px) {
                     .banner__four {
-                        min-height: 500px !important;
-                        height: 500px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .bg-video {
-                        min-height: 500px !important;
-                        height: 500px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-container {
-                        min-height: 500px !important;
-                        height: 500px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-hosted {
-                        min-height: 500px !important;
-                        height: 500px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four-content {
                         padding: 40px 20px !important;
@@ -249,20 +250,20 @@ const BannerFour = () => {
                 }
                 @media (max-width: 575px) {
                     .banner__four {
-                        min-height: 450px !important;
-                        height: 450px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .bg-video {
-                        min-height: 450px !important;
-                        height: 450px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-container {
-                        min-height: 450px !important;
-                        height: 450px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                     .banner__four .elementor-background-video-hosted {
-                        min-height: 450px !important;
-                        height: 450px !important;
+                        min-height: 100vh !important;
+                        height: 100vh !important;
                     }
                 }
             `}</style>

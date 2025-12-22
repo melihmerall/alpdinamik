@@ -8,6 +8,22 @@ export default function RootLayout({ children }) {
     const [faviconUrl, setFaviconUrl] = useState('/favicon.ico');
 
     useEffect(() => {
+        // Load CSS files dynamically for production compatibility
+        const cssFiles = [
+            '/assets/css/fontawesome.css',
+            '/assets/font/flaticon_flexitype.css',
+            '/assets/css/animate.css',
+            '/assets/css/meanmenu.min.css',
+            '/assets/sass/style.css'
+        ];
+
+        cssFiles.forEach(href => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        });
+
         // Dynamically import Bootstrap JavaScript
         import("bootstrap/dist/js/bootstrap.min.js");
 
@@ -48,6 +64,7 @@ export default function RootLayout({ children }) {
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 {/* DNS Prefetch for external resources */}
                 <link rel="dns-prefetch" href="https://html.nextwpcook.com" />
+                {/* CSS Files are loaded dynamically via useEffect for production compatibility */}
             </head>
             <body>
                 <LoadingProvider>

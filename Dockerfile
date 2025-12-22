@@ -37,9 +37,17 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy necessary files
+# Public klasörünü hem root'a hem standalone'a kopyala (Next.js standalone build için)
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Standalone build'de public klasörü de olmalı
+RUN if [ -d "/app/.next/standalone/public" ]; then \
+      echo "Standalone public klasörü zaten mevcut"; \
+    else \
+      mkdir -p /app/.next/standalone/public && \
+      cp -r /app/public/* /app/.next/standalone/public/ 2>/dev/null || true; \
+    fi
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma

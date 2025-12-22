@@ -1,13 +1,13 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: ${SITE_NAME:-alpdinamik}-postgres
+    container_name: alpdinamik-postgres
     environment:
       POSTGRES_USER: ${DB_USER:-alpdinamik_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME:-alpdinamik_db}
     volumes:
-      - ${SITE_NAME:-alpdinamik}-postgres-data:/var/lib/postgresql/data
+      - alpdinamik-postgres-data:/var/lib/postgresql/data
     ports:
       - "${DB_PORT:-5432}:5432"
     healthcheck:
@@ -16,14 +16,14 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - ${SITE_NAME:-alpdinamik}-network
+      - alpdinamik-network
     restart: unless-stopped
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ${SITE_NAME:-alpdinamik}-app
+    container_name: alpdinamik-app
     environment:
       DATABASE_URL: ${DATABASE_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
@@ -32,11 +32,17 @@ services:
       NODE_ENV: production
     ports:
       - "${SITE_PORT:-3001}:3000"
+    volumes:
+      # Upload klasörünü kalıcı hale getir
+      # Next.js standalone build .next/standalone/public klasörünü kullanır
+      - ./uploads:/app/.next/standalone/public/uploads
+      # Ayrıca /app/public/uploads'a da mount et (geriye dönük uyumluluk için)
+      - ./uploads:/app/public/uploads
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - ${SITE_NAME:-alpdinamik}-network
+      - alpdinamik-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
@@ -46,9 +52,9 @@ services:
       start_period: 40s
 
 volumes:
-  ${SITE_NAME:-alpdinamik}-postgres-data:
+  alpdinamik-postgres-data:
     driver: local
 
 networks:
-  ${SITE_NAME:-alpdinamik}-network:
+  alpdinamik-network:
     driver: bridge

@@ -9,42 +9,43 @@ import 'swiper/css/navigation'
 import 'swiper/css/autoplay'
 
 const ProductsSlider = () => {
-  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchCategories() {
       try {
-        const response = await fetch('/api/products/all?limit=15')
+        const response = await fetch('/api/categories/all?limit=15')
         if (response.ok) {
           const data = await response.json()
-          setProducts(data)
+          setCategories(data)
           
           // Preload only first 3 images (above the fold)
           if (data && data.length > 0) {
-            data.slice(0, 3).forEach((product) => {
-              if (product.imageUrl && !product.imageUrl.startsWith('http')) {
+            data.slice(0, 3).forEach((category) => {
+              const imageUrl = category.breadcrumbImageUrl || category.imageUrl
+              if (imageUrl && !imageUrl.startsWith('http')) {
                 // Only preload local images
                 const link = document.createElement('link')
                 link.rel = 'preload'
                 link.as = 'image'
-                link.href = product.imageUrl
+                link.href = imageUrl
                 document.head.appendChild(link)
               }
             })
           }
         }
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('Error fetching categories:', error)
       } finally {
         setLoading(false)
       }
     }
-    fetchProducts()
+    fetchCategories()
   }, [])
 
   // Loop için yeterli slide kontrolü
-  const canLoop = products.length > 3;
+  const canLoop = categories.length > 3;
   
   const slideControl = {
     spaceBetween: 30,
@@ -95,10 +96,10 @@ const ProductsSlider = () => {
         <div className="container">
           <div className="row mb-50">
             <div className="col-xl-12">
-              <div className="price__area-title t-center">
-                <span className="subtitle">Ürünlerimiz</span>
-                <h2>Ürün Portföyümüz</h2>
-              </div>
+            <div className="price__area-title t-center">
+              <span className="subtitle">Kategorilerimiz</span>
+              <h2>Ürün Kategorileri</h2>
+            </div>
             </div>
           </div>
           <div className="row">
@@ -153,7 +154,7 @@ const ProductsSlider = () => {
     )
   }
 
-  if (products.length === 0) {
+  if (categories.length === 0) {
     return null
   }
 
@@ -167,8 +168,8 @@ const ProductsSlider = () => {
         <div className="row mb-50">
           <div className="col-xl-12">
             <div className="price__area-title t-center">
-              <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Ürünlerimiz</span>
-              <h2 className="wow fadeInRight" data-wow-delay=".6s">Ürün Portföyümüz</h2>
+              <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">Kategorilerimiz</span>
+              <h2 className="wow fadeInRight" data-wow-delay=".6s">Ürün Kategorileri</h2>
             </div>
           </div>
         </div>
@@ -176,14 +177,38 @@ const ProductsSlider = () => {
         <div className="row wow fadeInUp" data-wow-delay=".5s">
           <div className="col-xl-12">
             <div className="slider-area" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+              <div className="products-slider-floating">
+                <button 
+                  type="button"
+                  className="products-floating-btn products-slider-prev"
+                  aria-label="Önceki kategori"
+                >
+                  <span className="nav-btn-icon" aria-hidden="true">
+                    <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 6H17M1 6L6 1M1 6L6 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <button 
+                  type="button"
+                  className="products-floating-btn products-slider-next"
+                  aria-label="Sonraki kategori"
+                >
+                  <span className="nav-btn-icon" aria-hidden="true">
+                    <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17 6L1 6M17 6L12 1M17 6L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
               <Swiper 
                 modules={[Navigation, Autoplay]} 
                 {...slideControl}
                 className="products-swiper"
                 style={{ width: '100%', overflow: 'hidden' }}
               >
-                {products.map((product, index) => (
-                  <SwiperSlide key={product.id}>
+                {categories.map((category, index) => (
+                  <SwiperSlide key={category.id}>
                     <div className="blog__one-item wow fadeInUp" data-wow-delay={`${0.4 + (index * 0.1)}s`} style={{
                       background: 'var(--bg-white)',
                       border: '1px solid rgba(0, 0, 0, 0.08)',
@@ -205,38 +230,41 @@ const ProductsSlider = () => {
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}>
                       <div className="blog__one-item-image" style={{ position: 'relative', width: '100%', height: '270px' }}>
-                        <Link href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`} prefetch>
-                          {product.imageUrl && product.imageUrl.startsWith('http') ? (
-                            <img
-                              src={product.imageUrl}
-                              alt={product.name}
-                              style={{
-                                width: '100%',
-                                height: '270px',
-                                objectFit: 'cover',
-                                borderRadius: '12px 12px 0 0'
-                              }}
-                              loading={index < 3 ? 'eager' : 'lazy'}
-                            />
-                          ) : (
-                            <Image
-                              src={product.imageUrl || '/assets/img/blog/blog-1.jpg'}
-                              alt={product.name}
-                              width={400}
-                              height={270}
-                              style={{
-                                width: '100%',
-                                height: 'auto',
-                                minHeight: '270px',
-                                objectFit: 'cover',
-                                borderRadius: '12px 12px 0 0'
-                              }}
-                              loading={index < 3 ? 'eager' : 'lazy'}
-                              priority={index < 3}
-                            />
-                          )}
+                        <Link href={`/temsilcilikler/${category.representative?.slug}/kategoriler/${category.slug}`} prefetch>
+                          {(() => {
+                            const imageUrl = category.breadcrumbImageUrl || category.imageUrl
+                            return imageUrl && imageUrl.startsWith('http') ? (
+                              <img
+                                src={imageUrl}
+                                alt={category.name}
+                                style={{
+                                  width: '100%',
+                                  height: '270px',
+                                  objectFit: 'cover',
+                                  borderRadius: '12px 12px 0 0'
+                                }}
+                                loading={index < 3 ? 'eager' : 'lazy'}
+                              />
+                            ) : (
+                              <Image
+                                src={imageUrl || '/assets/img/blog/blog-1.jpg'}
+                                alt={category.name}
+                                width={400}
+                                height={270}
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  minHeight: '270px',
+                                  objectFit: 'cover',
+                                  borderRadius: '12px 12px 0 0'
+                                }}
+                                loading={index < 3 ? 'eager' : 'lazy'}
+                                priority={index < 3}
+                              />
+                            )
+                          })()}
                         </Link>
-                        {product.representative?.name && (
+                        {category.representative?.name && (
                           <div className="blog__one-item-image-date" style={{
                             position: 'absolute',
                             bottom: 0,
@@ -252,17 +280,9 @@ const ProductsSlider = () => {
                               fontSize: '12px', 
                               color: 'var(--body-color)',
                               textTransform: 'uppercase',
-                              marginBottom: '2px'
-                            }}>{product.representative.name}</span>
-                            {product.maxCapacity && (
-                              <h6 style={{ 
-                                margin: 0, 
-                                fontSize: '16px', 
-                                fontWeight: '600',
-                                color: 'var(--primary-color-1)',
-                                lineHeight: '1.2'
-                              }}>Max. {product.maxCapacity}</h6>
-                            )}
+                              marginBottom: '2px',
+                              fontWeight: '600'
+                            }}>{category.representative.name}</span>
                           </div>
                         )}
                       </div>
@@ -272,19 +292,6 @@ const ProductsSlider = () => {
                         display: 'flex',
                         flexDirection: 'column'
                       }}>
-                        {product.series?.category && (
-                          <span style={{
-                            fontSize: '12px',
-                            color: 'var(--primary-color-1)',
-                            fontWeight: '600',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.5px',
-                            marginBottom: '8px',
-                            display: 'inline-block'
-                          }}>
-                            {product.series.category.name}
-                          </span>
-                        )}
                         <h6 style={{ 
                           margin: 0,
                           marginBottom: 'auto',
@@ -293,7 +300,7 @@ const ProductsSlider = () => {
                           fontWeight: '600'
                         }}>
                           <Link 
-                            href={`/temsilcilikler/${product.representative?.slug}/urunler/${product.slug}`} 
+                            href={`/temsilcilikler/${category.representative?.slug}/kategoriler/${category.slug}`} 
                             style={{ 
                               color: 'var(--text-heading-color)',
                               textDecoration: 'none',
@@ -306,30 +313,29 @@ const ProductsSlider = () => {
                               e.target.style.color = 'var(--text-heading-color)';
                             }}
                           >
-                            {product.name}
+                            {category.name}
                           </Link>
                         </h6>
+                        {category.description && (
+                          <p style={{
+                            margin: '10px 0 0 0',
+                            fontSize: '14px',
+                            color: 'var(--body-color)',
+                            lineHeight: '1.6',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {category.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
-              <div className="slider-arrow products-slider-arrows">
-                <button 
-                  type="button"
-                  className="slider-arrow-prev products-slider-prev"
-                  aria-label="Önceki ürün"
-                >
-                  <i className="fa-sharp fa-regular fa-arrow-left-long"></i>
-                </button>
-                <button 
-                  type="button"
-                  className="slider-arrow-next products-slider-next"
-                  aria-label="Sonraki ürün"
-                >
-                  <i className="fa-sharp fa-regular fa-arrow-right-long"></i>
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -360,39 +366,50 @@ const ProductsSlider = () => {
           width: 100% !important;
           position: relative !important;
         }
-        /* Slider Navigation Arrows - Theme Style */
-        .products-slider-arrows {
-          position: relative;
+        .products-slider-floating {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          pointer-events: none;
+          padding: 0 15px;
+          z-index: 2;
+          transform: translateY(-50%);
         }
-        .products-slider-arrows button {
-          background: none;
-          border: none;
-          padding: 0;
-          margin: 0;
-          outline: none;
-        }
-        .products-slider-arrows button i {
-          font-size: 24px;
+        .products-floating-btn {
+          pointer-events: auto;
+          width: 58px;
+          height: 58px;
+          border-radius: 50%;
+          border: 1px solid rgba(15, 27, 54, 0.2);
+          background: rgba(255,255,255,0.9);
+          backdrop-filter: blur(6px);
+          color: var(--text-heading-color);
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          border-radius: 50%;
-          color: var(--text-heading-color);
-          background: var(--bg-white);
-          transition: 0.4s;
-          border: 1px solid var(--border-color-1);
-          width: 60px;
-          height: 60px;
-          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 12px 25px rgba(15, 27, 54, 0.15);
         }
-        .products-slider-arrows button i:hover {
-          color: var(--color-1);
-          background: var(--primary-color-1);
-          border-color: var(--primary-color-1);
+        .products-floating-btn:hover,
+        .products-floating-btn:focus-visible {
+          color: #fff;
+          border-color: transparent;
+          background: linear-gradient(135deg, #1d62f0, #6d9dff);
+          outline: none;
+        }
+        .products-floating-btn .nav-btn-icon {
+          display: inline-flex;
         }
         @media (max-width: 991px) {
           .products-swiper {
             padding: 0 15px !important;
+          }
+          .products-slider-floating {
+            display: none;
           }
         }
         /* Products Slider Responsive Styles */
@@ -403,41 +420,6 @@ const ProductsSlider = () => {
           }
           .price__area-title h2 {
             font-size: clamp(28px, 5vw, 40px) !important;
-          }
-        }
-        /* Slider Navigation Arrows - Theme Style */
-        .products-slider-arrows {
-          position: relative;
-        }
-        .products-slider-arrows button {
-          background: none;
-          border: none;
-          padding: 0;
-          margin: 0;
-          outline: none;
-        }
-        .products-slider-arrows button i {
-          font-size: 24px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          color: var(--text-heading-color);
-          background: var(--bg-white);
-          transition: 0.4s;
-          border: 1px solid var(--border-color-1);
-          width: 60px;
-          height: 60px;
-          cursor: pointer;
-        }
-        .products-slider-arrows button i:hover {
-          color: var(--color-1);
-          background: var(--primary-color-1);
-          border-color: var(--primary-color-1);
-        }
-        @media (max-width: 991px) {
-          .products-slider-arrows {
-            display: none !important;
           }
         }
         @media (max-width: 767px) {
@@ -467,9 +449,6 @@ const ProductsSlider = () => {
           .blog__one-item-content h6 {
             font-size: 16px !important;
           }
-          .products-slider-arrows {
-            display: none !important;
-          }
         }
         @media (max-width: 575px) {
           .price__area-title h2 {
@@ -485,4 +464,3 @@ const ProductsSlider = () => {
 }
 
 export default ProductsSlider
-

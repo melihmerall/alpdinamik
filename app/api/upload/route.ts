@@ -9,18 +9,31 @@ export const runtime = 'nodejs'
 export const maxDuration = 300 // 5 minutes for large file uploads
 
 export async function POST(request: NextRequest) {
-  const user = await verifyAuth()
-  if (!user || user.role !== 'ADMIN') {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    )
-  }
-
+  console.log('[UPLOAD] Upload request received')
+  
   try {
+    const user = await verifyAuth()
+    console.log('[UPLOAD] Auth check:', { hasUser: !!user, role: user?.role })
+    
+    if (!user || user.role !== 'ADMIN') {
+      console.log('[UPLOAD] Unauthorized access attempt')
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    console.log('[UPLOAD] Parsing form data...')
     const formData = await request.formData()
     const file = formData.get('file') as File
     const folder = formData.get('folder') as string || 'uploads'
+    
+    console.log('[UPLOAD] File info:', { 
+      fileName: file?.name, 
+      fileSize: file?.size, 
+      fileType: file?.type,
+      folder 
+    })
 
     if (!file) {
       return NextResponse.json(
@@ -71,15 +84,52 @@ export async function POST(request: NextRequest) {
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
     const filename = `${timestamp}-${originalName}`
 
+    // Next.js standalone build uses .next/standalone/public for serving
+    // Try standalone first, fallback to public
+    const standaloneUploadDir = join(process.cwd(), '.next', 'standalone', 'public', 'uploads', folder)
+    const publicUploadDir = join(process.cwd(), 'public', 'uploads', folder)
+    
+    // Determine which directory to use
+    let uploadDir = publicUploadDir
+    let filepath = join(uploadDir, filename)
+    
+    // Check if standalone directory exists (production build)
+    if (existsSync(join(process.cwd(), '.next', 'standalone'))) {
+      uploadDir = standaloneUploadDir
+      filepath = join(uploadDir, filename)
+      console.log('[UPLOAD] Using standalone directory:', uploadDir)
+    } else {
+      console.log('[UPLOAD] Using public directory:', uploadDir)
+    }
+    
     // Create upload directory if it doesn't exist
-    const uploadDir = join(process.cwd(), 'public', 'uploads', folder)
     if (!existsSync(uploadDir)) {
+      console.log('[UPLOAD] Creating directory:', uploadDir)
       await mkdir(uploadDir, { recursive: true })
+      console.log('[UPLOAD] Directory created')
     }
 
     // Write file
-    const filepath = join(uploadDir, filename)
+    console.log('[UPLOAD] Writing file to:', filepath)
     await writeFile(filepath, buffer)
+    console.log('[UPLOAD] File written successfully, size:', buffer.length, 'bytes')
+    
+    // Also write to public directory for volume mount compatibility
+    if (uploadDir !== publicUploadDir) {
+      const publicFilepath = join(publicUploadDir, filename)
+      if (!existsSync(publicUploadDir)) {
+        await mkdir(publicUploadDir, { recursive: true })
+      }
+      await writeFile(publicFilepath, buffer)
+      console.log('[UPLOAD] Also written to public directory:', publicFilepath)
+    }
+    
+    // Verify file exists
+    if (!existsSync(filepath)) {
+      console.error('[UPLOAD] ERROR: File was not created!', filepath)
+      throw new Error('File was not created after write')
+    }
+    console.log('[UPLOAD] File verified, exists:', existsSync(filepath))
 
     // Get base URL from request or environment
     const host = request.headers.get('host') || ''
@@ -92,6 +142,8 @@ export async function POST(request: NextRequest) {
     const relativeUrl = `/uploads/${folder}/${filename}`
     const absoluteUrl = `${baseUrl}${relativeUrl}`
 
+    console.log('[UPLOAD] Upload successful:', { relativeUrl, absoluteUrl, filename })
+    
     return NextResponse.json({
       success: true,
       url: relativeUrl, // Keep relative for client-side usage
@@ -100,8 +152,17 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error uploading file:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('Error details:', {
+      message: errorMessage,
+      stack: errorStack,
+    })
     return NextResponse.json(
-      { error: 'Failed to upload file' },
+      { 
+        error: 'Failed to upload file',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     )
   }
