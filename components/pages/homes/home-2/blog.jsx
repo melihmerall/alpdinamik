@@ -165,30 +165,24 @@ const BlogTwo = () => {
                 <div className="row wow fadeInUp" data-wow-delay=".5s">
                     <div className="col-xl-12">
                         <div className="slider-area" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-                            <div className="blog-slider-floating">
-                                <button 
-                                    type="button"
-                                    className="floating-nav-btn blog-floating-btn blog_prev"
-                                    aria-label="Önceki haber"
-                                >
-                                    <span className="nav-btn-icon" aria-hidden="true">
-                                        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1 6H17M1 6L6 1M1 6L6 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </span>
-                                </button>
-                                <button 
-                                    type="button"
-                                    className="floating-nav-btn blog-floating-btn blog_next"
-                                    aria-label="Sonraki haber"
-                                >
-                                    <span className="nav-btn-icon" aria-hidden="true">
-                                        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M17 6L1 6M17 6L12 1M17 6L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </span>
-                                </button>
-                            </div>
+                            <button 
+                                type="button"
+                                className="blog-slider-nav blog_prev"
+                                aria-label="Önceki haber"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                            <button 
+                                type="button"
+                                className="blog-slider-nav blog_next"
+                                aria-label="Sonraki haber"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
                             <Swiper 
                                 modules={[Autoplay, Navigation]} 
                                 {...slideControl}
@@ -297,7 +291,7 @@ const BlogTwo = () => {
                     overflow: hidden !important;
                     width: 100% !important;
                     position: relative !important;
-                    padding: 0 60px !important;
+                    padding: 0 !important;
                 }
                 .blog__two .blog-swiper .swiper-wrapper {
                     overflow: visible !important;
@@ -316,11 +310,6 @@ const BlogTwo = () => {
                     overflow: hidden !important;
                     width: 100% !important;
                     position: relative !important;
-                }
-                @media (max-width: 991px) {
-                    .blog__two .blog-swiper {
-                        padding: 0 15px !important;
-                    }
                 }
                 .blog__two {
                     background: transparent !important;
@@ -447,22 +436,114 @@ const BlogTwo = () => {
                         font-size: clamp(28px, 5vw, 40px) !important;
                     }
                 }
-                .blog-slider-floating {
+                /* Blog Slider Navigation Arrows */
+                .blog-slider-nav {
                     position: absolute;
                     top: 50%;
-                    left: 0;
-                    right: 0;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    pointer-events: none;
-                    padding: 0 15px;
-                    z-index: 2;
                     transform: translateY(-50%);
+                    width: 40px;
+                    height: 40px;
+                    min-width: 40px;
+                    min-height: 40px;
+                    background: rgba(255, 255, 255, 0.12);
+                    backdrop-filter: blur(8px);
+                    border: 1px solid rgba(255, 255, 255, 0.18);
+                    border-radius: 50%;
+                    color: var(--text-heading-color);
+                    cursor: pointer;
+                    z-index: 20;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    opacity: 0.75;
+                    padding: 0;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                }
+                .blog-slider-nav:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    border-color: rgba(255, 255, 255, 0.35);
+                    opacity: 1;
+                    transform: translateY(-50%) scale(1.08);
+                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+                }
+                .blog-slider-nav:active {
+                    transform: translateY(-50%) scale(0.96);
+                }
+                .blog_prev {
+                    left: 25px;
+                }
+                .blog_next {
+                    right: 25px;
+                }
+                .blog-slider-nav svg {
+                    width: 16px;
+                    height: 16px;
+                    transition: transform 0.3s ease;
+                }
+                .blog-slider-nav:hover svg {
+                    transform: scale(1.1);
+                }
+                .blog-slider-nav.swiper-button-disabled {
+                    opacity: 0.3;
+                    cursor: not-allowed;
+                }
+                .blog-slider-nav.swiper-button-disabled:hover {
+                    transform: translateY(-50%) scale(1);
+                    background: rgba(255, 255, 255, 0.12);
                 }
                 @media (max-width: 991px) {
-                    .blog-slider-floating {
-                        display: none;
+                    .blog-slider-nav {
+                        width: 36px;
+                        height: 36px;
+                        min-width: 36px;
+                        min-height: 36px;
+                    }
+                    .blog_prev {
+                        left: 18px;
+                    }
+                    .blog_next {
+                        right: 18px;
+                    }
+                    .blog-slider-nav svg {
+                        width: 14px;
+                        height: 14px;
+                    }
+                }
+                @media (max-width: 767px) {
+                    .blog-slider-nav {
+                        width: 32px;
+                        height: 32px;
+                        min-width: 32px;
+                        min-height: 32px;
+                    }
+                    .blog_prev {
+                        left: 12px;
+                    }
+                    .blog_next {
+                        right: 12px;
+                    }
+                    .blog-slider-nav svg {
+                        width: 12px;
+                        height: 12px;
+                    }
+                }
+                @media (max-width: 575px) {
+                    .blog-slider-nav {
+                        width: 28px;
+                        height: 28px;
+                        min-width: 28px;
+                        min-height: 28px;
+                    }
+                    .blog_prev {
+                        left: 10px;
+                    }
+                    .blog_next {
+                        right: 10px;
+                    }
+                    .blog-slider-nav svg {
+                        width: 11px;
+                        height: 11px;
                     }
                 }
                 @media (max-width: 767px) {
