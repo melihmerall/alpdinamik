@@ -410,7 +410,6 @@ export default function CategoryPage() {
                                   <span className="product-hierarchy__category-name">{cat.name}</span>
                                   <span className="product-hierarchy__meta">
                                     {stats.totalSeries} seri
-                                    {stats.totalProducts ? ` · ${stats.totalProducts} ürün` : ""}
                                   </span>
                                 </div>
                                 {hasSeries && <span className="product-hierarchy__chevron" aria-hidden="true" />}
@@ -448,7 +447,7 @@ export default function CategoryPage() {
                                         <div>
                                           <span className="product-hierarchy__series-name">{series.name}</span>
                                           {hasChildren && (
-                                            <span className="product-hierarchy__meta">{seriesProductCount} ürün</span>
+                                            <span className="product-hierarchy__meta">ürünler</span>
                                           )}
                                         </div>
                                         {hasChildren && <span className="product-hierarchy__chevron" aria-hidden="true" />}

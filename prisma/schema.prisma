@@ -290,6 +290,7 @@ model Representative {
   logoUrl            String?
   websiteUrl         String?
   breadcrumbImageUrl String?  // Breadcrumb background image
+  heroImageUrl       String?  // Hero visual image
   order              Int      @default(0)
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
@@ -345,6 +346,39 @@ model Product {
 }
 
 // Product Images - Multiple images for a product (gallery)
+model ApplicationShowcase {
+  id                String   @id @default(cuid())
+  title             String
+  slug              String   @unique
+  summary           String?  @db.Text
+  body              String?  @db.Text
+  imageUrl          String?
+  breadcrumbImageUrl String?
+  order             Int      @default(0)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([isActive, order])
+  @@index([slug])
+  @@map("application_showcases")
+}
+
+// Documents - PDF documents and catalogs
+model Document {
+  id        String   @id @default(cuid())
+  title     String   // Document title (e.g., "Teknik Katalog")
+  imageUrl  String?  // Cover image URL
+  pdfUrl    String   // PDF file URL
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, order])
+  @@map("documents")
+}
+
 model ProductImage {
   id        String   @id @default(cuid())
   productId String

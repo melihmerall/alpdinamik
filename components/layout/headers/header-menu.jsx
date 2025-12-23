@@ -25,24 +25,20 @@ const MainMenu = () => {
                             {representatives.map((rep) => {
                                 const hasCategories = rep.categories && rep.categories.length > 0;
                                 
-                                // Get category URL - only category page, no fallback to product
                                 const getCategoryUrl = (category) => {
-                                    // Only use category page URL if slug exists
                                     if (category.slug) {
                                         return `/temsilcilikler/${rep.slug}/kategoriler/${category.slug}`;
                                     }
-                                    
-                                    // No fallback - return null if no category slug
                                     return null;
                                 };
                                 
                                 return (
-                                    <li key={rep.id} className={hasCategories ? 'menu-item-has-children' : ''}>
+                                    <li key={rep.id} className='menu-item-has-children'>
                                         <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
-                                        {hasCategories && (
-                                            <ul className='sub-menu'>
-                                                <li className='menu-item-has-children'>
-                                                    <Link href='#'>Ürünler</Link>
+                                        <ul className='sub-menu'>
+                                            <li className={hasCategories ? 'menu-item-has-children' : ''}>
+                                                <Link href={`/temsilcilikler/${rep.slug}`}>Ürünler</Link>
+                                                {hasCategories && (
                                                     <ul className='sub-menu'>
                                                         {rep.categories.map((category) => {
                                                             const categoryUrl = getCategoryUrl(category);
@@ -61,9 +57,15 @@ const MainMenu = () => {
                                                             );
                                                         })}
                                                     </ul>
-                                                </li>
-                                            </ul>
-                                        )}
+                                                )}
+                                            </li>
+                                            <li>
+                                                <Link href={`/temsilcilikler/${rep.slug}/uygulamalar`}>Uygulamalar</Link>
+                                            </li>
+                                            <li>
+                                                <Link href={`/temsilcilikler/${rep.slug}/dokumanlar`}>Dökümanlar</Link>
+                                            </li>
+                                        </ul>
                                     </li>
                                 );
                             })}
@@ -73,9 +75,9 @@ const MainMenu = () => {
 
                 <li><Link href='/sektorler'>Sektörler</Link></li>
 
-                <li><Link href='/blog'>Blog</Link></li>
+                <li><Link href='/blog'>Haberler</Link></li>
 
-                <li><Link href='/iletisim'>İLETİŞİM</Link></li>
+                <li><Link href='/iletisim'>İletişim</Link></li>
             </ul>
         </>
     );

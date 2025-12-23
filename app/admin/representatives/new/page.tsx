@@ -33,6 +33,7 @@ export default function NewRepresentative() {
     slug: "",
     description: "",
     logoUrl: "",
+    heroImageUrl: "",
     websiteUrl: "",
     breadcrumbImageUrl: "",
     isActive: true,
@@ -47,7 +48,10 @@ export default function NewRepresentative() {
     });
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'logoUrl' | 'breadcrumbImageUrl') => {
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: 'logoUrl' | 'breadcrumbImageUrl' | 'heroImageUrl'
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -182,6 +186,9 @@ export default function NewRepresentative() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Firma hakkında açıklama..."
               />
+              <small className="admin-help-text">
+                Bu alan temel HTML (ör. &lt;p&gt;, &lt;strong&gt;) destekler.
+              </small>
             </div>
 
             <div className="admin-form-group">
@@ -205,6 +212,29 @@ export default function NewRepresentative() {
               )}
               <small className="admin-help-text">
                 Firma logosu (PNG, JPG, WebP - Maks. 5MB)
+              </small>
+            </div>
+
+            <div className="admin-form-group">
+              <label className="admin-label">Hero Görseli</label>
+              <input
+                type="file"
+                className="admin-input"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, 'heroImageUrl')}
+                disabled={uploading}
+              />
+              {formData.heroImageUrl && (
+                <div className="admin-image-preview" style={{ marginTop: '1rem' }}>
+                  <img
+                    src={formData.heroImageUrl}
+                    alt="Hero Preview"
+                    style={{ maxWidth: '100%', borderRadius: '12px', border: '1px solid #e5e7eb' }}
+                  />
+                </div>
+              )}
+              <small className="admin-help-text">
+                Temsilcilik kahraman alanında gösterilecek görsel (1920x1080 önerilir)
               </small>
             </div>
 

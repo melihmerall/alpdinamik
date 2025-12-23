@@ -314,6 +314,32 @@ async function main() {
     })
   }
 
+  await prisma.applicationShowcase.deleteMany({})
+  await prisma.applicationShowcase.createMany({
+    data: [
+      {
+        title: 'İki noktadan tek tahrikli kaldırma sistemi',
+        summary:
+          'Vidalı kriko ve yön değiştirici kombinasyonuyla simetrik yük aktarımı sağlayan kompakt çözüm.',
+        body:
+          'İki adet vidalı kriko, bir yön değiştirici ve tek motor sayesinde platformlar eş zamanlı hareket eder. Kaplinler aracılığıyla güç aktarılır, hareket 90° kırılarak iki ayrı noktaya eşit dağıtılır.',
+        imageUrl: '/assets/img/applications/application-01.jpg',
+        order: 1,
+        isActive: true,
+      },
+      {
+        title: 'Dört noktadan tek tahrikli platform',
+        summary:
+          'Çift yön değiştirici ile dört köşeden aynı anda yükselen platform uygulaması.',
+        body:
+          'Motorun iki çıkışı yön değiştiricilere taşınır, karşılıklı vidalı krikolarla platform dengeli biçimde kalkar. Geniş yüzeyli yükler için kararlılık sağlar.',
+        imageUrl: '/assets/img/applications/application-02.jpg',
+        order: 2,
+        isActive: true,
+      },
+    ],
+  })
+
   // Create reference projects
   const referenceProjects = [
     {

@@ -1,10 +1,7 @@
 import { redirect } from 'next/navigation'
 import { verifyAuth } from '@/lib/middleware'
-import AdminSidebar from '@/components/admin/sidebar'
-import AdminHeader from '@/components/admin/header'
 import { prisma } from '@/lib/db'
 import Link from 'next/link'
-import './admin.css'
 
 export default async function AdminDashboard() {
   const user = await verifyAuth()
@@ -67,12 +64,7 @@ export default async function AdminDashboard() {
   }
 
   return (
-    <div className="admin-container">
-      <AdminSidebar />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <AdminHeader user={user} />
-        <main className="admin-main">
-          <div>
+    <div>
             <div style={{ marginBottom: '2rem' }}>
               <h1 style={{ fontSize: '2rem', fontWeight: '700', color: 'var(--admin-gray-900)', margin: '0 0 0.5rem' }}>
                 Dashboard
@@ -164,8 +156,6 @@ export default async function AdminDashboard() {
               )}
             </div>
           </div>
-        </main>
-      </div>
     </div>
   )
 }

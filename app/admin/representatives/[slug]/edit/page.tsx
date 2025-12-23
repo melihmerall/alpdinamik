@@ -17,6 +17,7 @@ export default function EditRepresentative() {
     slug: "",
     description: "",
     logoUrl: "",
+    heroImageUrl: "",
     websiteUrl: "",
     breadcrumbImageUrl: "",
     isActive: true,
@@ -38,6 +39,7 @@ export default function EditRepresentative() {
           description: data.description || "",
           logoUrl: data.logoUrl || "",
           websiteUrl: data.websiteUrl || "",
+          heroImageUrl: data.heroImageUrl || "",
           breadcrumbImageUrl: data.breadcrumbImageUrl || "",
           isActive: data.isActive !== undefined ? data.isActive : true,
           order: data.order || 0,
@@ -53,7 +55,10 @@ export default function EditRepresentative() {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: 'logoUrl' | 'breadcrumbImageUrl' | 'heroImageUrl'
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -194,6 +199,9 @@ export default function EditRepresentative() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
+              <small className="admin-help-text">
+                Temel HTML etiketleri desteklenir (örn. &lt;p&gt;, &lt;strong&gt;).
+              </small>
             </div>
 
             <div className="admin-form-group">
@@ -216,6 +224,28 @@ export default function EditRepresentative() {
               )}
               <small className="admin-help-text">
                 Firma logosu (PNG, JPG, WebP - Maks. 5MB)
+              </small>
+            </div>
+
+            <div className="admin-form-group">
+              <label className="admin-label">Hero Görseli</label>
+              <input
+                type="file"
+                className="admin-input"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, 'heroImageUrl')}
+                disabled={uploading}
+              />
+              {formData.heroImageUrl && (
+                <div className="admin-image-preview" style={{ marginTop: '0.75rem' }}>
+                  <img
+                    src={formData.heroImageUrl}
+                    alt="Hero Preview"
+                  />
+                </div>
+              )}
+              <small className="admin-help-text">
+                Temsilcilik kahraman alanında gösterilecek görsel
               </small>
             </div>
 

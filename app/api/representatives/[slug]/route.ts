@@ -47,7 +47,17 @@ export async function PUT(
 
   try {
     const body = await request.json();
-    const { name, slug, description, logoUrl, websiteUrl, breadcrumbImageUrl, isActive, order } = body;
+    const {
+      name,
+      slug,
+      description,
+      logoUrl,
+      heroImageUrl,
+      websiteUrl,
+      breadcrumbImageUrl,
+      isActive,
+      order,
+    } = body;
 
     // Check if slug is being changed and if new slug already exists
     if (slug !== params.slug) {
@@ -70,6 +80,7 @@ export async function PUT(
         slug,
         description: description || null,
         logoUrl: logoUrl || null,
+        heroImageUrl: heroImageUrl || null,
         websiteUrl: websiteUrl || null,
         breadcrumbImageUrl: breadcrumbImageUrl || null,
         isActive: isActive !== undefined ? isActive : true,

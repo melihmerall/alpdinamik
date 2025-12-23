@@ -49,6 +49,16 @@ type CategoryNode = {
   series?: SeriesNode[];
 };
 
+const convertDescriptionToHtml = (value?: string) => {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const htmlTagPattern = /<\/?[a-z][\s\S]*>/i;
+  return htmlTagPattern.test(trimmed)
+    ? trimmed
+    : trimmed.replace(/\n/g, "<br />");
+};
+
 async function getRepresentative(slug: string): Promise<Representative | null> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${slug}`,
@@ -181,6 +191,8 @@ export default async function RepresentativePage({
       ? "Kayıtlı ürün kombinasyonları"
       : "Ürünler yakında yayında";
 
+  const descriptionHtml = convertDescriptionToHtml(representative.description);
+
   const quickFacts = [
     representative.websiteUrl
       ? {
@@ -223,11 +235,11 @@ export default async function RepresentativePage({
             <div className="representative-hero__content">
               <span className="representative-hero__eyebrow">Temsilcilik</span>
               <h1>{representative.name}</h1>
-              {representative.description ? (
+              {descriptionHtml ? (
                 <div
                   className="representative-hero__description"
                   dangerouslySetInnerHTML={{
-                    __html: representative.description.replace(/\n/g, "<br />"),
+                    __html: descriptionHtml,
                   }}
                 />
               ) : (
@@ -306,11 +318,12 @@ export default async function RepresentativePage({
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
       {categories.length > 0 ? (
-        <section className="representative-category-section" id="categories">
+        <section className="representative-category-section">
           <div className="container">
             <div className="representative-category-head">
               <div>

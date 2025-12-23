@@ -282,6 +282,7 @@ model Representative {
   logoUrl            String?
   websiteUrl         String?
   breadcrumbImageUrl String?  // Breadcrumb background image
+  heroImageUrl       String?  // Hero visual image
   order              Int      @default(0)
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())

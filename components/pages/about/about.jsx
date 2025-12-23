@@ -4,6 +4,17 @@ import { useState, useEffect } from "react";
 import image from "../../../public/assets/img/about/about-4.jpg";
 import Count from "../common/count";
 
+const whyChooseItems = [
+    { title: "Mühendislik bakış açısı", description: "Ürün satmadan önce doğru çözümü konuşuruz." },
+    { title: "Yerli üretici gücü", description: "Mecmot'un üretici mühendisliğini sahaya taşırız." },
+    { title: "Doğru hesaplama, doğru ürün", description: "Uygulamaya özel mühendislik hesaplamaları ve ürün seçimi." },
+    { title: "Anında teknik destek", description: "Hızlı geri dönüş, yerinde ve ulaşılabilir teknik ekip." },
+    { title: "Satış sonrası da buradayız", description: "Proje devreye alındıktan sonra da destek devam eder." },
+    { title: "Müşteri değil, çözüm ortağı", description: "İlişkiyi tedarik değil, uzun vadeli iş birliği olarak görürüz." },
+    { title: "Güçlü satış ve saha ağı", description: "Projenin başından devreye almaya kadar yanınızdayız." },
+    { title: "Hareketin olduğu her yerde", description: "Endüstriyel hareket varsa, çözüm de vardır." },
+];
+
 const AboutMain = ({ aboutData }) => {
     const [isVisible, setIsVisible] = useState(false);
 
@@ -395,6 +406,33 @@ const AboutMain = ({ aboutData }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Why Choose Section */}
+            <section className="why-choose section-padding pt-0">
+                <div className="container">
+                    <div className="why-choose__head">
+                        <div>
+                            <span>Neden Alpdinamik?</span>
+                            <h3>Çünkü aynı masada sadece proje konuşuruz</h3>
+                        </div>
+                        <p>
+                            Mühendislikten gelen refleksimizle, satıştan önce ihtiyaçları doğru okumaya
+                            odaklanır, üreticinin gücünü sahaya taşırken projeyi sonuna kadar sahipleniriz.
+                        </p>
+                    </div>
+                    <div className="why-choose__grid">
+                        {whyChooseItems.map((item, index) => (
+                            <article key={item.title} className="why-choose__card">
+                                <div className="why-choose__badge">{index + 1}</div>
+                                <div>
+                                    <h4>{item.title}</h4>
+                                    <p>{item.description}</p>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </>
     );
 };
