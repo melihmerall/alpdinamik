@@ -319,6 +319,7 @@ async function main() {
     data: [
       {
         title: 'İki noktadan tek tahrikli kaldırma sistemi',
+        slug: 'iki-noktadan-tek-tahrikli-kaldirma-sistemi',
         summary:
           'Vidalı kriko ve yön değiştirici kombinasyonuyla simetrik yük aktarımı sağlayan kompakt çözüm.',
         body:
@@ -329,6 +330,7 @@ async function main() {
       },
       {
         title: 'Dört noktadan tek tahrikli platform',
+        slug: 'dort-noktadan-tek-tahrikli-platform',
         summary:
           'Çift yön değiştirici ile dört köşeden aynı anda yükselen platform uygulaması.',
         body:

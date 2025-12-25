@@ -2153,6 +2153,88 @@ a:active {
   width: auto;
 }
 
+/* Header Four - Başlangıçta fixed ve transparent */
+.header__four,
+div.header__four {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  background: transparent;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.header__four .header__area-menubar,
+div.header__four .header__area-menubar {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Scroll yapınca header__area class'ına geçiş - Yumuşak beyaz arka plan */
+.header__area.header__sticky-active,
+.header__sticky-active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.98);
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* Scroll yapınca menü yazıları koyu renk */
+.header__area.header__sticky-active .header__area-menubar-center-menu ul li a,
+.header__sticky-active .header__area-menubar-center-menu ul li a {
+  color: #222222 !important;
+}
+.header__area.header__sticky-active .menu__bar i,
+.header__sticky-active .menu__bar i {
+  color: #222222 !important;
+}
+.header__area.header__sticky-active .header__area-menubar-right-btn.one .build_button,
+.header__sticky-active .header__area-menubar-right-btn.one .build_button {
+  background: var(--primary-color-1) !important;
+  color: var(--text-white) !important;
+}
+.header__area.header__sticky-active .header__area-menubar-right-btn.one .build_button i,
+.header__sticky-active .header__area-menubar-right-btn.one .build_button i {
+  color: var(--text-white) !important;
+  background: var(--color-5) !important;
+}
+.header__area.header__sticky-active .header__area-menubar-left-logo img,
+.header__sticky-active .header__area-menubar-left-logo img {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Scroll yapınca sub-menu yazıları koyu renk */
+.header__area.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu li > a,
+.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu li > a {
+  color: #222222 !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+}
+.header__area.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu li:hover > a,
+.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu li:hover > a {
+  color: var(--primary-color-1) !important;
+}
+.header__area.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu,
+.header__sticky-active .header__area-menubar-center-menu ul li .sub-menu {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
 .representative-category-section {
   padding-top: 0;
   padding-bottom: clamp(60px, 8vw, 110px);

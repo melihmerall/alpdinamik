@@ -1,6 +1,6 @@
 -- AlterTable
-ALTER TABLE "banners" ADD COLUMN     "videoUrl" TEXT,
-ALTER COLUMN "title" DROP NOT NULL;
+-- videoUrl kolonu zaten mevcut olduğu için eklenmedi
+ALTER TABLE "banners" ALTER COLUMN "title" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "company_pages" ADD COLUMN     "certificationImageUrl" TEXT,

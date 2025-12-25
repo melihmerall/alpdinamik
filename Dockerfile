@@ -10,7 +10,8 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
+# Install all dependencies (including devDependencies for Prisma CLI)
+RUN npm ci && npm cache clean --force
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -18,7 +19,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma Client (Prisma devDependencies'de olduğu için node_modules'de olmalı)
 RUN npx prisma generate
 
 # Build Next.js
@@ -51,6 +52,13 @@ RUN if [ -d "/app/.next/standalone/public" ]; then \
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Copy Prisma CLI from builder stage (already installed there)
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+# Copy Prisma binary symlink
+RUN mkdir -p ./node_modules/.bin && \
+    ln -sf ../prisma/build/index.js ./node_modules/.bin/prisma 2>/dev/null || \
+    ln -sf ../prisma/cli/index.js ./node_modules/.bin/prisma 2>/dev/null || true && \
+    chown -R nextjs:nodejs ./node_modules/.bin
 
 USER nextjs
 

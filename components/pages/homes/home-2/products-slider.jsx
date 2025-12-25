@@ -12,24 +12,6 @@ const FALLBACK_CATEGORY_IMAGE = '/assets/img/blog/blog-1.jpg'
 
 const renderCategoryImage = ({ imageUrl, alt, shouldPrioritize }) => {
   const resolvedUrl = imageUrl || FALLBACK_CATEGORY_IMAGE
-  const sharedImageStyles = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain',
-    objectPosition: 'center',
-    display: 'block'
-  }
-
-  if (resolvedUrl.startsWith('http')) {
-    return (
-      <img
-        src={resolvedUrl}
-        alt={alt}
-        loading={shouldPrioritize ? 'eager' : 'lazy'}
-        style={sharedImageStyles}
-      />
-    )
-  }
 
   return (
     <Image
@@ -39,7 +21,13 @@ const renderCategoryImage = ({ imageUrl, alt, shouldPrioritize }) => {
       height={600}
       sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
       priority={shouldPrioritize}
-      style={sharedImageStyles}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center',
+        display: 'block'
+      }}
     />
   )
 }

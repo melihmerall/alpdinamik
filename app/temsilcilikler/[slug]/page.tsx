@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import SEO from "@/components/data/seo";
 import HeaderTwo from "@/components/layout/headers/header-two";
 import FooterTwo from "@/components/layout/footers/footer-two";
@@ -309,7 +310,14 @@ export default async function RepresentativePage({
 
             <div className="representative-hero__visual">
               <div className="representative-hero__visual-card">
-                <img src={heroVisual} alt={representative.name} />
+                <Image
+                  src={heroVisual}
+                  alt={representative.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 420px"
+                  style={{ objectFit: "contain" }}
+                  priority
+                />
                 {representative.logoUrl && (
                   <div className="representative-hero__logo">
                     <img src={representative.logoUrl} alt={`${representative.name} logo`} />
@@ -347,7 +355,13 @@ export default async function RepresentativePage({
                   <article key={category.id} className="representative-category-card">
                     <div className="representative-category-card__media">
                       {category.breadcrumbImageUrl ? (
-                        <img src={category.breadcrumbImageUrl} alt={category.name} />
+                        <Image
+                          src={category.breadcrumbImageUrl}
+                          alt={category.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 320px"
+                          style={{ objectFit: "contain" }}
+                        />
                       ) : (
                         <div className="representative-category-card__placeholder">
                           <i className="flaticon-box" aria-hidden="true"></i>

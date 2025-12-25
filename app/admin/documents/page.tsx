@@ -12,9 +12,9 @@ type Document = {
   isActive: boolean;
 };
 
-const emptyForm: Omit<Document, "id"> & {
-  order: string;
-} = {
+type DocumentForm = Omit<Document, "id" | "order"> & { order: string };
+
+const emptyForm: DocumentForm = {
   title: "",
   imageUrl: "",
   pdfUrl: "",
@@ -24,7 +24,7 @@ const emptyForm: Omit<Document, "id"> & {
 
 export default function AdminDocumentsPage() {
   const [items, setItems] = useState<Document[]>([]);
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState<DocumentForm>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
