@@ -265,7 +265,7 @@ export default function EditBannerPage() {
                 marginTop: '0.5rem',
                 marginBottom: '1rem'
               }}>
-                Video URL girilirse, görsel yerine video gösterilir.
+                Video URL girilirse, anasayfa her yüklendiğinde video 1 kez oynatılır. Video bitince ekli olan görsel gösterilmeye devam eder. Hem video hem görsel eklemeniz önerilir.
               </p>
             </div>
 

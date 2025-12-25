@@ -5,14 +5,14 @@ import image from "../../../public/assets/img/about/about-4.jpg";
 import Count from "../common/count";
 
 const whyChooseItems = [
-    { title: "Mühendislik bakış açısı", description: "Ürün satmadan önce doğru çözümü konuşuruz." },
-    { title: "Yerli üretici gücü", description: "Mecmot'un üretici mühendisliğini sahaya taşırız." },
-    { title: "Doğru hesaplama, doğru ürün", description: "Uygulamaya özel mühendislik hesaplamaları ve ürün seçimi." },
-    { title: "Anında teknik destek", description: "Hızlı geri dönüş, yerinde ve ulaşılabilir teknik ekip." },
-    { title: "Satış sonrası da buradayız", description: "Proje devreye alındıktan sonra da destek devam eder." },
-    { title: "Müşteri değil, çözüm ortağı", description: "İlişkiyi tedarik değil, uzun vadeli iş birliği olarak görürüz." },
-    { title: "Güçlü satış ve saha ağı", description: "Projenin başından devreye almaya kadar yanınızdayız." },
-    { title: "Hareketin olduğu her yerde", description: "Endüstriyel hareket varsa, çözüm de vardır." },
+    { title: "Mühendislik bakış açısı", description: "" },
+    { title: "Yerli üretici gücü", description: "" },
+    { title: "Doğru hesaplama, doğru ürün", description: "" },
+    { title: "Anında teknik destek", description: "" },
+    { title: "Satış sonrası da buradayız", description: "" },
+    { title: "Müşteri değil, çözüm ortağı", description: "" },
+    { title: "Güçlü satış ve saha ağı", description: "" },
+    { title: "Hareketin olduğu her yerde", description: "" },
 ];
 
 const AboutMain = ({ aboutData }) => {
@@ -413,7 +413,6 @@ const AboutMain = ({ aboutData }) => {
                     <div className="why-choose__head">
                         <div>
                             <span>Neden Alpdinamik?</span>
-                            <h3>Çünkü aynı masada sadece proje konuşuruz</h3>
                         </div>
                         <p>
                             Mühendislikten gelen refleksimizle, satıştan önce ihtiyaçları doğru okumaya

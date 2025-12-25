@@ -79,26 +79,8 @@ const getCategoryStats = (category: Category) => {
 };
 
 const buildSeriesHighlights = (series: SeriesNode) => {
-  const highlights: string[] = [];
-  const uniqueProducts = collectSeriesProducts(series);
-  const variantCount =
-    series.variants?.filter((variant) => (variant.products?.length ?? 0) > 0).length ?? 0;
-  const directProductCount = series.products?.length ?? 0;
-  const totalProducts = uniqueProducts.length;
-
-  if (variantCount > 0) {
-    highlights.push(`${variantCount} farklı varyant seçeneği`);
-  }
-
-  if (directProductCount > 0) {
-    highlights.push(`${directProductCount} doğrudan ürün`);
-  }
-
-  if (totalProducts > 0) {
-    highlights.push(`${totalProducts} ürün konfigürasyonu`);
-  }
-
-  return highlights.slice(0, 3);
+  // Detaylı bilgiler kaldırıldı, sadece seri bilgisi yeterli
+  return [];
 };
 
 export default function CategoryPage() {
@@ -109,6 +91,7 @@ export default function CategoryPage() {
   const [category, setCategory] = useState<Category | null>(null);
   const [representative, setRepresentative] = useState<any>(null);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
@@ -118,7 +101,7 @@ export default function CategoryPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [categoryRes, repRes, categoriesRes] = await Promise.all([
+        const [categoryRes, repRes, categoriesRes, settingsRes] = await Promise.all([
           fetch(
             `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/categories/${categorySlug}`
           ),
@@ -127,6 +110,9 @@ export default function CategoryPage() {
           ),
           fetch(
             `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/categories`
+          ),
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/site-settings`
           ),
         ]);
 
@@ -150,6 +136,11 @@ export default function CategoryPage() {
           setAllCategories(categoriesList || []);
         } else {
           setAllCategories([]);
+        }
+
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json();
+          setSiteSettings(settingsData);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -263,9 +254,8 @@ export default function CategoryPage() {
     );
   }
 
-  // Priority: category breadcrumbImageUrl (kategori görseli) > representative breadcrumbImageUrl > default
-  const breadcrumbBgImage = category.breadcrumbImageUrl 
-    || representative?.breadcrumbImageUrl 
+  // Sadece site settings'ten breadcrumb görseli al
+  const breadcrumbBgImage = siteSettings?.defaultBreadcrumbImageUrl
     || '/assets/img/breadcrumb.jpg';
 
   const categoryStats = getCategoryStats(category);
@@ -299,10 +289,6 @@ export default function CategoryPage() {
                     <div>
                       <span>Toplam Seri</span>
                       <strong>{categoryStats.totalSeries}</strong>
-                    </div>
-                    <div>
-                      <span>Ürün Kombinasyonu</span>
-                      <strong>{categoryStats.totalProducts}</strong>
                     </div>
                     <div>
                       <span>Temsilci</span>
@@ -379,7 +365,7 @@ export default function CategoryPage() {
                       {representative?.name} ürünleri
                     </h4>
                     <p className="product-hierarchy-card__meta">
-                      Tüm kategori, seri ve ürün kombinasyonlarını buradan keşfedin.
+                      Tüm kategori ve serileri buradan keşfedin.
                     </p>
                   </div>
                   <div className="product-hierarchy">
@@ -446,9 +432,6 @@ export default function CategoryPage() {
                                       >
                                         <div>
                                           <span className="product-hierarchy__series-name">{series.name}</span>
-                                          {hasChildren && (
-                                            <span className="product-hierarchy__meta">ürünler</span>
-                                          )}
                                         </div>
                                         {hasChildren && <span className="product-hierarchy__chevron" aria-hidden="true" />}
                                       </button>

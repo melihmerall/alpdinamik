@@ -15,6 +15,8 @@ const BannerFour = () => {
     const [contentBlocks, setContentBlocks] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const videoRefs = useRef({});
+    // Video biten slide'ları takip et (video bitince görsel gösterilecek)
+    const [videoEndedSlides, setVideoEndedSlides] = useState(new Set());
 
     useEffect(() => {
         async function fetchData() {
@@ -68,14 +70,24 @@ const BannerFour = () => {
             if (video) {
                 const slideIndex = parseInt(key);
                 if (slideIndex === activeIndex) {
-                    video.play().catch(() => {});
+                    // Eğer video daha önce bitmişse tekrar oynatma, görsel göster
+                    if (!videoEndedSlides.has(slideIndex)) {
+                        video.play().catch(() => {});
+                    } else {
+                        // Video bitmişse durdur
+                        video.pause();
+                    }
                 } else {
                     video.pause();
-                    video.currentTime = 0;
                 }
             }
         });
-    }, [activeIndex]);
+    }, [activeIndex, videoEndedSlides]);
+
+    // Video bitince görseli göster
+    const handleVideoEnded = (slideIndex) => {
+        setVideoEndedSlides(prev => new Set(prev).add(slideIndex));
+    };
 
     // Fallback banner
     const fallbackBanner = {
@@ -124,14 +136,14 @@ const BannerFour = () => {
                 }}
                 loop={slides.length > 1}
                 speed={1000}
-                pagination={{
+                pagination={slides.length > 1 ? {
                     clickable: true,
                     dynamicBullets: false
-                }}
-                navigation={{
+                } : false}
+                navigation={slides.length > 1 ? {
                     nextEl: '.banner__four-nav-next',
                     prevEl: '.banner__four-nav-prev',
-                }}
+                } : false}
                 onSlideChange={(swiper) => {
                     setActiveIndex(swiper.realIndex);
                 }}
@@ -143,12 +155,16 @@ const BannerFour = () => {
                     const title2 = words.length > 1 ? words.slice(1).join(' ') : (banner?.title ? '' : 'Endüstriyel çözümler');
                     const finalVideoUrl = banner?.videoUrl ? getVideoUrl(banner.videoUrl) : null;
                     const hasVideo = Boolean(finalVideoUrl);
+                    // Video bitmişse görsel göster
+                    const showImageAfterVideo = hasVideo && videoEndedSlides.has(index);
+                    const shouldShowVideo = hasVideo && !showImageAfterVideo;
 
                     return (
                         <SwiperSlide key={banner.id || `banner-${index}`}>
                             <div className="banner__four">
                                 <div className="banner__four-media">
-                                    {!hasVideo && banner?.imageUrl && (
+                                    {/* Video bitmişse veya video yoksa görsel göster */}
+                                    {(showImageAfterVideo || (!hasVideo && banner?.imageUrl)) && (
                                         <img
                                             src={banner.imageUrl}
                                             alt={banner?.title || 'Banner'}
@@ -156,23 +172,26 @@ const BannerFour = () => {
                                             loading={index <= 1 ? 'eager' : 'lazy'}
                                         />
                                     )}
-                                    {hasVideo && (
+                                    {/* Video göster (henüz bitmemişse) */}
+                                    {shouldShowVideo && (
                                         <div className="elementor-background-video-container" aria-hidden="true">
                                             <video
                                                 ref={(el) => {
                                                     if (el) videoRefs.current[index] = el;
                                                 }}
                                                 className="elementor-background-video-hosted"
-                                                autoPlay={index === 0}
+                                                autoPlay={index === activeIndex && index === 0}
                                                 muted
-                                                loop
+                                                loop={false}
                                                 playsInline
                                                 src={finalVideoUrl}
                                                 preload={index <= 1 ? 'auto' : 'metadata'}
+                                                onEnded={() => handleVideoEnded(index)}
                                             />
                                             <div className="banner__four-overlay"></div>
                                         </div>
                                     )}
+                                    {/* Fallback - ne video ne görsel yoksa */}
                                     {!hasVideo && !banner?.imageUrl && (
                                         <div
                                             className="banner__four-media-fallback"
@@ -226,17 +245,21 @@ const BannerFour = () => {
                     );
                 })}
             </Swiper>
-            {/* Navigation Arrows */}
-            <button className="banner__four-nav-prev" aria-label="Önceki slide">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-            </button>
-            <button className="banner__four-nav-next" aria-label="Sonraki slide">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-            </button>
+            {/* Navigation Arrows - Sadece 1'den fazla slide varsa göster */}
+            {slides.length > 1 && (
+                <>
+                    <button className="banner__four-nav-prev" aria-label="Önceki slide">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
+                    <button className="banner__four-nav-next" aria-label="Sonraki slide">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
+                </>
+            )}
             <style jsx global>{`
                 .banner__four-slider {
                     position: relative;
@@ -299,6 +322,9 @@ const BannerFour = () => {
                     min-height: 110vh;
                     overflow: hidden;
                     z-index: 0;
+                }
+                .banner__four .elementor-background-video-container.video-ended {
+                    display: none;
                 }
                 .banner__four .elementor-background-video-hosted {
                     position: absolute;
