@@ -17,8 +17,8 @@ const MissionVision = () => {
         async function fetchData() {
             try {
                 const [settingsRes, dataRes] = await Promise.all([
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`),
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/company-pages/misyon-vizyon`)
+                    fetch('/api/site-settings'),
+                    fetch('/api/company-pages/misyon-vizyon')
                 ]);
                 
                 if (settingsRes.ok) {

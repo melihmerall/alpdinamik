@@ -9,7 +9,8 @@ const SectorsMain = () => {
   useEffect(() => {
     async function fetchSectors() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/sectors`)
+        // Relative URL kullan - browser otomatik olarak mevcut domain'i kullanır
+        const response = await fetch('/api/sectors')
         if (response.ok) {
           const data = await response.json()
           setSectorsData(data.data || data)

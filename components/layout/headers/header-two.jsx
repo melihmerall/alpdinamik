@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import logo from "../../../public/assets/img/logo-2.png";
-import logo1 from "../../../public/assets/img/logo-1.png";
+import logoKoyu from "../../../public/uploads/Logo_koyu.png";
 import MainMenu from './header-menu';
 import { useEffect, useState } from 'react';
 import MobileMenuOne from './menu_sidebar/menu-one';
@@ -13,50 +13,67 @@ const HeaderTwo = () => {
     const [isSticky, setIsSticky] = useState(false);
 
     useEffect(() => {
-        let ticking = false;
-
         const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-                    setIsSticky(scrollY > 30);
-                    ticking = false;
-                });
-                ticking = true;
-            }
+            // Try multiple ways to get scroll position
+            const scrollY = window.scrollY 
+                || window.pageYOffset 
+                || document.documentElement.scrollTop 
+                || document.body.scrollTop 
+                || window.scrollTop
+                || 0;
+            
+            const shouldBeSticky = scrollY > 30;
+            setIsSticky(shouldBeSticky);
         };
 
+        // Initial check
         handleScroll();
+        
+        // Add scroll listener - use both window and document
         window.addEventListener('scroll', handleScroll, { passive: true });
-
+        document.addEventListener('scroll', handleScroll, { passive: true });
+        document.documentElement.addEventListener('scroll', handleScroll, { passive: true });
+        document.body.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Also try wheel event as fallback
+        window.addEventListener('wheel', handleScroll, { passive: true });
+        
         return () => {
             window.removeEventListener('scroll', handleScroll);
+            document.removeEventListener('scroll', handleScroll);
+            document.documentElement.removeEventListener('scroll', handleScroll);
+            document.body.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('wheel', handleScroll);
         };
     }, []);
 
     // Scroll yapınca header-one stiline geçiş yap
-    const headerClass = isSticky ? 'header__area' : `header__four`;
-    const logoToShow = isSticky ? logo1 : logo;
+    const headerClass = isSticky ? 'header__area header__sticky-active' : 'header__two';
+    const logoToShow = isSticky ? logoKoyu : logo;
     
-    const headerStyle = isSticky ? {
+    // Inline style ile tam kontrol
+    const headerStyle = {
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         width: '100%',
-        background: 'var(--primary-color-1)',
-        borderBottom: '1px solid #E5B142',
         zIndex: 999,
-        transition: 'all 0.3s ease'
-    } : {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
-        background: 'transparent',
-        zIndex: 999,
-        transition: 'all 0.3s ease'
+        transition: 'all 0.3s ease',
+        ...(isSticky ? {
+            background: 'rgba(255, 255, 255, 0.98)',
+            backgroundColor: 'rgba(255, 255, 255, 0.98)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+            padding: '20px 0',
+            boxShadow: '0 2px 20px rgba(0, 0, 0, 0.08)'
+        } : {
+            background: 'transparent',
+            backgroundColor: 'transparent',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.24)',
+            padding: '20px 0'
+        })
     };
 
     return (
@@ -66,11 +83,11 @@ const HeaderTwo = () => {
                     <div className="header__area-menubar">
                         <div className="header__area-menubar-left one">
                             <div className="header__area-menubar-left-logo">
-                                <Link href='/'><img className='one' src={logoToShow.src} alt='logo'/></Link>
+                                <Link href='/'><img src={logoToShow.src} alt='logo'/></Link>
                             </div>
                         </div>
                         <div className="header__area-menubar-center">
-                            <div className="header__area-menubar-center-menu">
+                            <div className={`header__area-menubar-center-menu ${isSticky ? 'header__area-menu-style' : 'header__two-menu-style'}`}>
                                 <MainMenu />
                             </div>
                         </div>

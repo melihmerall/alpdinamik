@@ -15,7 +15,7 @@ const ContactUs = () => {
         let isMounted = true;
         async function fetchSettings() {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`);
+                const response = await fetch('/api/site-settings');
                 if (response.ok) {
                     const data = await response.json();
                     if (isMounted) {

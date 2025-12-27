@@ -9,7 +9,7 @@ const RepresentativesMain = () => {
   useEffect(() => {
     async function fetchRepresentatives() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/representatives`)
+        const response = await fetch('/api/representatives')
         if (response.ok) {
           const data = await response.json()
           // API already returns only active representatives, no need to filter

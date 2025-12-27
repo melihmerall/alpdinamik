@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
 import SEO from "@/components/data/seo";
@@ -60,9 +61,32 @@ const convertDescriptionToHtml = (value?: string) => {
     : trimmed.replace(/\n/g, "<br />");
 };
 
+function getBaseUrl(): string {
+  // Environment variable varsa onu kullan
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // Server-side'da headers'dan hostname al
+  try {
+    const headersList = headers();
+    const host = headersList.get('host');
+    const protocol = headersList.get('x-forwarded-proto') || 'https';
+    if (host) {
+      return `${protocol}://${host}`;
+    }
+  } catch {
+    // headers() çağrılamazsa (örneğin build zamanında)
+  }
+  
+  // Fallback
+  return 'http://localhost:3000';
+}
+
 async function getRepresentative(slug: string): Promise<Representative | null> {
+  const baseUrl = getBaseUrl();
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${slug}`,
+    `${baseUrl}/api/representatives/${slug}`,
     {
       cache: "no-store",
     }
@@ -76,8 +100,9 @@ async function getRepresentative(slug: string): Promise<Representative | null> {
 }
 
 async function getCategories(repSlug: string): Promise<CategoryNode[]> {
+  const baseUrl = getBaseUrl();
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/representatives/${repSlug}/categories`,
+    `${baseUrl}/api/representatives/${repSlug}/categories`,
     {
       cache: "no-store",
     }

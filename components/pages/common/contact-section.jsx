@@ -82,6 +82,16 @@ const ContactSection = () => {
 			}
 		}
 
+		// Bot koruması: Honeypot field kontrolü
+		const honeypot = formData.get('website');
+		if (honeypot) {
+			// Bot tespit edildi, sessizce reddet
+			console.warn('Bot tespit edildi: honeypot field dolduruldu');
+			setError('Güvenlik kontrolü başarısız. Lütfen tekrar deneyin.');
+			setLoading(false);
+			return;
+		}
+
 		const data = {
 			fullName: formData.get('name'),
 			email: formData.get('email'),
@@ -444,6 +454,22 @@ const ContactSection = () => {
 							)}
 
 							<form ref={formRef} onSubmit={handleSubmit}>
+								{/* Honeypot field - Bot koruması (görünmez, botlar doldurursa reddedilir) */}
+								<input 
+									type="text" 
+									name="website" 
+									tabIndex={-1}
+									autoComplete="off"
+									style={{
+										position: 'absolute',
+										left: '-9999px',
+										width: '1px',
+										height: '1px',
+										opacity: 0,
+										pointerEvents: 'none'
+									}}
+									aria-hidden="true"
+								/>
 								<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
 									<div>
 										<label htmlFor="contact-name" style={{ display: 'block', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500' }}>

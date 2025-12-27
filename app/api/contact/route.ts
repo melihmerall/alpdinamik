@@ -4,9 +4,74 @@ import { LeadSource } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import nodemailer from 'nodemailer'
 
+// Basit rate limiting (in-memory)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 dakika
+const RATE_LIMIT_MAX_REQUESTS = 5 // 15 dakikada maksimum 5 istek
+
+function getClientIP(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for')
+  const realIP = request.headers.get('x-real-ip')
+  return forwarded?.split(',')[0] || realIP || 'unknown'
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const record = rateLimitMap.get(ip)
+
+  if (!record || now > record.resetTime) {
+    // Yeni kayıt veya süre dolmuş
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
+    return true
+  }
+
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false // Rate limit aşıldı
+  }
+
+  record.count++
+  return true
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting kontrolü
+    const clientIP = getClientIP(request)
+    if (!checkRateLimit(clientIP)) {
+      return NextResponse.json(
+        { error: 'Çok fazla istek gönderdiniz. Lütfen bir süre sonra tekrar deneyin.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
+    
+    // Bot koruması: Honeypot field kontrolü (meta içinde gönderilmemeli)
+    if (body.meta?.website || body.website) {
+      console.warn('Bot tespit edildi: honeypot field gönderildi', { ip: clientIP })
+      return NextResponse.json(
+        { error: 'Güvenlik kontrolü başarısız.' },
+        { status: 400 }
+      )
+    }
+
+    // Bot koruması: Çok kısa mesaj kontrolü (spam olabilir)
+    if (body.message && body.message.trim().length < 10) {
+      console.warn('Şüpheli mesaj: çok kısa mesaj', { ip: clientIP, messageLength: body.message.length })
+      return NextResponse.json(
+        { error: 'Mesaj çok kısa. Lütfen daha detaylı bilgi verin.' },
+        { status: 400 }
+      )
+    }
+
+    // Bot koruması: Email format kontrolü
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (body.email && !emailRegex.test(body.email)) {
+      return NextResponse.json(
+        { error: 'Geçersiz e-posta adresi.' },
+        { status: 400 }
+      )
+    }
     
     // Get base URL from request headers or environment
     const host = request.headers.get('host') || ''

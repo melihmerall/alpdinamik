@@ -18,8 +18,8 @@ const AboutUs = () => {
         async function fetchData() {
             try {
                 const [settingsRes, aboutRes] = await Promise.all([
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/site-settings`),
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/company-pages/hakkimizda`)
+                    fetch('/api/site-settings'),
+                    fetch('/api/company-pages/hakkimizda')
                 ]);
                 
                 if (settingsRes.ok) {

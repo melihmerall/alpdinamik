@@ -2153,6 +2153,26 @@ a:active {
   width: auto;
 }
 
+/* Header Two - Başlangıçta fixed ve transparent */
+.header__two,
+div.header__two {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  background: transparent;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.header__two .header__area-menubar,
+div.header__two .header__area-menubar {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
 /* Header Four - Başlangıçta fixed ve transparent */
 .header__four,
 div.header__four {

@@ -83,6 +83,16 @@ const FormArea = () => {
 			}
 		}
 
+		// Bot koruması: Honeypot field kontrolü
+		const honeypot = formData.get('website');
+		if (honeypot) {
+			// Bot tespit edildi, sessizce reddet
+			console.warn('Bot tespit edildi: honeypot field dolduruldu');
+			setError('Güvenlik kontrolü başarısız. Lütfen tekrar deneyin.');
+			setLoading(false);
+			return;
+		}
+
 		const data = {
 			fullName: formData.get('name'),
 			email: formData.get('email'),
@@ -156,7 +166,23 @@ const FormArea = () => {
 				</div>
 			)}
 
-			<form ref={formRef} onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
+			<form ref={formRef} onSubmit={handleSubmit} style={{ marginTop: '2rem', position: 'relative' }}>
+				{/* Honeypot field - Bot koruması (görünmez, botlar doldurursa reddedilir) */}
+				<input 
+					type="text" 
+					name="website" 
+					tabIndex={-1}
+					autoComplete="off"
+					style={{
+						position: 'absolute',
+						left: '-9999px',
+						width: '1px',
+						height: '1px',
+						opacity: 0,
+						pointerEvents: 'none'
+					}}
+					aria-hidden="true"
+				/>
 				<div className="row">
 					<div className="col-md-6 mb-25">
 						<div className="contact__form-area-item">
