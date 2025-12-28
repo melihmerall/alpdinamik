@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SEO from "@/components/data/seo";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "@/components/pages/common/scroll/scroll-to-top";
 import BreadCrumb from "@/components/pages/common/breadcrumb";
@@ -154,8 +154,10 @@ export default function CategoryPage() {
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(categoryId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
         newSet.add(categoryId);
       }
       return newSet;
@@ -164,8 +166,10 @@ export default function CategoryPage() {
 
   const toggleSeries = (seriesId: string) => {
     setExpandedSeries((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(seriesId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(seriesId)) {
+        newSet.delete(seriesId);
+      } else {
         newSet.add(seriesId);
       }
       return newSet;
@@ -174,8 +178,10 @@ export default function CategoryPage() {
 
   const toggleVariant = (variantId: string) => {
     setExpandedVariants((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(variantId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(variantId)) {
+        newSet.delete(variantId);
+      } else {
         newSet.add(variantId);
       }
       return newSet;
@@ -199,7 +205,7 @@ export default function CategoryPage() {
   if (loading) {
     return (
       <>
-        <HeaderTwo />
+        <HeaderFour />
         <div className="page-wrapper">
           <div className="section-padding">
             <div className="container">
@@ -220,7 +226,7 @@ export default function CategoryPage() {
   if (error || !category || !representative) {
     return (
       <>
-        <HeaderTwo />
+        <HeaderFour />
         <div className="page-wrapper">
           <div className="section-padding">
             <div className="container">
@@ -265,92 +271,13 @@ export default function CategoryPage() {
       <SEO pageTitle={category.name} />
       <CustomCursor />
       <SwitchTab />
-      <HeaderTwo />
+      <HeaderFour />
       <BreadCrumb 
         title={category.name} 
         innerTitle={category.name}
         backgroundImage={breadcrumbBgImage}
       />
       <div className="page-wrapper">
-
-        <div className="category-selection-band section-padding pt-0">
-          <div className="container">
-            <div className="category-selection-shell">
-              <div className="category-selection-hero">
-                <div className="category-selection-hero__content">
-                  <span>Temsilci · {representative?.name}</span>
-                  <h3>{category.name}</h3>
-                  <p>
-                    {category.description
-                      ? category.description.replace(/<[^>]+>/g, '').slice(0, 180)
-                      : `${representative?.name} ürün ailesindeki tüm kategorileri kısa yoldan keşfedin.`}
-                  </p>
-                  <div className="category-selection-stats">
-                    <div>
-                      <span>Toplam Seri</span>
-                      <strong>{categoryStats.totalSeries}</strong>
-                    </div>
-                    <div>
-                      <span>Temsilci</span>
-                      <strong>{representative?.name}</strong>
-                    </div>
-                  </div>
-                </div>
-                <div className="category-selection-hero__visual">
-                  {category.breadcrumbImageUrl ? (
-                    <img 
-                      src={category.breadcrumbImageUrl} 
-                      alt={category.name} 
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="category-selection-hero__placeholder">
-                      <i className="flaticon flaticon-right-up"></i>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="category-selection-head">
-                <div>
-                  <span className="subtitle">Ürün Ağacı</span>
-                  <h3>Tüm kategoriler bir arada</h3>
-                </div>
-                <p>
-                  {representative?.name} markasına ait tüm kategorileri kısa yoldan ziyaret edin ve seri detaylarına
-                  tek dokunuşla ulaşın.
-                </p>
-              </div>
-              <div className="category-selection-grid">
-                {allCategories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    href={`/temsilcilikler/${repSlug}/kategoriler/${cat.slug}`}
-                    className={`category-selection-card ${cat.slug === categorySlug ? "is-active" : ""}`}
-                  >
-                    <div className="category-selection-card__image">
-                      {cat.breadcrumbImageUrl ? (
-                        <img 
-                          src={cat.breadcrumbImageUrl} 
-                          alt={cat.name} 
-                          loading="lazy" 
-                        />
-                      ) : (
-                        <div className="category-selection-card__placeholder">
-                          <i className="flaticon-box" aria-hidden="true"></i>
-                        </div>
-                      )}
-                    </div>
-                    <div className="category-selection-card__content">
-                      <h4>{cat.name}</h4>
-                      <span>{cat.series?.length ?? 0} seri</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Category Content */}
         <div className="section-padding">

@@ -255,7 +255,7 @@ const ProductsSlider = () => {
                 {categories.map((category, index) => {
                   const categoryName = category.name || 'Ürün Kategorisi'
                   const representativeName = category.representative?.name
-                  const badgeLabel = category.categoryGroup || category.sector || 'Öne Çıkan'
+                  const representativeLogoUrl = category.representative?.logoUrl
                   const eyebrowLabel = category.industry || category.focusArea || 'Lineer Hareket Çözümü'
                   const categoryUrl = category.representative?.slug && category.slug
                     ? `/temsilcilikler/${category.representative.slug}/kategoriler/${category.slug}`
@@ -276,13 +276,20 @@ const ProductsSlider = () => {
                           <div className="products-card__image-wrapper">
                             {renderCategoryImage({ imageUrl, alt: categoryName, shouldPrioritize })}
                           </div>
-                          <span className="products-card__badge">
-                            {badgeLabel}
-                          </span>
                           {representativeName && (
                             <div className="products-card__rep">
-                              <i className="fas fa-building" aria-hidden="true"></i>
-                              <span>{representativeName}</span>
+                              {representativeLogoUrl ? (
+                                <img 
+                                  src={representativeLogoUrl} 
+                                  alt={representativeName}
+                                  className="products-card__rep-logo"
+                                />
+                              ) : (
+                                <>
+                                  <i className="fas fa-building" aria-hidden="true"></i>
+                                  <span>{representativeName}</span>
+                                </>
+                              )}
                             </div>
                           )}
                         </div>
@@ -410,7 +417,7 @@ const ProductsSlider = () => {
         }
         .products-card__rep {
           position: absolute;
-          bottom: 18px;
+          bottom: 4px;
           left: 32px;
           display: inline-flex;
           align-items: center;
@@ -426,6 +433,14 @@ const ProductsSlider = () => {
         }
         .products-card__rep i {
           color: var(--primary-color-1);
+        }
+        .products-card__rep-logo {
+          max-width: 90px;
+          max-height: 32px;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          display: block;
         }
         .products-card__body {
           padding: 22px 24px 26px 24px;
@@ -641,7 +656,7 @@ const ProductsSlider = () => {
           }
           .products-card__rep {
             left: 32px;
-            bottom: 18px;
+            bottom: 4px;
           }
         }
         @media (max-width: 767px) {

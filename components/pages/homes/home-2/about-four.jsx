@@ -24,6 +24,34 @@ const AboutFour = () => {
     };
 
     const [displayData, setDisplayData] = useState(fallbackData);
+    const titleContentRef = React.useRef(null);
+    const imageContainerRef = React.useRef(null);
+
+    // Fotoğraf yüksekliğini başlık ve açıklama yüksekliğine göre ayarla
+    useEffect(() => {
+        const adjustImageHeight = () => {
+            if (titleContentRef.current && imageContainerRef.current) {
+                const titleHeight = titleContentRef.current.offsetHeight;
+                imageContainerRef.current.style.height = `${titleHeight}px`;
+            }
+        };
+
+        // İlk yükleme ve resize için
+        adjustImageHeight();
+        window.addEventListener('resize', adjustImageHeight);
+        
+        // İçerik yüklendikten sonra tekrar ayarla (animasyonlar için bekle)
+        const timeoutId1 = setTimeout(adjustImageHeight, 100);
+        const timeoutId2 = setTimeout(adjustImageHeight, 500);
+        const timeoutId3 = setTimeout(adjustImageHeight, 1000);
+        
+        return () => {
+            window.removeEventListener('resize', adjustImageHeight);
+            clearTimeout(timeoutId1);
+            clearTimeout(timeoutId2);
+            clearTimeout(timeoutId3);
+        };
+    }, [displayData]);
 
     useEffect(() => {
         let isMounted = true;
@@ -81,34 +109,31 @@ const AboutFour = () => {
     return (
         <div className="about__four section-padding" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
             <div className="container">
-                <div className="row al-center" style={{ marginBottom: '60px' }}>
-                    <div className="col-lg-3 lg-mb-25">
-                        <div className="about__four-left wow img_top_animation">
-                            <img src={displayData.imageUrl || image1.src} alt={displayData.title || 'About'} />
-                        </div>
-                    </div>
-                    <div className="col-lg-9">
+                <div className="row al-center" style={{ marginBottom: '60px', alignItems: 'flex-start' }}>
+                    <div className="col-lg-7">
                         <div className="about__four-title">
-                            <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">{displayData.subtitle}</span>
-                            <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">
-                                {(() => {
-                                    const title = displayData.title || '';
-                                    const words = title.split(' ');
-                                    if (words.length > 1) {
-                                        const firstWord = words[0];
-                                        const restWords = words.slice(1).join(' ');
-                                        return (
-                                            <>
-                                                {firstWord}
-                                                <br />
-                                                {restWords}
-                                            </>
-                                        );
-                                    }
-                                    return title;
-                                })()}
-                            </h2>
-                            <p className="wow fadeInUp" data-wow-delay=".4s">{displayData.body}</p>
+                            <div className="about__four-title-content">
+                                <span className="subtitle wow fadeInLeft" data-wow-delay=".4s">{displayData.subtitle}</span>
+                                <h2 className="mb-20 wow fadeInRight" data-wow-delay=".6s">
+                                    {(() => {
+                                        const title = displayData.title || '';
+                                        const words = title.split(' ');
+                                        if (words.length > 1) {
+                                            const firstWord = words[0];
+                                            const restWords = words.slice(1).join(' ');
+                                            return (
+                                                <>
+                                                    {firstWord}
+                                                    <br />
+                                                    {restWords}
+                                                </>
+                                            );
+                                        }
+                                        return title;
+                                    })()}
+                                </h2>
+                                <p className="wow fadeInUp" data-wow-delay=".4s">{displayData.body}</p>
+                            </div>
                             {displayData.ctaLabel && displayData.ctaUrl && (
                                 <div className="wow fadeInDown" data-wow-delay="1.2s">
                                     <Link className="build_button mt-25" href={displayData.ctaUrl}>
@@ -118,9 +143,14 @@ const AboutFour = () => {
                             )}
                         </div>
                     </div>
+                    <div className="col-lg-5">
+                        <div className="about__four-left wow img_top_animation">
+                            <img src={displayData.imageUrl || image1.src} alt={displayData.title || 'About'} />
+                        </div>
+                    </div>
                 </div>
                 <div className="row mt-30" style={{ marginTop: '60px' }}>
-                    <div className="col-lg-8">
+                    <div className="col-lg-12">
                         <div className="about__four-counter">
                             <div className="row">
                                 {displayData.stat1Number && displayData.stat1Label && (
@@ -156,14 +186,37 @@ const AboutFour = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-4 lg-mt-25">
-                        <div className="about__four-right t-right wow img_right_animation">
-                            <img src={displayData.image2Url || image2.src} alt={displayData.title || 'About'} />
-                        </div>
-                    </div>
                 </div>
             </div>
             <style jsx global>{`
+                /* About Four Styles */
+                .about__four-title {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .about__four-title-content {
+                    flex: 1;
+                }
+                .about__four-title p {
+                    max-width: 600px;
+                }
+                .about__four-left {
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 12px;
+                    margin-top: 40px;
+                }
+                @media (min-width: 992px) {
+                    .about__four-left {
+                        margin-top: 50px;
+                    }
+                }
+                .about__four-left img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 12px;
+                }
                 /* About Four Responsive Styles */
                 @media (max-width: 991px) {
                     .about__four {
@@ -171,7 +224,8 @@ const AboutFour = () => {
                         padding-bottom: 60px !important;
                     }
                     .about__four-left {
-                        margin-bottom: 40px;
+                        margin-top: 30px;
+                        margin-bottom: 0;
                     }
                     .about__four-right {
                         text-align: center !important;
@@ -186,16 +240,25 @@ const AboutFour = () => {
                         padding-top: 40px !important;
                         padding-bottom: 40px !important;
                     }
-                    .about__four-left h2 {
+                    .about__four-title h2 {
                         font-size: clamp(24px, 6vw, 36px) !important;
                         line-height: 1.3 !important;
                     }
-                    .about__four-left .subtitle {
+                    .about__four-title .subtitle {
                         font-size: 14px !important;
                     }
-                    .about__four-left p {
+                    .about__four-title p {
                         font-size: 15px !important;
                         line-height: 1.6 !important;
+                    }
+                    .about__four-left {
+                        margin-top: 30px !important;
+                        margin-bottom: 40px;
+                        height: auto !important;
+                    }
+                    .about__four-left img {
+                        height: auto !important;
+                        max-height: none !important;
                     }
                     .about__four-stats {
                         flex-direction: column !important;

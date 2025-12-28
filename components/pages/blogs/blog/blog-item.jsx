@@ -17,22 +17,22 @@ const BlogItem = ({ currentBlogItems }) => {
     <>
       {currentBlogItems?.map((data, id) => (
         <div className="col-lg-6" key={id} style={{ marginBottom: '2.5rem', paddingLeft: '15px', paddingRight: '15px' }}>
-          <div className="blog__three-item" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div className="blog__three-item-image" style={{ overflow: 'hidden', borderRadius: '8px' }}>
+          <div className="blog__three-item" style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)', transition: 'all 0.3s ease' }}>
+            <div className="blog__three-item-image" style={{ overflow: 'hidden', borderRadius: '16px 16px 0 0' }}>
               <Link href={`/blog/${data.slug}`}>
                 <img 
                   src={data.imageUrl || data.image?.src || '/assets/img/blog/blog-1.jpg'} 
                   alt={data.title || 'image'}
                   style={{
                     width: '100%',
-                    height: '280px',
+                    height: '380px',
                     objectFit: 'cover',
-                    transition: 'transform 0.3s ease'
+                    transition: 'transform 0.4s ease'
                   }}
                 />
               </Link>
             </div>
-            <div className="blog__three-item-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: '1.5rem' }}>
+            <div className="blog__three-item-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '2rem', paddingTop: '1.75rem' }}>
               {data.publishedAt && (
                 <div className="meta" style={{ marginBottom: '0.75rem' }}>
                   <span style={{ color: 'var(--body-color)', fontSize: '0.875rem' }}>

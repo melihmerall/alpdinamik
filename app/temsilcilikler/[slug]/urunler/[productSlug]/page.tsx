@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import React from "react";
-import HeaderTwo from "@/components/layout/headers/header-two";
+import HeaderFour from "@/components/layout/headers/header-four";
 import FooterTwo from "@/components/layout/footers/footer-two";
 import ScrollToTop from "@/components/pages/common/scroll/scroll-to-top";
 import { InteractiveSVGProduct } from "./InteractiveSVG";
@@ -237,8 +237,10 @@ export default function ProductPage() {
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(categoryId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
         newSet.add(categoryId);
       }
       return newSet;
@@ -247,8 +249,10 @@ export default function ProductPage() {
 
   const toggleSeries = (seriesId: string) => {
     setExpandedSeries((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(seriesId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(seriesId)) {
+        newSet.delete(seriesId);
+      } else {
         newSet.add(seriesId);
       }
       return newSet;
@@ -257,8 +261,10 @@ export default function ProductPage() {
 
   const toggleVariant = (variantId: string) => {
     setExpandedVariants((prev) => {
-      const newSet = new Set<string>();
-      if (!prev.has(variantId)) {
+      const newSet = new Set(prev);
+      if (newSet.has(variantId)) {
+        newSet.delete(variantId);
+      } else {
         newSet.add(variantId);
       }
       return newSet;
@@ -268,7 +274,7 @@ export default function ProductPage() {
   if (loading) {
     return (
       <>
-        <HeaderTwo />
+        <HeaderFour />
         <div className="page-wrapper">
           <div className="section-padding">
             <div className="container">
@@ -289,7 +295,7 @@ export default function ProductPage() {
   if (error || !product) {
     return (
       <>
-        <HeaderTwo />
+        <HeaderFour />
         <div className="page-wrapper">
           <div className="section-padding">
             <div className="container">
@@ -325,7 +331,7 @@ export default function ProductPage() {
 
   return (
     <>
-      <HeaderTwo />
+      <HeaderFour />
       <div className="page-wrapper">
         {/* Breadcrumb */}
         <div

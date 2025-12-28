@@ -260,7 +260,25 @@ export default async function RepresentativePage({
           <div className="representative-hero__shell">
             <div className="representative-hero__content">
               <span className="representative-hero__eyebrow">Temsilcilik</span>
-              <h1>{representative.name}</h1>
+              {representative.logoUrl ? (
+                <div className="representative-hero__logo-title">
+                  <Image
+                    src={representative.logoUrl}
+                    alt={representative.name}
+                    width={200}
+                    height={80}
+                    style={{ 
+                      width: 'auto', 
+                      height: 'auto', 
+                      maxWidth: '280px', 
+                      maxHeight: '100px',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </div>
+              ) : (
+                <h1>{representative.name}</h1>
+              )}
               {descriptionHtml ? (
                 <div
                   className="representative-hero__description"
@@ -273,45 +291,6 @@ export default async function RepresentativePage({
                   {representative.name} markasına ait tüm ürün ailesini keşfedin. Aktif
                   kategoriler ve seri detayları bu sayfada sizi bekliyor.
                 </p>
-              )}
-
-              <div className="representative-hero__stats">
-                <div>
-                  <span>Toplam Kategori</span>
-                  <strong>{totalCategories}</strong>
-                  <p>{categoryPreview}</p>
-                </div>
-                <div>
-                  <span>Toplam Seri</span>
-                  <strong>{totalSeries}</strong>
-                  <p>{seriesPreview}</p>
-                </div>
-                <div>
-                  <span>Ürün Kombinasyonu</span>
-                  <strong>{totalProducts}</strong>
-                  <p>{productPreview}</p>
-                </div>
-              </div>
-
-              {quickFacts.length > 0 && (
-                <div className="representative-hero__facts">
-                  {quickFacts.map((fact) => (
-                    <div key={fact.label} className="representative-hero__fact">
-                      <span>{fact.label}</span>
-                      {fact.href ? (
-                        <Link
-                          href={fact.href}
-                          target={fact.href.startsWith("http") ? "_blank" : "_self"}
-                          rel={fact.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        >
-                          {fact.value}
-                        </Link>
-                      ) : (
-                        <p>{fact.value}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
               )}
 
               <div className="representative-hero__actions">
@@ -334,7 +313,15 @@ export default async function RepresentativePage({
             </div>
 
             <div className="representative-hero__visual">
-              <div className="representative-hero__visual-card">
+              <Link 
+                href={params.slug === 'mecmot' 
+                  ? 'https://mecmot.com/wp-content/uploads/2025/11/2025-10Kasim_Katalog.pdf'
+                  : '#'}
+                target={params.slug === 'mecmot' ? '_blank' : undefined}
+                rel={params.slug === 'mecmot' ? 'noopener noreferrer' : undefined}
+                className="representative-hero__visual-card"
+                style={{ display: 'block', cursor: params.slug === 'mecmot' ? 'pointer' : 'default' }}
+              >
                 <Image
                   src={heroVisual}
                   alt={representative.name}
@@ -348,7 +335,7 @@ export default async function RepresentativePage({
                     <img src={representative.logoUrl} alt={`${representative.name} logo`} />
                   </div>
                 )}
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -360,13 +347,9 @@ export default async function RepresentativePage({
           <div className="container">
             <div className="representative-category-head">
               <div>
-                <span className="subtitle">Ürün ağacı</span>
-                <h3>Tüm kategoriler bir arada</h3>
+                <span className="subtitle">Ürünler</span>
               </div>
-              <p>
-                {representative.name} markasına ait tüm kategorileri kısa yoldan ziyaret edin
-                ve seri detaylarına tek dokunuşla ulaşın.
-              </p>
+
             </div>
 
             <div className="representative-category-grid">

@@ -21,7 +21,15 @@ const BreadCrumb = ({ title, innerTitle, backgroundImage }: BreadCrumbProps) => 
     backgroundImage || defaultBreadcrumb || "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
 
   return (
-    <div className="breadcrumb__area" style={{ backgroundImage: `url(${bgImage})` }}>
+    <div 
+      className="breadcrumb__area" 
+      style={{ 
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="container">
         <div className="row">
           <div className="col-xl-12">
