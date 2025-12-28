@@ -22,23 +22,37 @@ async function loadFallbackIcon() {
 
 export async function GET(request: Request) {
   try {
-    const settings = await prisma.siteSettings.findFirst();
+    // Try to get favicon from database
+    try {
+      const settings = await prisma.siteSettings.findFirst();
 
-    if (settings?.faviconUrl) {
-      const faviconUrl = settings.faviconUrl.startsWith('http')
-        ? settings.faviconUrl
-        : new URL(settings.faviconUrl, request.url).toString();
+      if (settings?.faviconUrl) {
+        const faviconUrl = settings.faviconUrl.startsWith('http')
+          ? settings.faviconUrl
+          : new URL(settings.faviconUrl, request.url).toString();
 
-      return NextResponse.redirect(faviconUrl, {
-        headers: {
-          'Cache-Control': 'public, max-age=86400',
-        },
-      });
+        return NextResponse.redirect(faviconUrl, {
+          headers: {
+            'Cache-Control': 'public, max-age=86400',
+          },
+        });
+      }
+    } catch (dbError) {
+      // If database query fails, fall back to static favicon
+      console.warn('Database query failed for favicon, using fallback:', dbError);
     }
 
+    // Fallback to static favicon
     return await loadFallbackIcon();
   } catch (error) {
     console.error('Error serving favicon:', error);
-    return await loadFallbackIcon();
+    // Always return fallback icon, even if there's an error
+    try {
+      return await loadFallbackIcon();
+    } catch (fallbackError) {
+      // If even fallback fails, return a minimal response
+      console.error('Fallback favicon also failed:', fallbackError);
+      return new NextResponse(null, { status: 404 });
+    }
   }
 }

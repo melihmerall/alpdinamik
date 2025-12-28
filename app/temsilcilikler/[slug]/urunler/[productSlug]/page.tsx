@@ -433,7 +433,12 @@ export default function ProductPage() {
                                     {stats.totalSeries} seri
                                   </span>
                                 </div>
-                                {hasSeries && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                                {hasSeries && (
+                                  <span 
+                                    className={`product-hierarchy__toggle-icon ${isCategoryExpanded ? "is-open" : ""}`} 
+                                    aria-hidden="true"
+                                  />
+                                )}
                               </button>
                               <Link
                                 href={`/temsilcilikler/${repSlug}/kategoriler/${category.slug}`}
@@ -467,11 +472,13 @@ export default function ProductPage() {
                                       >
                                         <div>
                                           <span className="product-hierarchy__series-name">{series.name}</span>
-                                          {hasChildren && (
-                                            <span className="product-hierarchy__meta">ürünler</span>
-                                          )}
                                         </div>
-                                        {hasChildren && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                                        {hasChildren && (
+                                          <span 
+                                            className={`product-hierarchy__toggle-icon ${isSeriesExpanded ? "is-open" : ""}`} 
+                                            aria-hidden="true"
+                                          />
+                                        )}
                                       </button>
 
                                       {isSeriesExpanded && hasChildren && (
@@ -496,7 +503,10 @@ export default function ProductPage() {
                                                   >
                                                     <span>{variant.name}</span>
                                                     {hasVariantProducts && (
-                                                      <span className="product-hierarchy__chevron" aria-hidden="true" />
+                                                      <span 
+                                                        className={`product-hierarchy__toggle-icon ${isVariantExpanded ? "is-open" : ""}`} 
+                                                        aria-hidden="true"
+                                                      />
                                                     )}
                                                   </button>
 

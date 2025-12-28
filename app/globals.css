@@ -2979,35 +2979,164 @@ div.header__four .header__area-menubar {
   border-color: rgba(29, 98, 240, 0.4);
 }
 
-.product-hierarchy__chevron {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+/* Modern Minimal Toggle Icon (+ / -) */
+.product-hierarchy__toggle-icon {
+  width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  transition: transform 0.2s ease, border-color 0.15s ease;
+  color: rgba(255, 255, 255, 0.7);
   flex-shrink: 0;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border-radius: 6px;
+  margin-left: 12px;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* Kapalı durum - + işareti */
+.product-hierarchy__toggle-icon::before {
+  content: "+" !important;
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, content 0.3s ease;
+  opacity: 0.8;
+}
+
+/* Kapalı durumda + göster (is-open olmayanlar için) */
+.product-hierarchy__toggle-icon:not(.is-open)::before {
+  content: "+" !important;
+}
+
+/* Açık durum - - işareti (sadece icon'un kendi is-open class'ı veya button'un aria-expanded durumuna göre) */
+.product-hierarchy__toggle-icon.is-open::before,
+.product-hierarchy__category-toggle[aria-expanded="true"] .product-hierarchy__toggle-icon::before,
+.product-hierarchy__series-toggle[aria-expanded="true"] .product-hierarchy__toggle-icon::before,
+.product-hierarchy__variant-toggle[aria-expanded="true"] .product-hierarchy__toggle-icon::before,
+button[aria-expanded="true"] .product-hierarchy__toggle-icon::before {
+  content: "−" !important;
+  opacity: 1;
+}
+
+/* Hover efekti */
+.product-hierarchy__category-toggle:hover:not(:disabled) .product-hierarchy__toggle-icon,
+.product-hierarchy__series-toggle:hover:not(:disabled) .product-hierarchy__toggle-icon,
+.product-hierarchy__variant-toggle:hover:not(:disabled) .product-hierarchy__toggle-icon {
+  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.1);
+}
+
+/* Açık durumda stil (sadece icon'un kendi is-open class'ına göre) */
+.product-hierarchy__toggle-icon.is-open,
+button[aria-expanded="true"] .product-hierarchy__toggle-icon {
+  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Active state */
+.product-hierarchy__category-toggle:active:not(:disabled) .product-hierarchy__toggle-icon,
+.product-hierarchy__series-toggle:active:not(:disabled) .product-hierarchy__toggle-icon,
+.product-hierarchy__variant-toggle:active:not(:disabled) .product-hierarchy__toggle-icon {
+  transform: scale(0.95);
+}
+
+/* Disabled durum */
+.product-hierarchy__category-toggle:disabled .product-hierarchy__toggle-icon,
+.product-hierarchy__series-toggle:disabled .product-hierarchy__toggle-icon,
+.product-hierarchy__variant-toggle:disabled .product-hierarchy__toggle-icon {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Chevron kaldırıldı - gizle */
+.product-hierarchy__chevron {
+  display: none !important;
 }
 
 .product-hierarchy__chevron::before {
   content: "";
-  width: 5px;
-  height: 5px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
+  width: 7px;
+  height: 7px;
+  border-right: 2.5px solid currentColor;
+  border-bottom: 2.5px solid currentColor;
   transform: rotate(45deg);
   display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  position: absolute;
+  opacity: 0.8;
 }
 
+/* Hover efekti - smooth ve modern */
+.product-hierarchy__category-toggle:hover:not(:disabled) .product-hierarchy__chevron,
+.product-hierarchy__series-toggle:hover:not(:disabled) .product-hierarchy__chevron,
+.product-hierarchy__variant-toggle:hover:not(:disabled) .product-hierarchy__chevron {
+  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.product-hierarchy__category-toggle:hover:not(:disabled) .product-hierarchy__chevron::before,
+.product-hierarchy__series-toggle:hover:not(:disabled) .product-hierarchy__chevron::before,
+.product-hierarchy__variant-toggle:hover:not(:disabled) .product-hierarchy__chevron::before {
+  opacity: 1;
+}
+
+/* Açık durum - chevron aşağı bakacak (smooth rotation) */
+.product-hierarchy__category.is-open .product-hierarchy__chevron::before,
+.product-hierarchy__series.is-open .product-hierarchy__chevron::before,
+.product-hierarchy__variant.is-open .product-hierarchy__chevron::before,
+.product-hierarchy__chevron.is-open::before,
+button[aria-expanded="true"] .product-hierarchy__chevron::before,
+.product-hierarchy__category-toggle[aria-expanded="true"] .product-hierarchy__chevron::before,
+.product-hierarchy__series-toggle[aria-expanded="true"] .product-hierarchy__chevron::before,
+.product-hierarchy__variant-toggle[aria-expanded="true"] .product-hierarchy__chevron::before {
+  transform: rotate(225deg) !important;
+  opacity: 1;
+}
+
+/* Açık durumda chevron stili - daha belirgin */
 .product-hierarchy__category.is-open .product-hierarchy__chevron,
 .product-hierarchy__series.is-open .product-hierarchy__chevron,
-.product-hierarchy__variant.is-open .product-hierarchy__chevron {
-  transform: rotate(180deg);
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.3);
+.product-hierarchy__variant.is-open .product-hierarchy__chevron,
+.product-hierarchy__chevron.is-open,
+button[aria-expanded="true"] .product-hierarchy__chevron,
+.product-hierarchy__category-toggle[aria-expanded="true"] .product-hierarchy__chevron,
+.product-hierarchy__series-toggle[aria-expanded="true"] .product-hierarchy__chevron,
+.product-hierarchy__variant-toggle[aria-expanded="true"] .product-hierarchy__chevron,
+.product-hierarchy__variant.is-open button .product-hierarchy__chevron,
+.product-hierarchy__variant.is-open .product-hierarchy__variant-toggle .product-hierarchy__chevron {
+  color: rgba(255, 255, 255, 1) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Active state - tıklama animasyonu */
+.product-hierarchy__category-toggle:active:not(:disabled) .product-hierarchy__chevron,
+.product-hierarchy__series-toggle:active:not(:disabled) .product-hierarchy__chevron,
+.product-hierarchy__variant-toggle:active:not(:disabled) .product-hierarchy__chevron {
+  transform: scale(0.95);
+}
+
+/* Disabled durum */
+.product-hierarchy__category-toggle:disabled .product-hierarchy__chevron,
+.product-hierarchy__series-toggle:disabled .product-hierarchy__chevron,
+.product-hierarchy__variant-toggle:disabled .product-hierarchy__chevron {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Focus state - accessibility */
+.product-hierarchy__category-toggle:focus-visible .product-hierarchy__chevron,
+.product-hierarchy__series-toggle:focus-visible .product-hierarchy__chevron,
+.product-hierarchy__variant-toggle:focus-visible .product-hierarchy__chevron {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
 }
 
 .product-hierarchy__category-body {

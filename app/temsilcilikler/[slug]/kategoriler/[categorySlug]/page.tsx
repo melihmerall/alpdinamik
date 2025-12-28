@@ -260,9 +260,12 @@ export default function CategoryPage() {
     );
   }
 
-  // Sadece site settings'ten breadcrumb görseli al
-  const breadcrumbBgImage = siteSettings?.defaultBreadcrumbImageUrl
-    || '/assets/img/breadcrumb.jpg';
+  // Breadcrumb görseli: Önce representative'ın breadcrumbImageUrl'i, sonra category'nin, sonra site settings'ten default
+  const breadcrumbBgImage = 
+    representative?.breadcrumbImageUrl ||
+    category?.breadcrumbImageUrl ||
+    siteSettings?.defaultBreadcrumbImageUrl ||
+    '/assets/img/breadcrumb.jpg';
 
   const categoryStats = getCategoryStats(category);
 
@@ -325,7 +328,12 @@ export default function CategoryPage() {
                                     {stats.totalSeries} seri
                                   </span>
                                 </div>
-                                {hasSeries && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                                {hasSeries && (
+                                  <span 
+                                    className={`product-hierarchy__toggle-icon ${isCategoryExpanded ? "is-open" : ""}`} 
+                                    aria-hidden="true"
+                                  />
+                                )}
                               </button>
                               <Link
                                 href={`/temsilcilikler/${repSlug}/kategoriler/${cat.slug}`}
@@ -360,7 +368,12 @@ export default function CategoryPage() {
                                         <div>
                                           <span className="product-hierarchy__series-name">{series.name}</span>
                                         </div>
-                                        {hasChildren && <span className="product-hierarchy__chevron" aria-hidden="true" />}
+                                        {hasChildren && (
+                                          <span 
+                                            className={`product-hierarchy__toggle-icon ${isSeriesExpanded ? "is-open" : ""}`} 
+                                            aria-hidden="true"
+                                          />
+                                        )}
                                       </button>
 
                                       {isSeriesExpanded && hasChildren && (
@@ -385,7 +398,10 @@ export default function CategoryPage() {
                                                   >
                                                     <span>{variant.name}</span>
                                                     {hasVariantProducts && (
-                                                      <span className="product-hierarchy__chevron" aria-hidden="true" />
+                                                      <span 
+                                                        className={`product-hierarchy__toggle-icon ${isVariantExpanded ? "is-open" : ""}`} 
+                                                        aria-hidden="true"
+                                                      />
                                                     )}
                                                   </button>
                                                   {isVariantExpanded && hasVariantProducts && (

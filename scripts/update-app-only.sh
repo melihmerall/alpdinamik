@@ -38,17 +38,50 @@ docker-compose -f docker-compose.prod.yml rm -f app || {
 # Alternatif olarak docker rm ile de silebiliriz
 docker rm -f alpdinamik-app 2>/dev/null || true
 
-# 4. Eski app image'ını sil (opsiyonel - temizlik için)
-echo -e "${YELLOW}🧹 Eski app image temizleniyor...${NC}"
+# 4. Docker temizliği (veritabanı volumleri hariç)
+echo -e "${YELLOW}🧹 Docker temizliği yapılıyor...${NC}"
+
+# Dangling images (kullanılmayan image'lar) temizle
+echo -e "${BLUE}   📦 Dangling images temizleniyor...${NC}"
+docker image prune -f 2>/dev/null || true
+
+# Kullanılmayan container'ları temizle (sadece stopped)
+echo -e "${BLUE}   📦 Stopped container'lar temizleniyor...${NC}"
+docker container prune -f 2>/dev/null || true
+
+# Build cache temizle (eski build cache'leri)
+echo -e "${BLUE}   📦 Build cache temizleniyor...${NC}"
+docker builder prune -f 2>/dev/null || true
+
+# Eski app image'ını sil
+echo -e "${BLUE}   📦 Eski app image temizleniyor...${NC}"
 docker rmi alpdinamik_app:latest 2>/dev/null || {
-    echo -e "${YELLOW}⚠️  Eski image bulunamadı veya kullanımda${NC}"
+    echo -e "${YELLOW}   ⚠️  Eski image bulunamadı veya kullanımda${NC}"
 }
 
-# 5. Next.js cache temizleme (opsiyonel - CSS cache sorunları için)
-echo -e "${YELLOW}🧹 Next.js cache temizleniyor...${NC}"
-rm -rf .next 2>/dev/null || true
+# Disk kullanımını göster
+echo -e "${BLUE}   💾 Docker disk kullanımı:${NC}"
+docker system df 2>/dev/null || true
 
-# 6. App image'ını yeniden build et
+# 5. Next.js cache temizleme (kapsamlı)
+echo -e "${YELLOW}🧹 Next.js cache temizleniyor...${NC}"
+
+# .next klasörünü temizle
+rm -rf .next 2>/dev/null || true
+echo -e "${GREEN}   ✅ .next klasörü temizlendi${NC}"
+
+# .next/cache klasörünü temizle (eğer varsa)
+rm -rf .next/cache 2>/dev/null || true
+
+# node_modules/.cache temizle (eğer varsa)
+rm -rf node_modules/.cache 2>/dev/null || true
+
+# Build cache temizle
+rm -rf .turbo 2>/dev/null || true
+
+echo -e "${GREEN}   ✅ Next.js cache temizlendi${NC}"
+
+# 7. App image'ını yeniden build et
 echo -e "${YELLOW}🔨 App image yeniden build ediliyor (bu işlem birkaç dakika sürebilir)...${NC}"
 docker-compose -f docker-compose.prod.yml build --no-cache app
 
@@ -56,7 +89,7 @@ docker-compose -f docker-compose.prod.yml build --no-cache app
 echo -e "${YELLOW}▶️  App container başlatılıyor...${NC}"
 docker-compose -f docker-compose.prod.yml up -d app
 
-# 8. Container durumunu kontrol et
+# 9. Container durumunu kontrol et
 echo -e "${YELLOW}⏳ Container başlatılması bekleniyor (10 saniye)...${NC}"
 sleep 10
 
@@ -64,7 +97,7 @@ sleep 10
 echo -e "${BLUE}📊 Container durumu:${NC}"
 docker ps | grep alpdinamik || echo -e "${RED}❌ Container görünmüyor!${NC}"
 
-# 10. App loglarını göster (son 20 satır)
+# 11. App loglarını göster (son 20 satır)
 echo -e "${BLUE}📋 App logları (son 20 satır):${NC}"
 docker logs --tail 20 alpdinamik-app || echo -e "${YELLOW}⚠️  Loglar alınamadı${NC}"
 
@@ -81,7 +114,7 @@ else
     echo -e "${GREEN}✅ Container çalışıyor: $CONTAINER_STATUS${NC}"
 fi
 
-# 12. Port kontrolü
+# 13. Port kontrolü
 echo -e "${YELLOW}🔌 Port kontrolü yapılıyor...${NC}"
 sleep 3
 if docker exec alpdinamik-app nc -z localhost 3000 2>/dev/null || curl -f http://localhost:3001/api/health >/dev/null 2>&1; then
@@ -110,7 +143,7 @@ if [ "$HEALTH_CHECK_PASSED" = false ]; then
     echo -e "${YELLOW}   Logları kontrol edin: docker logs -f alpdinamik-app${NC}"
 fi
 
-# 14. Nginx kontrolü ve reload
+# 15. Nginx kontrolü ve reload
 echo -e "${YELLOW}🌐 Nginx kontrolü yapılıyor...${NC}"
 if command -v nginx &> /dev/null; then
     if sudo nginx -t 2>/dev/null; then
@@ -127,7 +160,7 @@ else
     echo -e "${YELLOW}⚠️  Nginx bulunamadı, Docker nginx kullanılıyor olabilir${NC}"
 fi
 
-# 15. CSS Cache kontrolü ve öneriler
+# 16. CSS Cache kontrolü ve öneriler
 echo -e "${YELLOW}💡 CSS değişiklikleri görünmüyorsa:${NC}"
 echo "   1. Tarayıcı cache'ini temizleyin (Ctrl+Shift+R veya Cmd+Shift+R)"
 echo "   2. Hard refresh yapın (Ctrl+F5 veya Cmd+Shift+R)"
@@ -135,7 +168,17 @@ echo "   3. CSS dosyasının yüklendiğini kontrol edin:"
 echo "      curl -I https://alpdinamik.com.tr/_next/static/css/ 2>/dev/null | head -1"
 echo ""
 
-# 16. Son durum özeti
+# 16. Final temizlik (opsiyonel - disk alanı kazanmak için)
+echo -e "${YELLOW}🧹 Final temizlik yapılıyor...${NC}"
+
+# Kullanılmayan network'leri temizle
+docker network prune -f 2>/dev/null || true
+
+# Disk kullanımını tekrar göster
+echo -e "${BLUE}💾 Güncel Docker disk kullanımı:${NC}"
+docker system df 2>/dev/null || true
+
+# 18. Son durum özeti
 echo ""
 echo -e "${GREEN}════════════════════════════════════════${NC}"
 echo -e "${GREEN}✅ App güncelleme tamamlandı!${NC}"
@@ -143,7 +186,10 @@ echo -e "${GREEN}═════════════════════
 echo ""
 echo -e "${BLUE}📝 Özet:${NC}"
 echo "   ✅ Veritabanı container'ı (alpdinamik-postgres) hiç dokunulmadı"
+echo "   ✅ Veritabanı volumleri korundu"
 echo "   ✅ Tüm veriler korundu"
+echo "   ✅ Docker temizliği yapıldı (dangling images, unused containers, build cache)"
+echo "   ✅ Next.js cache temizlendi (.next, .turbo, node_modules/.cache)"
 echo "   ✅ Sadece app container'ı ve image'ı güncellendi"
 echo "   ✅ Container durumu: $CONTAINER_STATUS"
 echo ""
@@ -155,4 +201,5 @@ echo "   Logları izle:     docker logs -f alpdinamik-app"
 echo "   Container durumu: docker ps | grep alpdinamik"
 echo "   Nginx durumu:     sudo systemctl status nginx"
 echo "   Nginx test:       sudo nginx -t"
+echo "   Disk kullanımı:   docker system df"
 echo ""

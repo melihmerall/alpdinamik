@@ -67,7 +67,7 @@ const ResponsiveMenu = () => {
                                 
                                 return (
                                     <li key={rep.id} className='menu-item-has-children'>
-                                        <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name.toUpperCase()}</Link>
+                                        <Link href={`/temsilcilikler/${rep.slug}`}>{rep.name}</Link>
                                         <ul className='sub-menu' style={activeSubMenus(`rep-${rep.id}`)}>
                                             <li className={hasCategories ? 'menu-item-has-children' : ''}>
                                                 <Link href={`/temsilcilikler/${rep.slug}`}>Ürünler</Link>
